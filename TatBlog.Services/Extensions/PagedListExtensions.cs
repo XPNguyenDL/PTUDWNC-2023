@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
-using System.Linq.Dynamic.Core
+using System.Linq.Dynamic.Core;
 
 namespace TatBlog.Services.Extensions;
 
