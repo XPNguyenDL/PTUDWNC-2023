@@ -1,7 +1,11 @@
 ﻿
 
+using Microsoft.Identity.Client;
+using TatBlog.Core.DTO;
+using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
+using TatBlog.Services.Blogs;
 
 var context = new BlogDbContext();
 var seeder = new DataSeeder(context);
@@ -22,28 +26,63 @@ seeder.Initialize();
 
 #endregion
 
-#region MyRegion
+#region Show post
 
-var posts = context.Posts.Where(p => p.Published)
-    .OrderBy(p => p.Title)
-    .Select(p => new
-    {
-        Id = p.Id,
-        Title = p.Title,
-        ViewCount = p.ViewCount,
-        PostedDate = p.PostedDate,
-        Author = p.Author.FullName,
-        Category = p.Category.Name
-    }).ToList();
+//var posts = context.Posts.Where(p => p.Published)
+//    .OrderBy(p => p.Title)
+//    .Select(p => new
+//    {
+//        Id = p.Id,
+//        Title = p.Title,
+//        ViewCount = p.ViewCount,
+//        PostedDate = p.PostedDate,
+//        Author = p.Author,
+//        Category = p.Category
+//    }).ToList();
 
-foreach (var post in posts)
-{
-    Console.WriteLine("Id: {0}", post.Id);
-    Console.WriteLine("Title: {0}", post.Title);
-    Console.WriteLine("ViewCount: {0}", post.ViewCount);
-    Console.WriteLine("PostedDate: {0}", post.PostedDate);
-    Console.WriteLine("Author: {0}", post.Author);
-    Console.WriteLine("Category: {0}", post.Category);
-    Console.WriteLine("".PadRight(80, '-'));
-}
+
 #endregion
+
+#region Blog repository
+
+IBlogRepository blogRepo = new BlogRepository(context);
+
+var posts = await blogRepo.GetPopularArticlesAsync(3);
+
+//PrintPosts(posts);
+
+var category = await blogRepo.GetCategoriesAsync();
+
+PrintCategories(category);
+
+
+
+
+#endregion
+
+
+void PrintPosts(IList<Post> posts)
+{
+    foreach (var post in posts)
+    {
+        Console.WriteLine("Id: {0}", post.Id);
+        Console.WriteLine("Title: {0}", post.Title);
+        Console.WriteLine("ViewCount: {0}", post.ViewCount);
+        Console.WriteLine("PostedDate: {0}", post.PostedDate);
+        Console.WriteLine("Author: {0}", post.Author.FullName);
+        Console.WriteLine("Category: {0}", post.Category.Name);
+        Console.WriteLine("".PadRight(80, '-'));
+    }
+}
+
+void PrintCategories(IList<CategoryItem> categories)
+{
+    Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+        "ID", "Name", "Count");
+
+    foreach (var category in categories)
+    {
+        Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+            category.Id, category.Name, category.PostCount);
+    }
+}
