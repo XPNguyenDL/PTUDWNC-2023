@@ -1,9 +1,11 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
+using TatBlog.Services.Extensions;
 
 namespace TatBlog.Services.Blogs;
 
@@ -80,5 +82,22 @@ public class BlogRepository : IBlogRepository
                 ShowOnMenu = x.ShowOnMenu,
                 PostCount = x.Posts.Count(p => p.Published),
             }).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IPagedList<TagItem>> GetPagedTagsAsync(
+        IPagingParams pagingParams,
+        CancellationToken cancellationToken = default)
+    {
+        var tagQuery = _dbContext.Set<Tag>()
+            .Select(x => new TagItem()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UrlSlug = x.UrlSlug,
+                Description = x.Description,
+                PostCount = x.Posts.Count(p => p.Published)
+            });
+
+        return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
     }
 }
