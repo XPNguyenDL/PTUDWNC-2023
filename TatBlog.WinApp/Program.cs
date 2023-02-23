@@ -6,10 +6,11 @@ using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
 using TatBlog.Services.Blogs;
+using TatBlog.WinApp;
 
 var context = new BlogDbContext();
-var seeder = new DataSeeder(context);
-seeder.Initialize();
+//var seeder = new DataSeeder(context);
+//seeder.Initialize();
 
 #region Show Authors
 
@@ -45,20 +46,44 @@ seeder.Initialize();
 
 #region Blog repository
 
-IBlogRepository blogRepo = new BlogRepository(context);
+//IBlogRepository blogRepo = new BlogRepository(context);
 
-var posts = await blogRepo.GetPopularArticlesAsync(3);
+//var posts = await blogRepo.GetPopularArticlesAsync(3);
 
-//PrintPosts(posts);
+////PrintPosts(posts);
 
-var category = await blogRepo.GetCategoriesAsync();
+//var category = await blogRepo.GetCategoriesAsync();
 
-PrintCategories(category);
+//PrintCategories(category);
 
 
 
 
 #endregion
+
+#region Phân trang
+
+IBlogRepository blogRepo = new BlogRepository(context);
+
+var paringParams = new PagingParams()
+{
+    PageNumber = 1,
+    PageSize = 5,
+    SortColumn = "PostCount",
+    SortOrder = "DESC"
+};
+
+var tagsList = await blogRepo.GetPagedTagsAsync(paringParams);
+
+Console.WriteLine("{0, -40}{1, -50}{2, 10}", "Id", "Name", "Count");
+
+foreach (var tagItem in tagsList)
+{
+    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
+}
+
+#endregion
+
 
 
 void PrintPosts(IList<Post> posts)
