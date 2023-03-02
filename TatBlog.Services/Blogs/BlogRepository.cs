@@ -55,6 +55,8 @@ public class BlogRepository : IBlogRepository
             .AnyAsync(s => s.Id != postId && s.UrlSlug.Equals(slug), cancellationToken);
     }
 
+
+
     public async Task IncreaseViewCountAsync(Guid postId, CancellationToken cancellationToken = default)
     {
         await _dbContext.Set<Post>()
@@ -99,5 +101,102 @@ public class BlogRepository : IBlogRepository
             });
 
         return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
+    // Lấy thẻ tag theo tên (slug)
+
+    public async Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Tag>()
+            .FirstOrDefaultAsync(t => t.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Tag>()
+            .Select(s => new TagItem()
+            {
+                Id = s.Id,
+                Name = s.Name,
+                UrlSlug = s.UrlSlug,
+                Description = s.Description,
+                PostCount = s.Posts.Count(p => p.Published)
+            }).ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> DeleteTagByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var tag = _dbContext.Set<Tag>().FirstOrDefault(t => t.Id == id);
+        if (tag != null)
+        {
+            _dbContext.Tags.Remove(tag);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<Category> GetCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Category>()
+            .FirstOrDefaultAsync(t => t.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<Category> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Category>()
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
+    public async Task<Category> AddOrUpdateCategoryAsync(Category category, CancellationToken cancellationToken = default)
+    {
+        if (_dbContext.Set<Category>().Any(s => s.Id == category.Id))
+        {
+            _dbContext.Entry(category).State = EntityState.Modified;
+        }
+        else
+        {
+            _dbContext.Categories.Add(category);
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return category;
+    }
+
+    public async Task<bool> DeleteCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    { 
+        return await _dbContext.Set<Category>()
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken) > 0;
+    }
+
+    public async Task<bool> IsCategorySlugExistedAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Category>().AnyAsync(s => s.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+    {
+        var tagQuery = _dbContext.Set<Category>()
+            .Select(x => new CategoryItem()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UrlSlug = x.UrlSlug,
+                Description = x.Description,
+                ShowOnMenu = x.ShowOnMenu,
+                PostCount = x.Posts.Count(p => p.Published)
+            });
+
+        return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async Task<(int day, int month, int PostCount)> CountPostByMonth(int month, CancellationToken cancellationToken = default)
+    {
+        var date = DateTime.Now.AddMonths(-month);
+        var result = await _dbContext.Set<Post>()
+            .Where(s => s.PostedDate > date).CountAsync(cancellationToken);
+        return (date.Day, month, result);
+
     }
 }
