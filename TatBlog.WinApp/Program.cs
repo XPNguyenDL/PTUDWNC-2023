@@ -85,6 +85,28 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
 //}
 
+var paringParams = new PagingParams()
+{
+    PageNumber = 1,
+    SortColumn = "Title",
+    SortOrder = "DESC"
+};
+
+PostQuery postQuery = new()
+{
+    CategoryId = Guid.Parse("885771be-ef28-4c85-a896-5919ecca366e")
+};
+
+var postList = await blogRepo.GetPagedPostsQueryAsync(paringParams, postQuery);
+
+foreach (var post in postList)
+{
+    Console.WriteLine("{0, -40}{1, -50}{2, 10}", post.Id, post.Title, post.Author.FullName);
+}
+
+
+
+
 #endregion
 
 #region Bài tập
@@ -169,11 +191,6 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //        category.Id, category.Name, category.PostCount);
 //}
 
-//await blogRepo.TogglePublicStatusPostAsync(Guid.Parse("415fff6f-9a37-4223-bca9-0ccc530a2b5d"));
-
-var posts = await blogRepo.GetRandomPostAsync(4);
-
-PrintPosts(posts);
 
 #endregion
 
