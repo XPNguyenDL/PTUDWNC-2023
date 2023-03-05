@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.Identity.Client;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
@@ -11,6 +12,8 @@ using TatBlog.WinApp;
 var context = new BlogDbContext();
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();
+
+IBlogRepository blogRepo = new BlogRepository(context);
 
 #region Show Authors
 
@@ -63,28 +66,112 @@ var context = new BlogDbContext();
 
 #region Phân trang
 
-IBlogRepository blogRepo = new BlogRepository(context);
 
-var paringParams = new PagingParams()
-{
-    PageNumber = 1,
-    PageSize = 5,
-    SortColumn = "PostCount",
-    SortOrder = "DESC"
-};
 
-var tagsList = await blogRepo.GetPagedTagsAsync(paringParams);
+//var paringParams = new PagingParams()
+//{
+//    PageNumber = 1,
+//    PageSize = 5,
+//    SortColumn = "PostCount",
+//    SortOrder = "DESC"
+//};
 
-Console.WriteLine("{0, -40}{1, -50}{2, 10}", "Id", "Name", "Count");
+//var tagsList = await blogRepo.GetPagedTagsAsync(paringParams);
 
-foreach (var tagItem in tagsList)
+//Console.WriteLine("{0, -40}{1, -50}{2, 10}", "Id", "Name", "Count");
+
+//foreach (var tagItem in tagsList)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
+//}
+
+#endregion
+
+#region Bài tập
+
+
+// c.Lấy danh sách tất cả các thẻ (Tag) kèm theo số bài viết chứa thẻ đó. Kết 
+// quả trả về kiểu IList<TagItem>.
+
+//var tagList = await blogRepo.GetTagsAsync();
+
+//foreach (var tagItem in tagList)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
+//}
+
+// d. Xóa một thẻ theo mã cho trước. 
+
+await blogRepo.DeleteTagByIdAsync(Guid.Parse("9fdc3139-b1fb-483a-8df9-4d993d242035"));
+
+var tagList = await blogRepo.GetTagsAsync();
+
+
+foreach (var tagItem in tagList)
 {
     Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
 }
 
+// e. Tìm một chuyên mục (Category) theo tên định danh (slug). 
+
+//var category = await blogRepo.GetCategoryBySlugAsync("net-core");
+//Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//    category.Id, category.Name, category.UrlSlug);
+
+//f. Tìm một chuyên mục theo mã số cho trước
+
+//var newCategory = new Category()
+//{
+//    Id = Guid.Parse("bcca0f65-4ed9-4898-a160-08db1b1030e1"),
+//    Name = "GitLab 1",
+//    UrlSlug = "git-lab-1"
+//};
+
+//var category = await blogRepo.AddOrUpdateCategoryAsync(newCategory);
+
+//Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//    category.Id, category.Name, category.UrlSlug);
+
+//var categories = await blogRepo.GetCategoriesAsync();
+//PrintCategories(categories);
+
+//h. Xóa một chuyên mục theo mã số cho trước. 
+
+//await blogRepo.DeleteCategoryByIdAsync(Guid.Parse("a78f98e2-0c4f-41dc-47da-08db1b1079dd"));
+//var categories = await blogRepo.GetCategoriesAsync();
+//PrintCategories(categories);
+
+// i. Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa. 
+
+//var check = await blogRepo.IsCategorySlugExistedAsync("git-lab-2");
+
+//Console.WriteLine(check);
+
+// j. Lấy và phân trang danh sách chuyên mục, kết quả trả về kiểu 
+// <CategoryItem>.
+
+//var paringParams = new PagingParams()
+//{
+//    PageNumber = 1,
+//    PageSize = 5,
+//    SortColumn = "PostCount",
+//    SortOrder = "DESC"
+//};
+
+//var categories = await blogRepo.GetPagedCategoriesAsync(paringParams);
+
+//Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//    "ID", "Name", "Count");
+
+//foreach (var category in categories)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//        category.Id, category.Name, category.PostCount);
+//}
+
+
+
 #endregion
-
-
 
 void PrintPosts(IList<Post> posts)
 {
