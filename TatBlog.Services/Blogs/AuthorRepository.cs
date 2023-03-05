@@ -1,6 +1,74 @@
-﻿namespace TatBlog.Services.Blogs;
+﻿using Microsoft.EntityFrameworkCore;
+using TatBlog.Core.Contracts;
+using TatBlog.Core.DTO;
+using TatBlog.Core.Entities;
+using TatBlog.Data.Contexts;
+using TatBlog.Services.Extensions;
 
-public class AuthorRepository
+namespace TatBlog.Services.Blogs;
+
+public class AuthorRepository : IAuthorRepository
 {
-    
+    private readonly BlogDbContext _dbContext;
+
+    public AuthorRepository(BlogDbContext context)
+    {
+        _dbContext = context;
+    }
+    public async Task<Author> GetAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>()
+            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+    }
+
+    public async Task<Author> GetAuthorBySlugAsync(string urlSlug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>()
+            .FirstOrDefaultAsync(s => s.UrlSlug == urlSlug, cancellationToken);
+    }
+
+    public async Task<IPagedList<AuthorItem>> GetPagedAuthorsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+    {
+        var authorQuery = _dbContext.Set<Author>()
+            .Select(s => new AuthorItem()
+            {
+                Id = s.Id,
+                Email = s.Email,
+                FullName = s.FullName,
+                ImageUrl = s.ImageUrl,
+                JoinedDate = s.JoinedDate,
+                Notes = s.Notes,
+                PostCount = s.Posts.Count(p => p.Published)
+            });
+        return await authorQuery.ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async Task<Author> AddOrUpdateAuthor(Author author, CancellationToken cancellationToken = default)
+    {
+        if (_dbContext.Set<Author>().Any(s => s.Id == author.Id))
+        {
+            _dbContext.Entry(author).State = EntityState.Modified;
+        }
+        else
+        {
+            _dbContext.Authors.Add(author);
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return author;
+    }
+
+    public async Task<List<Author>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default)
+    {
+        var authorItem = _dbContext.Set<Author>()
+            .Select(s => new AuthorItem()
+            {
+                PostCount = s.Posts.Count(p => p.Published)
+            }).ToList();
+
+        var maxPostCount = authorItem.Max(s => s.PostCount);
+
+        return await _dbContext.Set<Author>()
+            .Where(s => s.Posts.Count(p => p.Published) == maxPostCount).Take(authorNum).ToListAsync(cancellationToken);
+    }
 }
