@@ -102,15 +102,15 @@ IBlogRepository blogRepo = new BlogRepository(context);
 
 // d. Xóa một thẻ theo mã cho trước. 
 
-await blogRepo.DeleteTagByIdAsync(Guid.Parse("9fdc3139-b1fb-483a-8df9-4d993d242035"));
+//await blogRepo.DeleteTagByIdAsync(Guid.Parse("9fdc3139-b1fb-483a-8df9-4d993d242035"));
 
-var tagList = await blogRepo.GetTagsAsync();
+//var tagList = await blogRepo.GetTagsAsync();
 
 
-foreach (var tagItem in tagList)
-{
-    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
-}
+//foreach (var tagItem in tagList)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
+//}
 
 // e. Tìm một chuyên mục (Category) theo tên định danh (slug). 
 
@@ -169,7 +169,11 @@ foreach (var tagItem in tagList)
 //        category.Id, category.Name, category.PostCount);
 //}
 
+//await blogRepo.TogglePublicStatusPostAsync(Guid.Parse("415fff6f-9a37-4223-bca9-0ccc530a2b5d"));
 
+var posts = await blogRepo.GetRandomPostAsync(4);
+
+PrintPosts(posts);
 
 #endregion
 

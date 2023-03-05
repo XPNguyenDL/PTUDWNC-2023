@@ -55,8 +55,6 @@ public class BlogRepository : IBlogRepository
             .AnyAsync(s => s.Id != postId && s.UrlSlug.Equals(slug), cancellationToken);
     }
 
-
-
     public async Task IncreaseViewCountAsync(Guid postId, CancellationToken cancellationToken = default)
     {
         await _dbContext.Set<Post>()
@@ -191,6 +189,7 @@ public class BlogRepository : IBlogRepository
         return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
     }
 
+    // Còn bug 
     public async Task<(int day, int month, int PostCount)> CountPostByMonth(int month, CancellationToken cancellationToken = default)
     {
         var date = DateTime.Now.AddMonths(-month);
@@ -198,5 +197,42 @@ public class BlogRepository : IBlogRepository
             .Where(s => s.PostedDate > date).CountAsync(cancellationToken);
         return (date.Day, month, result);
 
+    }
+
+    public async Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>().FirstOrDefaultAsync(s => s.Id.Equals(postId), cancellationToken);
+    }
+
+    public async Task<Post> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default)
+    {
+        if (_dbContext.Set<Post>().Any(s => s.Id == post.Id))
+        {
+            _dbContext.Entry(post).State = EntityState.Modified;
+        }
+        else
+        {
+            _dbContext.Posts.Add(post);
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return post;
+    }
+
+    public async Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Set<Post>()
+            .Where(x => x.Id == postId)
+            .ExecuteUpdateAsync(p => p.SetProperty(x => x.Published, x => !x.Published), cancellationToken);
+    }
+
+    public async Task<IList<Post>> GetRandomPostAsync(int ranNum, CancellationToken cancellation = default)
+    {
+        Random rand = new();
+        return await _dbContext.Set<Post>()
+            .Include(s => s.Author)
+            .Include(c => c.Category)
+            .OrderBy(c => Guid.NewGuid())
+            .Take(ranNum).ToListAsync(cancellation);
     }
 }

@@ -19,7 +19,6 @@ public interface IBlogRepository
         string slug,
         CancellationToken cancellationToken = default);
 
-
     // Increase view post
     Task IncreaseViewCountAsync(Guid postId, CancellationToken cancellationToken = default);
 
@@ -40,4 +39,11 @@ public interface IBlogRepository
         CancellationToken cancellationToken = default);
     Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
     Task<(int day, int month, int PostCount)> CountPostByMonth(int month, CancellationToken cancellationToken = default);
+
+    Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default);
+    Task<Post> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+
+    Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
+
+    Task<IList<Post>> GetRandomPostAsync(int ranNum, CancellationToken cancellation = default);
 }
