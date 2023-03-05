@@ -228,11 +228,51 @@ public class BlogRepository : IBlogRepository
 
     public async Task<IList<Post>> GetRandomPostAsync(int ranNum, CancellationToken cancellation = default)
     {
-        Random rand = new();
         return await _dbContext.Set<Post>()
             .Include(s => s.Author)
             .Include(c => c.Category)
             .OrderBy(c => Guid.NewGuid())
             .Take(ranNum).ToListAsync(cancellation);
+    }
+
+    public async Task<IList<Post>> FindPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>()
+            .Include(s => s.Author)
+            .Include(c => c.Category)
+            .Where(s => s.Author.Id == postQuery.AuthorId ||
+                        s.CategoryId == postQuery.CategoryId ||
+                        s.Category.UrlSlug == postQuery.CategorySlug ||
+                        s.PostedDate.Day == postQuery.CreatedDate.Day || 
+                        s.PostedDate.Month == postQuery.CreatedDate.Month ||
+                        s.Tags.Any(t => t.Name.Contains(postQuery.TagName))).ToListAsync(cancellationToken);
+    }
+
+    public async Task<int> CountPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>()
+            .Include(s => s.Author)
+            .Include(c => c.Category)
+            .Where(s => s.Author.Id == postQuery.AuthorId ||
+                        s.CategoryId == postQuery.CategoryId ||
+                        s.Category.UrlSlug == postQuery.CategorySlug ||
+                        s.PostedDate.Day == postQuery.CreatedDate.Day ||
+                        s.PostedDate.Month == postQuery.CreatedDate.Month ||
+                        s.Tags.Any(t => t.Name.Contains(postQuery.TagName))).CountAsync(cancellationToken);
+    }
+
+    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, PostQuery postQuery, CancellationToken cancellationToken = default)
+    {
+        var post = _dbContext.Set<Post>()
+            .Include(s => s.Author)
+            .Include(c => c.Category)
+            .Where(s => s.Author.Id == postQuery.AuthorId ||
+                        s.CategoryId == postQuery.CategoryId ||
+                        s.Category.UrlSlug == postQuery.CategorySlug ||
+                        s.PostedDate.Day == postQuery.CreatedDate.Day ||
+                        s.PostedDate.Month == postQuery.CreatedDate.Month ||
+                        s.Tags.Any(t => t.Name.Contains(postQuery.TagName)));
+        pagingParams.PageSize = await CountPostsQueryAsync(postQuery, cancellationToken);
+        return await post.ToPagedListAsync(pagingParams, cancellationToken);
     }
 }

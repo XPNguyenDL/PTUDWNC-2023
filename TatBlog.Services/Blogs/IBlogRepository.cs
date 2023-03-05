@@ -25,7 +25,7 @@ public interface IBlogRepository
     Task<IList<CategoryItem>> GetCategoriesAsync(bool showOnMenu = false, CancellationToken cancellationToken = default);
 
     Task<IPagedList<TagItem>> GetPagedTagsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
-    
+
     // Get Tag by slug
     Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default);
@@ -46,4 +46,8 @@ public interface IBlogRepository
     Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
 
     Task<IList<Post>> GetRandomPostAsync(int ranNum, CancellationToken cancellation = default);
+
+    Task<IList<Post>> FindPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default);
+    Task<int> CountPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default);
+    Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, PostQuery postQuery, CancellationToken cancellationToken = default);
 }
