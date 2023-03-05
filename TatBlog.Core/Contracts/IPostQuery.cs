@@ -1,8 +1,6 @@
-﻿using TatBlog.Core.Entities;
+﻿namespace TatBlog.Core.Contracts;
 
-namespace TatBlog.Core.DTO;
-
-public class PostQuery
+public interface IPostQuery
 {
     public Guid AuthorId { get; set; }
     public Guid CategoryId { get; set; }
@@ -12,5 +10,4 @@ public class PostQuery
     public DateTime CreatedDate { get; set; }
 
     public String TagName { get; set; }
-
 }
