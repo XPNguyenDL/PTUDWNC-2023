@@ -10,11 +10,12 @@ using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
 var context = new BlogDbContext();
-//var seeder = new DataSeeder(context);
-//seeder.Initialize();
+var seeder = new DataSeeder(context);
+seeder.Initialize();
 
 IBlogRepository blogRepo = new BlogRepository(context);
 IAuthorRepository authorRepo = new AuthorRepository(context);
+ISubscriberRepository subRepo = new SubscriberRepository(context);
 
 #region Show Authors
 
@@ -60,15 +61,26 @@ IAuthorRepository authorRepo = new AuthorRepository(context);
 
 //PrintCategories(category);
 
+//subRepo.UnSubscribeAsync("2014478@dlu.edu.vn", "Hủy đăng ký");
 
+var paringParams = new PagingParams()
+{
+    PageNumber = 1,
+    PageSize = 5,
+    SortColumn = "Email",
+    SortOrder = "DESC"
+};
 
+var subs = await subRepo.SearchSubscribersAsync(paringParams, "2014478", SubscribeStatus.Block);
 
+foreach (var sub in subs)
+{
+
+    Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12}", sub.Id, sub.Email, sub.Reason, sub.Note);
+}
 #endregion
 
 #region Phân trang
-
-
-
 //var paringParams = new PagingParams()
 //{
 //    PageNumber = 1,
@@ -100,23 +112,6 @@ IAuthorRepository authorRepo = new AuthorRepository(context);
 //    Console.WriteLine("{0, -40}{1, -50}{2, 10}", post.Id, post.Title, post.Author.FullName);
 //}
 
-var paringParams = new PagingParams()
-{
-    PageNumber = 1,
-    PageSize = 10,
-    SortColumn = "FullName",
-    SortOrder = "DESC"
-};
-var authors = await authorRepo.GetAuthorMostPost(2);
-
-Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12:MM/dd/yyyy}",
-    "ID", "Full Name", "Email", "Joined Date");
-
-foreach (var author in authors)
-{
-    Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12:MM/dd/yyyy}",
-        author.Id, author.FullName, author.Email, author.JoinedDate);
-}
 
 #endregion
 

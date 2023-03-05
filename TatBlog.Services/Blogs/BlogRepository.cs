@@ -235,7 +235,7 @@ public class BlogRepository : IBlogRepository
             .Take(ranNum).ToListAsync(cancellation);
     }
 
-    public async Task<IList<Post>> FindPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default)
+    public async Task<IList<Post>> FindPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Post>()
             .Include(s => s.Author)
@@ -248,7 +248,7 @@ public class BlogRepository : IBlogRepository
                         s.Tags.Any(t => t.Name.Contains(postQuery.TagName))).ToListAsync(cancellationToken);
     }
 
-    public async Task<int> CountPostsQueryAsync(PostQuery postQuery, CancellationToken cancellationToken = default)
+    public async Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Post>()
             .Include(s => s.Author)
@@ -261,7 +261,7 @@ public class BlogRepository : IBlogRepository
                              s.Tags.Any(t => t.Name.Contains(postQuery.TagName)), cancellationToken);
     }
 
-    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, PostQuery postQuery, CancellationToken cancellationToken = default)
+    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, IPostQuery postQuery, CancellationToken cancellationToken = default)
     {
         var post = _dbContext.Set<Post>()
             .Include(s => s.Author)
@@ -272,7 +272,6 @@ public class BlogRepository : IBlogRepository
                         s.PostedDate.Day == postQuery.CreatedDate.Day ||
                         s.PostedDate.Month == postQuery.CreatedDate.Month ||
                         s.Tags.Any(t => t.Name.Contains(postQuery.TagName)));
-        pagingParams.PageSize = await CountPostsQueryAsync(postQuery, cancellationToken);
         return await post.ToPagedListAsync(pagingParams, cancellationToken);
     }
 
