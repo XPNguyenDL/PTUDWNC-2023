@@ -14,6 +14,7 @@ var context = new BlogDbContext();
 //seeder.Initialize();
 
 IBlogRepository blogRepo = new BlogRepository(context);
+IAuthorRepository authorRepo = new AuthorRepository(context);
 
 #region Show Authors
 
@@ -85,27 +86,37 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //    Console.WriteLine("{0, -40}{1, -50}{2, 10}", tagItem.Id, tagItem.Name, tagItem.PostCount);
 //}
 
+
+
+//PostQuery postQuery = new()
+//{
+//    CategoryId = Guid.Parse("885771be-ef28-4c85-a896-5919ecca366e")
+//};
+
+//var postList = await blogRepo.GetPagedPostsQueryAsync(paringParams, postQuery);
+
+//foreach (var post in postList)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}", post.Id, post.Title, post.Author.FullName);
+//}
+
 var paringParams = new PagingParams()
 {
     PageNumber = 1,
-    SortColumn = "Title",
+    PageSize = 10,
+    SortColumn = "FullName",
     SortOrder = "DESC"
 };
+var authors = await authorRepo.GetAuthorMostPost(2);
 
-PostQuery postQuery = new()
+Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12:MM/dd/yyyy}",
+    "ID", "Full Name", "Email", "Joined Date");
+
+foreach (var author in authors)
 {
-    CategoryId = Guid.Parse("885771be-ef28-4c85-a896-5919ecca366e")
-};
-
-var postList = await blogRepo.GetPagedPostsQueryAsync(paringParams, postQuery);
-
-foreach (var post in postList)
-{
-    Console.WriteLine("{0, -40}{1, -50}{2, 10}", post.Id, post.Title, post.Author.FullName);
+    Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12:MM/dd/yyyy}",
+        author.Id, author.FullName, author.Email, author.JoinedDate);
 }
-
-
-
 
 #endregion
 
