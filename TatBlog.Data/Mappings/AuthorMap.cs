@@ -31,6 +31,8 @@ namespace TatBlog.Data.Mappings
 
             builder.Property(a => a.Notes)
                 .HasMaxLength(500);
+
+            
         }
     }
 }
