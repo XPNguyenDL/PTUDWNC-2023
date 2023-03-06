@@ -15,7 +15,9 @@ namespace TatBlog.Data.Contexts
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<Subscriber> Subscribers { get; set; }
-        
+
+        public DbSet<Comment> Comments { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

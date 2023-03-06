@@ -41,5 +41,6 @@ namespace TatBlog.Core.Entities
         public Author Author { get; set; }
 
         public IList<Tag> Tags { get; set; }
+        public IList<Comment> Comments { get; set; }
     }
 }
