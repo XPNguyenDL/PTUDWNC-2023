@@ -26,16 +26,18 @@ public class SubscriberRepository : ISubscriberRepository
             var sub = _dbContext.Set<Subscriber>().FirstOrDefault(s => s.Email.Equals(email));
             if (sub == null)
             {
-                sub.Id = Guid.NewGuid();
-                sub.DateSubscribe = DateTime.Now;
-                sub.Email = email;
-                sub.SubscribeStatus = SubscribeStatus.Subscribe;
-                _dbContext.Subscribers.Add(sub);
-
+                var newSub = new Subscriber()
+                {
+                    Id = Guid.NewGuid(),
+                    DateSubscribe = DateTime.Now,
+                    Email = email,
+                    SubscribeStatus = SubscribeStatus.Subscribe
+                };
+                _dbContext.Subscribers.Add(newSub);
             }
             else
             {
-                if (sub.SubscribeStatus == SubscribeStatus.Block) return false;
+                if (sub.SubscribeStatus == SubscribeStatus.Block || sub.SubscribeStatus == SubscribeStatus.Subscribe) return false;
                 sub.DateSubscribe = DateTime.Now;
                 sub.DateUnSubscribe = null;
                 sub.SubscribeStatus = SubscribeStatus.Subscribe;
