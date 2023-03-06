@@ -71,13 +71,12 @@ var paringParams = new PagingParams()
     SortOrder = "DESC"
 };
 
-var subs = await subRepo.SearchSubscribersAsync(paringParams, "2014478", SubscribeStatus.Block);
+var sub = await subRepo.SubscribeAsync("2014478@dlu.edu.vn");
 
-foreach (var sub in subs)
-{
 
-    Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12}", sub.Id, sub.Email, sub.Reason, sub.Note);
-}
+
+    //Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12}", sub.Id, sub.Email, sub.Reason, sub.Note);
+
 #endregion
 
 #region Phân trang

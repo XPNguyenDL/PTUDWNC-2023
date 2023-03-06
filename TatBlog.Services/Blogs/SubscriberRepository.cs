@@ -23,19 +23,27 @@ public class SubscriberRepository : ISubscriberRepository
         Match match = regex.Match(email);
         if (match.Success)
         {
-            if (!_dbContext.Set<Subscriber>().Any(s => s.Email.Equals(email)))
+            var sub = _dbContext.Set<Subscriber>().FirstOrDefault(s => s.Email.Equals(email));
+            if (sub == null)
             {
-                var subscriber = new Subscriber()
-                {
-                    Id = Guid.NewGuid(),
-                    DateSubscribe = DateTime.Now,
-                    Email = email,
-                    SubscribeStatus = SubscribeStatus.Subscribe
-                };
-                _dbContext.Subscribers.Add(subscriber);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                return true;
+                sub.Id = Guid.NewGuid();
+                sub.DateSubscribe = DateTime.Now;
+                sub.Email = email;
+                sub.SubscribeStatus = SubscribeStatus.Subscribe;
+                _dbContext.Subscribers.Add(sub);
+
             }
+            else
+            {
+                if (sub.SubscribeStatus == SubscribeStatus.Block) return false;
+                sub.DateSubscribe = DateTime.Now;
+                sub.DateUnSubscribe = null;
+                sub.SubscribeStatus = SubscribeStatus.Subscribe;
+                sub.Reason = null;
+                _dbContext.Entry(sub).State = EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return true;
         }
         return false;
     }
@@ -91,10 +99,9 @@ public class SubscriberRepository : ISubscriberRepository
     {
         var subQuery = _dbContext.Set<Subscriber>()
             .Where(s => s.Email.Contains(keyword) ||
-                        s.Note.Contains(keyword) ||
-                        s.Reason.Contains(keyword) ||
+                        s.Note.ToLower().Contains(keyword.ToLower()) ||
+                        s.Reason.ToLower().Contains(keyword.ToLower()) ||
                         s.SubscribeStatus == status);
-        subQuery.ToList();
         return await subQuery.ToPagedListAsync(pagingParams, cancellation);
     }
 }
