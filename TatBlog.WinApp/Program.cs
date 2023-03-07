@@ -10,6 +10,11 @@ using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
 using TatBlog.Services.Blogs;
 
+Guid guidOutput;
+Console.WriteLine(Guid.TryParse("123", out guidOutput));
+Console.WriteLine( guidOutput);
+Console.ReadKey();
+
 //var context = new BlogDbContext();
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();

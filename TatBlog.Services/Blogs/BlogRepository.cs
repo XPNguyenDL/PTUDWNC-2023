@@ -251,16 +251,23 @@ public class BlogRepository : IBlogRepository
 
     private IQueryable<Post> FilterPost(IPostQuery postQuery)
     {
+        Guid id = new Guid();
+        int keyNumber = 0;
+        var keyword = !string.IsNullOrWhiteSpace(postQuery.Keyword) ? postQuery.Keyword.ToLower() : "";
+        Guid.TryParse(postQuery.Keyword, out id);
+        int.TryParse(postQuery.Keyword, out keyNumber);
         return _dbContext.Set<Post>()
             .Include(t => t.Tags)
             .Include(s => s.Author)
             .Include(c => c.Category)
-            .Where(s => s.Author.Id == postQuery.AuthorId ||
-                        s.CategoryId == postQuery.CategoryId ||
-                        s.Category.UrlSlug == postQuery.CategorySlug ||
-                        s.PostedDate.Day == postQuery.CreatedDate.Day ||
-                        s.PostedDate.Month == postQuery.CreatedDate.Month ||
-                        s.Tags.Any(t => t.Name.Contains(postQuery.TagName)));
+            .Where(s => s.Published && s.Author.Id == id ||
+                        s.CategoryId == id ||
+                        s.Category.UrlSlug.ToLower().Contains(keyword) ||
+                        s.Author.UrlSlug.ToLower().Contains(keyword) ||
+                        s.Author.FullName.ToLower().Contains(keyword) ||
+                        s.PostedDate.Day == keyNumber ||
+                        s.PostedDate.Month == keyNumber ||
+                        s.Tags.Any(t => t.UrlSlug.ToLower().Contains(keyword) || t.Name.ToLower().Contains(keyword)));
     }
 
     public async Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
