@@ -3,13 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "jquery@3.6.3",
-      "destination": "wwwroot/lib/jquery/",
-      "files": [
-        "jquery.min.js"
-      ]
-    },
-    {
       "library": "jquery-validate@1.19.5",
       "destination": "wwwroot/lib/jquery-validate/",
       "files": [
@@ -32,19 +25,49 @@
       ]
     },
     {
-      "library": "font-awesome@6.3.0",
-      "destination": "wwwroot/lib/font-awesome/",
+      "provider": "unpkg",
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/lib/jquery/",
       "files": [
-        "css/all.min.css"
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "dist/jquery.slim.js",
+        "dist/jquery.slim.min.js",
+        "dist/jquery.slim.min.map",
+        "README.md",
+        "LICENSE.txt"
       ]
     },
     {
-      "provider": "cdnjs",
-      "library": "font-awesome@6.3.0",
+      "provider": "unpkg",
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "LICENSE.txt",
+        "README.md",
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "dist/jquery.slim.js",
+        "dist/jquery.slim.min.js",
+        "dist/jquery.slim.min.map"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "font-awesome@4.7.0",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
-        "css/all.min.css",
-        "css/fontawesome.min.css"
+        "css/font-awesome.css",
+        "css/font-awesome.css.map",
+        "css/font-awesome.min.css",
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.svg",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.woff2",
+        "fonts/FontAwesome.otf"
       ]
     }
   ]
