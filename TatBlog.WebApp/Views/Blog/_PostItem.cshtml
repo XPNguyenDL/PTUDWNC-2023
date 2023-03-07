@@ -14,21 +14,40 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <a class="text-decoration-none card-title text-dark fs-5"
+                       asp-controller="Blog"
+                       asp-action="Post"
+                       asp-route-year="@Model.PostedDate.Year"
+                       asp-route-month="@Model.PostedDate.Month"
+                       asp-route-day="@Model.PostedDate.Day"
+                       asp-route-slug="@Model.UrlSlug"
+                       title="@Model.Title">
                         @Model.Title
-                    </h5>
+                    </a>
                     <p class="card-text">
                         <small class="text-muted">
                             Tác giả:
                         </small>
                         <span class="text-primary">
-                            @Model.Author.FullName
+                            <a class="text-decoration-none"
+                               asp-controller="Blog"
+                               asp-action="Author"
+                               asp-route-slug="@Model.Author.UrlSlug"
+                               title="@Model.Author.FullName">
+                                @Model.Author.FullName
+                            </a>
                         </span>
                         <small class="text-muted">
                             Chủ đề:
                         </small>
                         <span class="text-primary">
-                            @Model.Category.Name:
+                            <a class="text-decoration-none"
+                               asp-controller="Blog"
+                               asp-action="Category"
+                               asp-route-slug="@Model.Category.UrlSlug"
+                               title="@Model.Category.Description">
+                                @Model.Category.Name
+                            </a>
                         </span>
                     </p>
                     <p class="card-text">
@@ -38,14 +57,15 @@
                         @await Html.PartialAsync("_TagList", @Model.Tags)
                     </div>
                     <div class="text-end">
-                        <a asp-controller="Blog"
-                           asp-action="Post"
-                           asp-route-year="@Model.PostedDate.Year"
-                           asp-route-month="@Model.PostedDate.Month"
-                           asp-route-slug="@Model.UrlSlug"
-                           class="btn btn-primary"
-                           title="@Model.Title">
-                           Xem chi tiết
+                        <a
+                            asp-controller="Blog"
+                            asp-action="Post"
+                            asp-route-year="@Model.PostedDate.Year"
+                            asp-route-month="@Model.PostedDate.Month"
+                            asp-route-slug="@Model.UrlSlug"
+                            class="btn btn-primary"
+                            title="@Model.Title">
+                            Xem chi tiết
                         </a>
                     </div>
                 </div>
