@@ -13,6 +13,7 @@ public class BlogRepository : IBlogRepository
 {
     private readonly BlogDbContext _dbContext;
 
+
     public BlogRepository(BlogDbContext context)
     {
         _dbContext = context;
@@ -162,7 +163,7 @@ public class BlogRepository : IBlogRepository
     }
 
     public async Task<bool> DeleteCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    { 
+    {
         return await _dbContext.Set<Category>()
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync(cancellationToken) > 0;
@@ -243,27 +244,15 @@ public class BlogRepository : IBlogRepository
             .Where(s => s.Author.Id == postQuery.AuthorId ||
                         s.CategoryId == postQuery.CategoryId ||
                         s.Category.UrlSlug == postQuery.CategorySlug ||
-                        s.PostedDate.Day == postQuery.CreatedDate.Day || 
+                        s.PostedDate.Day == postQuery.CreatedDate.Day ||
                         s.PostedDate.Month == postQuery.CreatedDate.Month ||
                         s.Tags.Any(t => t.Name.Contains(postQuery.TagName))).ToListAsync(cancellationToken);
     }
 
-    public async Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
+    private IQueryable<Post> FilterPost(IPostQuery postQuery)
     {
-        return await _dbContext.Set<Post>()
-            .Include(s => s.Author)
-            .Include(c => c.Category)
-            .CountAsync(s => s.Author.Id == postQuery.AuthorId ||
-                             s.CategoryId == postQuery.CategoryId ||
-                             s.Category.UrlSlug == postQuery.CategorySlug ||
-                             s.PostedDate.Day == postQuery.CreatedDate.Day ||
-                             s.PostedDate.Month == postQuery.CreatedDate.Month ||
-                             s.Tags.Any(t => t.Name.Contains(postQuery.TagName)), cancellationToken);
-    }
-
-    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, IPostQuery postQuery, CancellationToken cancellationToken = default)
-    {
-        var post = _dbContext.Set<Post>()
+        return _dbContext.Set<Post>()
+            .Include(t => t.Tags)
             .Include(s => s.Author)
             .Include(c => c.Category)
             .Where(s => s.Author.Id == postQuery.AuthorId ||
@@ -272,7 +261,20 @@ public class BlogRepository : IBlogRepository
                         s.PostedDate.Day == postQuery.CreatedDate.Day ||
                         s.PostedDate.Month == postQuery.CreatedDate.Month ||
                         s.Tags.Any(t => t.Name.Contains(postQuery.TagName)));
-        return await post.ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
+    public async Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
+    {
+        return await FilterPost(postQuery).CountAsync(cancellationToken);
+    }
+
+    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery, 
+        int pageNumber = 1,
+        int pageSize = 10, 
+        CancellationToken cancellationToken = default)
+    {
+
+        return await FilterPost(postQuery).ToPagedListAsync(pageNumber, pageSize, nameof(Post.PostedDate), "DESC", cancellationToken);
     }
 
     // t chưa làm được

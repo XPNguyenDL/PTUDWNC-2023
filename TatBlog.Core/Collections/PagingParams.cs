@@ -1,6 +1,6 @@
 ﻿using TatBlog.Core.Contracts;
 
-namespace TatBlog.WinApp;
+namespace TatBlog.Core.Collections;
 
 public class PagingParams : IPagingParams
 {
