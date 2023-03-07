@@ -10,10 +10,7 @@ using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
 using TatBlog.Services.Blogs;
 
-Guid guidOutput;
-Console.WriteLine(Guid.TryParse("123", out guidOutput));
-Console.WriteLine( guidOutput);
-Console.ReadKey();
+
 
 //var context = new BlogDbContext();
 //var seeder = new DataSeeder(context);
@@ -81,7 +78,7 @@ Console.ReadKey();
 
 
 
-    //Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12}", sub.Id, sub.Email, sub.Reason, sub.Note);
+//Console.WriteLine("{0, -40}{1, -30}{2, -30}{3, 12}", sub.Id, sub.Email, sub.Reason, sub.Note);
 
 #endregion
 

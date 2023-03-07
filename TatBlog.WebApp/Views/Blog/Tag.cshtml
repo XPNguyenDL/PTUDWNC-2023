@@ -1,0 +1,17 @@
+﻿@model IPagedList<Post>
+@{
+    ViewData["Title"] = "Tag Cloud";
+
+    var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
+}
+
+<div class="p-4">
+        <h3 class="text-primary mb-3">
+            Những bài viết chứa thẻ: '@postQuery.TagSlug'
+        </h3>
+    @foreach (var item in Model)
+    {
+        @await Html.PartialAsync("_PostItem", item)
+    }
+    @await Html.PartialAsync("_Pager", Model)
+</div>
