@@ -1,21 +1,22 @@
 ﻿
 
 using Microsoft.Identity.Client;
+using TatBlog.Core;
+using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
 using TatBlog.Services.Blogs;
-using TatBlog.WinApp;
 
-var context = new BlogDbContext();
-var seeder = new DataSeeder(context);
-seeder.Initialize();
+//var context = new BlogDbContext();
+//var seeder = new DataSeeder(context);
+//seeder.Initialize();
 
-IBlogRepository blogRepo = new BlogRepository(context);
-IAuthorRepository authorRepo = new AuthorRepository(context);
-ISubscriberRepository subRepo = new SubscriberRepository(context);
+//IBlogRepository blogRepo = new BlogRepository(context);
+//IAuthorRepository authorRepo = new AuthorRepository(context);
+//ISubscriberRepository subRepo = new SubscriberRepository(context);
 
 #region Show Authors
 
@@ -63,15 +64,15 @@ ISubscriberRepository subRepo = new SubscriberRepository(context);
 
 //subRepo.UnSubscribeAsync("2014478@dlu.edu.vn", "Hủy đăng ký");
 
-var paringParams = new PagingParams()
-{
-    PageNumber = 1,
-    PageSize = 5,
-    SortColumn = "Email",
-    SortOrder = "DESC"
-};
+//var paringParams = new PagingParams()
+//{
+//    PageNumber = 1,
+//    PageSize = 5,
+//    SortColumn = "Email",
+//    SortOrder = "DESC"
+//};
 
-var sub = await subRepo.SubscribeAsync("2014478@dlu.edu.vn");
+//var sub = await subRepo.SubscribeAsync("2014478@dlu.edu.vn");
 
 
 
@@ -199,28 +200,28 @@ var sub = await subRepo.SubscribeAsync("2014478@dlu.edu.vn");
 
 #endregion
 
-void PrintPosts(IList<Post> posts)
-{
-    foreach (var post in posts)
-    {
-        Console.WriteLine("Id: {0}", post.Id);
-        Console.WriteLine("Title: {0}", post.Title);
-        Console.WriteLine("ViewCount: {0}", post.ViewCount);
-        Console.WriteLine("PostedDate: {0}", post.PostedDate);
-        Console.WriteLine("Author: {0}", post.Author.FullName);
-        Console.WriteLine("Category: {0}", post.Category.Name);
-        Console.WriteLine("".PadRight(80, '-'));
-    }
-}
+//void PrintPosts(IList<Post> posts)
+//{
+//    foreach (var post in posts)
+//    {
+//        Console.WriteLine("Id: {0}", post.Id);
+//        Console.WriteLine("Title: {0}", post.Title);
+//        Console.WriteLine("ViewCount: {0}", post.ViewCount);
+//        Console.WriteLine("PostedDate: {0}", post.PostedDate);
+//        Console.WriteLine("Author: {0}", post.Author.FullName);
+//        Console.WriteLine("Category: {0}", post.Category.Name);
+//        Console.WriteLine("".PadRight(80, '-'));
+//    }
+//}
 
-void PrintCategories(IList<CategoryItem> categories)
-{
-    Console.WriteLine("{0, -40}{1, -50}{2, 10}",
-        "ID", "Name", "Count");
+//void PrintCategories(IList<CategoryItem> categories)
+//{
+//    Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//        "ID", "Name", "Count");
 
-    foreach (var category in categories)
-    {
-        Console.WriteLine("{0, -40}{1, -50}{2, 10}",
-            category.Id, category.Name, category.PostCount);
-    }
-}
+//    foreach (var category in categories)
+//    {
+//        Console.WriteLine("{0, -40}{1, -50}{2, 10}",
+//            category.Id, category.Name, category.PostCount);
+//    }
+//}

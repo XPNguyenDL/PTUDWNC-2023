@@ -49,5 +49,8 @@ public interface IBlogRepository
 
     Task<IList<Post>> FindPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default);
     Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default);
-    Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPagingParams pagingParams, IPostQuery postQuery, CancellationToken cancellationToken = default);
+    Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
 }

@@ -19,10 +19,9 @@ namespace TatBlog.Data.Contexts
         public DbSet<Comment> Comments { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-FQ22EB1;Database=TagBlog;
-                Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True");
+          
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

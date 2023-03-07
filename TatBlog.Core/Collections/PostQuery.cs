@@ -1,6 +1,6 @@
 ﻿using TatBlog.Core.Contracts;
 
-namespace TatBlog.WinApp;
+namespace TatBlog.Core.Collections;
 
 public class PostQuery : IPostQuery
 {
@@ -8,5 +8,6 @@ public class PostQuery : IPostQuery
     public Guid CategoryId { get; set; } = Guid.NewGuid();
     public string CategorySlug { get; set; } = "";
     public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public bool Published { get; set; }
     public string TagName { get; set; } = "";
 }

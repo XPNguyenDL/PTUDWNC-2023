@@ -20,10 +20,10 @@ public class Subscriber : IEntity
 
     public DateTime? DateUnSubscribe { get; set; }
 
-    public string? Reason { get; set; }
+    public string Reason { get; set; }
 
     public SubscribeStatus SubscribeStatus { get; set; }
 
-    public string? Note { get; set; }
+    public string Note { get; set; }
 
 }
