@@ -261,13 +261,15 @@ public class BlogRepository : IBlogRepository
             .Include(s => s.Author)
             .Include(c => c.Category)
             .WhereIf(condition.Published, s => s.Published)
+            .WhereIf(condition.NonPublished, s => !s.Published)
             .WhereIf(condition.CategoryId != Guid.Empty, p => p.CategoryId == condition.CategoryId)
-            .WhereIf(!string.IsNullOrWhiteSpace(condition.AuthorSlug), p => p.Author.UrlSlug == condition.AuthorSlug)
             .WhereIf(condition.AuthorId != Guid.Empty, p => p.AuthorId == condition.AuthorId)
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.AuthorSlug), p => p.Author.UrlSlug == condition.AuthorSlug)
             .WhereIf(!string.IsNullOrWhiteSpace(condition.CategorySlug),
                 p => p.Category.UrlSlug == condition.CategorySlug)
             .WhereIf(!string.IsNullOrWhiteSpace(condition.TagSlug),
                 p => p.Tags.Any(t => t.UrlSlug == condition.TagSlug))
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.PostSlug), p => p.UrlSlug == condition.PostSlug)
             .WhereIf(condition.Year > 0, p => p.PostedDate.Year == condition.Year)
             .WhereIf(condition.Month > 0, p => p.PostedDate.Month == condition.Month)
             .WhereIf(condition.Day > 0, p => p.PostedDate.Day == condition.Day)

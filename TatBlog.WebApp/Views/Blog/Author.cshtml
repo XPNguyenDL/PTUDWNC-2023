@@ -1,13 +1,14 @@
-﻿@model IPagedList<Post>
+﻿
+@model IPagedList<Post>
 @{
-    ViewData["Title"] = "Tag Cloud";
 
     var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
+    ViewData["Title"] = $"Bài viết - {postQuery.AuthorSlug}";
 }
 
 <div class="p-4">
     <h3 class="text-primary mb-3">
-        Những bài viết chứa thẻ: '@postQuery.TagSlug'
+        Những bài viết của: '@postQuery.AuthorSlug'
     </h3>
     @foreach (var item in Model)
     {

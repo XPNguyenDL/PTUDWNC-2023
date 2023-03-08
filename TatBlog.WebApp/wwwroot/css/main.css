@@ -1,2 +1,10 @@
 ﻿body {
 }
+
+.h-512 {
+    height: 50vh;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
