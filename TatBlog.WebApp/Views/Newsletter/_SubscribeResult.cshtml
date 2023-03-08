@@ -1,0 +1,18 @@
+﻿@model Subscriber
+
+<div class="mx-auto mt-5 p-5 rounded shadow" style="max-width: 576px">
+    <h5 class="text-uppercase">Thông báo</h5>
+    @if (Model.SubscribeStatus == SubscribeStatus.Subscribe)
+    {
+        <p>Đã đăng ký thành công.</p>
+    } 
+    else if (Model.SubscribeStatus == SubscribeStatus.Unsubscribe)
+    {
+        <p>Đã hủy đăng ký do: <span class="text-bg-info">'@Model.Reason'.</span></p>
+    }
+    else if (Model.SubscribeStatus == SubscribeStatus.Block)
+    {
+        <p>Đã bị chặn đăng ký.</p>
+    }
+
+</div>

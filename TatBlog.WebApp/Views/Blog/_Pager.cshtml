@@ -25,11 +25,13 @@
         @if (Model.HasPreviousPage)
         {
             <a asp-controller="Blog"
-               asp-acction="@actionName"
-               asp-route-slug="@slug"
-               asp-route-k="@postQuery.Keyword"
-               asp-route-p="@(Model.PageNumber - 1)"
-               asp-route-ps="@Model.PageSize"
+       asp-acction="@actionName"
+       asp-route-slug="@slug"
+       asp-route-k="@postQuery.Keyword"
+       asp-route-year="@postQuery.Year"
+       asp-route-month="@postQuery.Month"
+       asp-route-p="@(Model.PageNumber - 1)"
+       asp-route-ps="@Model.PageSize"
        class="btn btn-info">
                 <i class="fa fa-arrow-left"></i>
                 Trang trước
@@ -38,8 +40,8 @@
         else
         {
             <button type="button"
-                class="btn btn-outline-secondary"
-                disabled>
+            class="btn btn-outline-secondary"
+            disabled>
                 <i class="fa fa-arrow-left"></i>
                 Trang trước
             </button>
@@ -48,12 +50,14 @@
         @if (Model.HasNextPage)
         {
             <a asp-controller="Blog"
-               asp-acction="@actionName"
-               asp-route-slug="@slug"
-               asp-route-k="@postQuery.Keyword"
-               asp-route-p="@(Model.PageNumber + 1)"
-               asp-route-ps="@Model.PageSize"
-               class="btn btn-info">
+       asp-acction="@actionName"
+       asp-route-slug="@slug"
+       asp-route-k="@postQuery.Keyword"
+       asp-route-year="@postQuery.Year"
+       asp-route-month="@postQuery.Month"
+       asp-route-p="@(Model.PageNumber + 1)"
+       asp-route-ps="@Model.PageSize"
+       class="btn btn-info">
                 Trang sau
                 <i class="fa fa-arrow-right"></i>
             </a>
@@ -61,8 +65,8 @@
         else
         {
             <button type="button"
-                    class="btn btn-outline-secondary"
-                    disabled>
+            class="btn btn-outline-secondary"
+            disabled>
                 Trang sau
                 <i class="fa fa-arrow-right"></i>
             </button>

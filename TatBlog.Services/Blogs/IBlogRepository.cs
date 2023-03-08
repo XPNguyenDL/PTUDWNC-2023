@@ -23,6 +23,7 @@ public interface IBlogRepository
     Task IncreaseViewCountAsync(Guid postId, CancellationToken cancellationToken = default);
 
     Task<IList<CategoryItem>> GetCategoriesAsync(bool showOnMenu = false, CancellationToken cancellationToken = default);
+    Task<IList<AuthorItem>> GetAuthorAsync(int numAuthor, CancellationToken cancellationToken = default);
 
     Task<IPagedList<TagItem>> GetPagedTagsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
 

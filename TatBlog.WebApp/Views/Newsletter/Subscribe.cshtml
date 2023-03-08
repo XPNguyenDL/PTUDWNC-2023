@@ -1,0 +1,22 @@
+﻿@model Subscriber
+@{
+    ViewData["Title"] = "Đăng ký nhận thông báo";
+}
+
+@if (Model == null)
+{
+    <div class="mx-auto mt-5 p-5 rounded shadow" style="max-width: 576px">
+        <h5 class="text-uppercase">Đăng ký nhận thông báo</h5>
+        <p>Nhận thông báo về tin tức, bài viết mới thông qua email.</p>
+        <partial name="_NewsletterForm" />
+        <a asp-controller="Newsletter"
+           asp-action="UnSubscribe">Hủy đăng ký</a>
+    </div>
+}
+else
+{
+    <partial name="_SubscribeResult" model="Model"/>
+}
+
+
+
