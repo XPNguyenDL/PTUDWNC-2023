@@ -19,11 +19,12 @@ public class BlogRepository : IBlogRepository
         _dbContext = context;
     }
 
-    public async Task<Post> GetPostAsync(int year, int month, string slug, CancellationToken cancellationToken = default)
+    public async Task<Post> GetPostAsync(int year, int month, int day, string slug, CancellationToken cancellationToken = default)
     {
         IQueryable<Post> postsQuery = _dbContext.Set<Post>()
             .Include(x => x.Category)
-            .Include(x => x.Author);
+            .Include(x => x.Author)
+            .Include(p => p.Tags);
         if (year > 0)
         {
             postsQuery = postsQuery.Where(x => x.PostedDate.Year == year);
@@ -32,10 +33,15 @@ public class BlogRepository : IBlogRepository
         {
             postsQuery = postsQuery.Where(x => x.PostedDate.Month == month);
         }
+        if (day > 0)
+        {
+            postsQuery = postsQuery.Where(x => x.PostedDate.Day == day);
+        }
         if (!string.IsNullOrWhiteSpace(slug))
         {
             postsQuery = postsQuery.Where(x => x.UrlSlug.Equals(slug));
         }
+
 
         return await postsQuery.FirstOrDefaultAsync(cancellationToken);
     }
@@ -191,12 +197,21 @@ public class BlogRepository : IBlogRepository
     }
 
     // Còn bug 
-    public async Task<(int day, int month, int PostCount)> CountPostByMonth(int month, CancellationToken cancellationToken = default)
+    public async Task<IList<MonthlyPostCountItem>> CountPostByMonth(int month, CancellationToken cancellationToken = default)
     {
-        var date = DateTime.Now.AddMonths(-month);
         var result = await _dbContext.Set<Post>()
-            .Where(s => s.PostedDate > date).CountAsync(cancellationToken);
-        return (date.Day, month, result);
+            .GroupBy(s => new { s.PostedDate.Month, s.PostedDate.Year})
+            .Select(p => new MonthlyPostCountItem()
+            {
+                Month = p.Key.Month,
+                Year = p.Key.Year,
+                PostCount = p.Count()
+            })
+            .OrderByDescending(s => s.Year)
+            .ThenByDescending(s => s.Month)
+            .Take(month)
+            .ToListAsync(cancellationToken);
+        return result;
 
     }
 

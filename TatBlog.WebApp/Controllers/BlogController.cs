@@ -27,8 +27,7 @@ namespace TatBlog.WebApp.Controllers
 
             var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
 
-
-
+            
             ViewBag.PostQuery = postQuery;
             return View(postsList);
         }
@@ -82,23 +81,30 @@ namespace TatBlog.WebApp.Controllers
             string slug,
             int year,
             int month,
-            int day,
+            int day)
+        {
+          
+            var post = await _blogRepo.GetPostAsync(year, month, day, slug);
+            await _blogRepo.IncreaseViewCountAsync(post.Id);
+            return View(post);
+        }
+
+        public async Task<IActionResult> Archives(int year, int month,
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
             var postQuery = new PostQuery()
             {
-                PostSlug = slug,
-                Day = day,
                 Month = month,
                 Year = year,
             };
 
             var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
-            var post = postsList.FirstOrDefault();
+            ViewBag.Date = new DateTime(year, month, 1);
             ViewBag.PostQuery = postQuery;
-            return View(post);
+            return View(postsList);
         }
+        
 
         public IActionResult About()
         {

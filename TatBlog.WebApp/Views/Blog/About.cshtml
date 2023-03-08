@@ -1,17 +1,14 @@
-﻿@model IPagedList<Post>
-@{
-    ViewData["Title"] = "Tag Cloud";
-
-    var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
+﻿@{
+    ViewData["PageTitle"] = "Giới thiệu";
 }
 
-<div class="p-4">
-    <h3 class="text-primary mb-3">
-        Những bài viết chứa thẻ: '@postQuery.TagSlug'
-    </h3>
-    @foreach (var item in Model)
-    {
-        @await Html.PartialAsync("_PostItem", item)
-    }
-    @await Html.PartialAsync("_Pager", Model)
+<div class="p-5">
+    <h2 class="mb-5 text-uppercase text-center">Giới thiệu</h2>
+    <iframe class="w-100" height="640" src="https://www.youtube.com/embed/_olv1Sw14_g" title="Zoolander meme BlvckVines x Kenjumboy." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <div class="mt-5">
+        <div class="d-flex justify-content-between row gx-4">
+            <img src="/images/about_1.jpg" class="w-50" alt="about-image" />
+            <img src="/images/about_2.png" class="w-50" alt="about-image" />
+        </div>
+    </div>
 </div>
