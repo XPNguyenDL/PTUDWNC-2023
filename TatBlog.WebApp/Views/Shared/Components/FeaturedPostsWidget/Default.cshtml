@@ -1,0 +1,28 @@
+﻿@model IList<Post>
+
+<div class="mb-4">
+    <h3 class="text-success mb-2">
+        Bài viết nổi gần đây
+    </h3>
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between col">
+                <div class="col-9">
+                    <a asp-controller="Blog"
+                       asp-action="Post"
+                       asp-route-slug="@item.UrlSlug"
+                       asp-route-year="@item.PostedDate.Year"
+                       asp-route-month="@item.PostedDate.Month">
+                        @item.Title by @item.Author.FullName
+                    </a>
+                </div>
+               
+                <div class="col-3">
+                    <i class="fa fa-eye"></i>
+                    <span>(@item.ViewCount)</span>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
