@@ -251,71 +251,94 @@ public class BlogRepository : IBlogRepository
 
     private IQueryable<Post> FilterPost(IPostQuery condition)
     {
-        Guid id = new Guid();
+        
         int keyNumber = 0;
         var keyword = !string.IsNullOrWhiteSpace(condition.Keyword) ? condition.Keyword.ToLower() : "";
-        Guid.TryParse(condition.Keyword, out id);
         int.TryParse(condition.Keyword, out keyNumber);
 
         IQueryable<Post> posts = _dbContext.Set<Post>()
             .Include(t => t.Tags)
             .Include(s => s.Author)
-            .Include(c => c.Category);
+            .Include(c => c.Category)
+            .WhereIf(condition.Published, s => s.Published)
+            .WhereIf(condition.CategoryId != Guid.Empty, p => p.CategoryId == condition.CategoryId)
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.AuthorSlug), p => p.Author.UrlSlug == condition.AuthorSlug)
+            .WhereIf(condition.AuthorId != Guid.Empty, p => p.AuthorId == condition.AuthorId)
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.CategorySlug),
+                p => p.Category.UrlSlug == condition.CategorySlug)
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.TagSlug),
+                p => p.Tags.Any(t => t.UrlSlug == condition.TagSlug))
+            .WhereIf(condition.Year > 0, p => p.PostedDate.Year == condition.Year)
+            .WhereIf(condition.Month > 0, p => p.PostedDate.Month == condition.Month)
+            .WhereIf(condition.Day > 0, p => p.PostedDate.Day == condition.Day)
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.Keyword), s =>
+                s.Category.UrlSlug.ToLower().Contains(keyword) ||
+                s.Author.UrlSlug.ToLower().Contains(keyword) ||
+                s.Author.FullName.ToLower().Contains(keyword) ||
+                s.PostedDate.Day == keyNumber ||
+                s.PostedDate.Month == keyNumber ||
+                s.PostedDate.Year == keyNumber ||
+                s.Tags.Any(t => t.UrlSlug.ToLower().Contains(keyword) || t.Name.ToLower().Contains(keyword)));
 
-        if (condition.Published)
-        {
-            posts = posts.Where(s => s.Published);
-        }
+        #region old filter
 
-        if (condition.CategoryId != Guid.Empty)
-        {
-            posts = posts.Where(s => s.CategoryId == condition.CategoryId);
-        }
+        //if (condition.Published)
+        //{
+        //    posts = posts.Where(s => s.Published);
+        //}
 
-        if (condition.AuthorId != Guid.Empty)
-        {
-            posts = posts.Where(s => s.AuthorId == condition.AuthorId);
-        }
+        //if (condition.CategoryId != Guid.Empty)
+        //{
+        //    posts = posts.Where(s => s.CategoryId == condition.CategoryId);
+        //}
 
-        if (!string.IsNullOrWhiteSpace(condition.CategorySlug))
-        {
-            posts = posts.Where(x => x.Category.UrlSlug == condition.CategorySlug);
-        }
+        //if (condition.AuthorId != Guid.Empty)
+        //{
+        //    posts = posts.Where(s => s.AuthorId == condition.AuthorId);
+        //}
 
-        if (!string.IsNullOrWhiteSpace(condition.TagSlug))
-        {
-            posts = posts.Where(x => x.Tags.Any(t => t.UrlSlug == condition.TagSlug));
-        }
+        //if (!string.IsNullOrWhiteSpace(condition.CategorySlug))
+        //{
+        //    posts = posts.Where(x => x.Category.UrlSlug == condition.CategorySlug);
+        //}
 
-        if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
-        {
-            posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
-        }
+        //if (!string.IsNullOrWhiteSpace(condition.TagSlug))
+        //{
+        //    posts = posts.Where(x => x.Tags.Any(t => t.UrlSlug == condition.TagSlug));
+        //}
 
-        if (condition.Month > 0)
-        {
-            posts = posts.Where(s => s.PostedDate.Month == condition.Month);
-        }
-        
-        if (condition.Day> 0)
-        {
-            posts = posts.Where(s => s.PostedDate.Day == condition.Day);
-        }
-        
-        if (condition.Year > 0)
-        {
-            posts = posts.Where(s => s.PostedDate.Year == condition.Year);
-        }
-        
-        if (!string.IsNullOrWhiteSpace(condition.Keyword))
-        {
-            posts = posts.Where(s => s.Category.UrlSlug.ToLower().Contains(keyword) ||
-                                     s.Author.UrlSlug.ToLower().Contains(keyword) ||
-                                     s.Author.FullName.ToLower().Contains(keyword) ||
-                                     s.PostedDate.Day == keyNumber ||
-                                     s.PostedDate.Month == keyNumber ||
-                                     s.Tags.Any(t => t.UrlSlug.ToLower().Contains(keyword) || t.Name.ToLower().Contains(keyword)));
-        }
+        //if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
+        //{
+        //    posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
+        //}
+
+        //if (condition.Month > 0)
+        //{
+        //    posts = posts.Where(s => s.PostedDate.Month == condition.Month);
+        //}
+
+        //if (condition.Day > 0)
+        //{
+        //    posts = posts.Where(s => s.PostedDate.Day == condition.Day);
+        //}
+
+        //if (condition.Year > 0)
+        //{
+        //    posts = posts.Where(s => s.PostedDate.Year == condition.Year);
+        //}
+
+
+        //if (!string.IsNullOrWhiteSpace(condition.Keyword))
+        //{
+        //    posts = posts.Where(s => s.Category.UrlSlug.ToLower().Contains(keyword) ||
+        //                             s.Author.UrlSlug.ToLower().Contains(keyword) ||
+        //                             s.Author.FullName.ToLower().Contains(keyword) ||
+        //                             s.PostedDate.Day == keyNumber ||
+        //                             s.PostedDate.Month == keyNumber ||
+        //                             s.Tags.Any(t => t.UrlSlug.ToLower().Contains(keyword) || t.Name.ToLower().Contains(keyword)));
+        //}
+
+        #endregion
 
         return posts;
     }
