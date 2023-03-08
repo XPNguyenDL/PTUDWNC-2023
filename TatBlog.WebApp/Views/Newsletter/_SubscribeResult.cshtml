@@ -2,7 +2,20 @@
 
 <div class="mx-auto mt-5 p-5 rounded shadow" style="max-width: 576px">
     <h5 class="text-uppercase">Thông báo</h5>
-    @if (Model.SubscribeStatus == SubscribeStatus.Subscribe)
+    
+    @switch (Model.SubscribeStatus)
+    {
+        case SubscribeStatus.Subscribe:
+            <p>Đã đăng ký thành công.</p>
+            break;
+        case SubscribeStatus.Unsubscribe:
+            <p>Đã hủy đăng ký do: <span class="text-bg-info">'@Model.Reason'.</span></p>
+            break;
+        case SubscribeStatus.Block:
+            <p>Đã bị chặn đăng ký.</p>
+            break;
+    }
+    @*@if (Model.SubscribeStatus == SubscribeStatus.Subscribe)
     {
         <p>Đã đăng ký thành công.</p>
     } 
@@ -13,6 +26,6 @@
     else if (Model.SubscribeStatus == SubscribeStatus.Block)
     {
         <p>Đã bị chặn đăng ký.</p>
-    }
+    }*@
 
 </div>
