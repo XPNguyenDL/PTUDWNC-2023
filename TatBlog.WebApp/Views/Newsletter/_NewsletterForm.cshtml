@@ -1,0 +1,22 @@
+﻿@model Subscriber
+
+<div class="mb-4">
+    <form asp-controller="Newsletter"
+          asp-action="Subscribe"
+          method="post">
+        <div class="input-group mb-3">            
+            <input type="text"
+                   class="form-control"
+                   name="email"
+                   placeholder="Enter email"
+                   aria-label="Enter email"
+                   aria-describedby="btnSearchPost" />
+
+            <button class="btn btn-outline-secondary"
+                    type="submit"
+                    id="btnSearchPost">
+                Đăng ký
+            </button>
+        </div>
+    </form>
+</div>
