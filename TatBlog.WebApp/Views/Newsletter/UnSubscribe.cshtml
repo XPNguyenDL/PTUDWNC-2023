@@ -1,12 +1,12 @@
 ﻿@model Subscriber
 @{
-    ViewData["Title"] = "Hủy ký nhận thông báo";
+    ViewData["Title"] = "Hủy đăng ký nhận thông báo";
 }
 
 @if (Model == null)
 {
     <div class="mx-auto mt-5 p-5 rounded shadow" style="max-width: 576px">
-        <h5 class="text-uppercase">Hủy ký nhận thông báo</h5>
+        <h5 class="text-uppercase">Hủy đăng ký nhận thông báo</h5>
         <p>Nhận thông báo về tin tức, bài viết mới thông qua email.</p>
         <div class="mb-4">
             <form asp-controller="Newsletter"
@@ -16,6 +16,7 @@
                     <input type="text"
                            class="form-control"
                            name="email"
+                           required="true"
                            placeholder="Enter email"
                            aria-label="Enter email"
                            aria-describedby="btnSearchPost" />
@@ -24,6 +25,7 @@
                     <input type="text"
                            class="form-control"
                            name="reason"
+                           required="true"
                            placeholder="Enter reason"
                            aria-label="Enter reason"
                            aria-describedby="btnSearchPost" />
@@ -31,7 +33,7 @@
                 <button class="btn btn-outline-secondary"
                     type="submit"
                     id="btnSearchPost">
-                    Hủy ký
+                    Hủy đăng ký
                 </button>
             </form>
         </div>
