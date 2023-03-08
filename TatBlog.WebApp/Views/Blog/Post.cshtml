@@ -2,7 +2,7 @@
 @{
 
     var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
-    ViewData["Title"] = $"Bài viết - {postQuery.PostSlug}";
+    ViewData["Title"] = $"Bài viết - {Model.UrlSlug}";
     var images = string.IsNullOrWhiteSpace(Model.ImageUrl) ? "/images/image_1.jpg" : $"/{Model.ImageUrl}";
 }
 

@@ -1,0 +1,27 @@
+﻿@model IList<MonthlyPostCountItem>
+@{
+    string converTime(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMMM yyyy");
+    }
+}
+
+<div class="mb-4">
+    <h3 class="text-success mb-2">
+        Bài viết 12 tháng gần đây
+    </h3>
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                <a asp-controller="Blog"
+                   asp-action="Archives"
+                   asp-route-year="@item.Year"
+                   asp-route-month="@item.Month">
+                    @converTime(item.Month, item.Year)
+                    <span>(@item.PostCount)</span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
