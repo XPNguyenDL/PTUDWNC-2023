@@ -29,7 +29,8 @@
                asp-route-slug="@slug"
                asp-route-k="@postQuery.Keyword"
                asp-route-p="@(Model.PageNumber - 1)"
-               asp-route-ps="@Model.PageSize">
+               asp-route-ps="@Model.PageSize"
+       class="btn btn-info">
                 <i class="fa fa-arrow-left"></i>
                 Trang trước
             </a>
@@ -51,9 +52,10 @@
                asp-route-slug="@slug"
                asp-route-k="@postQuery.Keyword"
                asp-route-p="@(Model.PageNumber + 1)"
-               asp-route-ps="@Model.PageSize">
-                <i class="fa fa-arrow-right"></i>
+               asp-route-ps="@Model.PageSize"
+               class="btn btn-info">
                 Trang sau
+                <i class="fa fa-arrow-right"></i>
             </a>
         }
         else
@@ -61,8 +63,8 @@
             <button type="button"
                     class="btn btn-outline-secondary"
                     disabled>
-                <i class="fa fa-arrow-right"></i>
                 Trang sau
+                <i class="fa fa-arrow-right"></i>
             </button>
         }
     </div>

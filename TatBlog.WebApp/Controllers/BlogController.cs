@@ -17,13 +17,12 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Index(
             [FromQuery(Name = "k")] string keyword = null,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 10)
+            [FromQuery(Name = "ps")] int pageSize = 3)
         {
 
             var postQuery = new PostQuery()
             {
                 Keyword = keyword,
-                Published = true
             };
 
             var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
@@ -37,21 +36,68 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Tag(
             string slug,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 10)
+            [FromQuery(Name = "ps")] int pageSize = 3)
         {
-
             var postQuery = new PostQuery()
             {
                 TagSlug = slug,
-                Published = true
             };
 
             var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
-
-
-
             ViewBag.PostQuery = postQuery;
             return View(postsList);
+        }
+
+        public async Task<IActionResult> Author(
+            string slug,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+            var postQuery = new PostQuery()
+            {
+                AuthorSlug = slug,
+            };
+
+            var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
+            ViewBag.PostQuery = postQuery;
+            return View(postsList);
+        }
+
+        public async Task<IActionResult> Category(
+            string slug,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+            var postQuery = new PostQuery()
+            {
+                CategorySlug = slug,
+            };
+
+            var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
+            ViewBag.PostQuery = postQuery;
+            return View(postsList);
+        }
+
+        public async Task<IActionResult> Post(
+            string slug,
+            int year,
+            int month,
+            int day,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+            var postQuery = new PostQuery()
+            {
+                PostSlug = slug,
+                Day = day,
+                Month = month,
+                Year = year,
+            };
+
+            var postsList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
+            var post = postsList.FirstOrDefault();
+            ViewBag.PostQuery = postQuery;
+            return View(post);
         }
 
         public IActionResult About()

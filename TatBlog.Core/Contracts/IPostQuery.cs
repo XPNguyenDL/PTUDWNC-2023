@@ -9,12 +9,14 @@ public interface IPostQuery
     public string CategorySlug { get; set; }
 
     public string AuthorSlug { get; set; }
+    public string PostSlug { get; set; }
 
     public int Year { get; set; }
     public int Month { get; set; }
     public int Day { get; set; }
 
     public bool Published { get; set; }
+    public bool NonPublished { get; set; }
     
     public string TagSlug { get; set; }
 
