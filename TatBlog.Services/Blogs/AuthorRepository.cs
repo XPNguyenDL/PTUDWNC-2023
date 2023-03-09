@@ -60,15 +60,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<List<Author>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default)
     {
-        var authorItem = _dbContext.Set<Author>()
-            .Select(s => new AuthorItem()
-            {
-                PostCount = s.Posts.Count(p => p.Published)
-            }).ToList();
-
-        var maxPostCount = authorItem.Max(s => s.PostCount);
-
         return await _dbContext.Set<Author>()
-            .Where(s => s.Posts.Count(p => p.Published) == maxPostCount).Take(authorNum).ToListAsync(cancellationToken);
+            .OrderByDescending(s => s.Posts.Count(p => p.Published)).Take(authorNum).ToListAsync(cancellationToken);
     }
 }
