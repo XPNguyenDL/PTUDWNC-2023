@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TatBlog.Core.Contracts;
+﻿using TatBlog.Core.Contracts;
 
 namespace TatBlog.Core.Entities;
 

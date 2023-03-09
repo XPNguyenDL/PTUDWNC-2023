@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace TatBlog.Core.Contracts;
+﻿namespace TatBlog.Core.Contracts;
 
 public interface IPagingParams
 {
