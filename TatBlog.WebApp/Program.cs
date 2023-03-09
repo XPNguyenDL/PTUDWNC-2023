@@ -3,7 +3,7 @@
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.ConfigureMVC()
-        .ConfigureServicer();
+        .ConfigureService();
 }
 
 var app = builder.Build();

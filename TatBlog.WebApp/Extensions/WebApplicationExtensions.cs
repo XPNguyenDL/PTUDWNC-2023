@@ -15,13 +15,14 @@ public static class WebApplicationExtensions
         return builder;
     }
 
-    public static WebApplicationBuilder ConfigureServicer(
+    public static WebApplicationBuilder ConfigureService(
         this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<BlogDbContext>(o =>
             o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddScoped<IBlogRepository, BlogRepository>();
         builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
+        builder.Services.AddScoped<ICommentRepository, CommentRepository>();
         builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
         return builder;

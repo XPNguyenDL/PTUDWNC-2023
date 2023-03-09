@@ -4,7 +4,16 @@
     var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
     ViewData["Title"] = $"Bài viết - {Model.UrlSlug}";
     var images = string.IsNullOrWhiteSpace(Model.ImageUrl) ? "/images/image_1.jpg" : $"/{Model.ImageUrl}";
+    var comments = ViewData["Comments"] as IList<Comment> ?? new List<Comment>();
+    var cmtSuccess = false;
+    if (ViewBag.CmtSuccess != null)
+    {
+        cmtSuccess = true;
+    }
+    var linkShare = $"https://localhost:7245/blog/post/{Model.PostedDate.Year}/{Model.PostedDate.Month}/{Model.PostedDate.Day}/{Model.UrlSlug}";
 }
+
+
 
 <div class="p-4">
 
@@ -15,14 +24,22 @@
                 <div>
                     <!-- Post content-->
                     <article>
+                        <div class="d-flex justify-content-between">
+                            <header class="mb-4">
+                                <!-- Post title-->
+                                <p class="fw-bolder mb-2 text-dark fs-5">@Model.Title</p>
+                                <partial name="_TagList" model="@Model.Tags" />
+                                <!-- Post meta content-->
+                                <div class="text-muted fst-italic mb-2">@Model.PostedDate.ToString("MM/dd/yyyy")</div>
+
+                            </header>
+                            <div class="fb-share-button mt-4" data-href="@linkShare"
+                             data-layout="button_count" data-size="large">
+                                <a target="_blank" 
+                                   href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A7245%2Fblog%2Fpost%2F2022%2F9%2F30%2F10-web-development-trends-in-2023&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Chia sẻ</a>
+                            </div>
+                        </div>
                         <!-- Post header-->
-                        <header class="mb-4">
-                            <!-- Post title-->
-                            <p class="fw-bolder mb-2 text-dark fs-5">@Model.Title</p>
-                            <partial name="_TagList" model="@Model.Tags"/>
-                            <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">@Model.PostedDate.ToString("MM/dd/yyyy")</div>
-                        </header>
                         <!-- Preview image figure-->
                         <figure class="mb-4">
                             <img class="img-fluid rounded mx-auto d-block h-512 object-fit-cover" src="@images" alt="...">
@@ -37,33 +54,51 @@
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Nhận xét...."></textarea></form>
-                                <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
-                                <!-- Parent comment-->
-                               <div class="flex-shrink-0 mr-4"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                <!-- Child comment 1-->
-                                <div class="d-flex mt-4">
+
+                                <form class="mb-4"
+                                  asp-controller="Blog"
+                                  asp-action="Post"
+                                  method="post">
+                                    <input value="@Model.Id" class="d-none" name="postId" aria-describedby="btnComment" />
+                                    <div class="input-group mb-3">
+                                        <input type="text"
+                                           class="form-control"
+                                           name="userName"
+                                           required
+                                           placeholder="Enter user name..."
+                                           aria-label="Enter user name..."
+                                           aria-describedby="btnComment" />
+
+                                        <button class="btn btn-outline-secondary"
+                                            type="submit"
+                                            id="btnComment">
+                                            Đăng ký
+                                        </button>
+                                    </div>
+                                    <textarea class="form-control"
+                                          rows="3"
+                                          placeholder="Enter content..."
+                                          name="content"
+                                          required
+                                          aria-describedby="btnComment"></textarea>
+                                </form>
+                                @if (cmtSuccess)
+                                {
+                                    <p class="text-success">Gửi bình luận thành công.</p>
+                                }
+                                @if (comments != null)
+                                {
+                                    foreach (var cmt in comments)
+                                    {
+                                        <div class="d-flex mb-2">
                                             <div class="flex-shrink-0 mr-4"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
                                             <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                                                <div class="fw-bold">@cmt.UserComment <small class="text-light">@cmt.PostTime.ToString("MM/dd/yyyy")</small></div>
+                                                @cmt.Content
                                             </div>
                                         </div>
-
-                                    </div>
-                                </div>
-                                <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 mr-4"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                                    </div>
-                                </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </section>
@@ -77,3 +112,6 @@
     }
 
 </div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0" nonce="onAonF8z"></script>

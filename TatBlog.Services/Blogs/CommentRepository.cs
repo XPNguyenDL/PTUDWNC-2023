@@ -13,19 +13,31 @@ public class CommentRepository : ICommentRepository
         _dbContext = context;
     }
 
-    public async Task<Comment> AddOrUpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default)
-    {
-        if (_dbContext.Set<Comment>().Any(s => s.Id == comment.Id))
-        {
-            _dbContext.Entry(comment).State = EntityState.Modified;
-        }
-        else
-        {
-            _dbContext.Comments.Add(comment);
-        }
+    public async Task<List<Comment>> GetCommentsByPost(Guid postId, CancellationToken cancellationToken = default) =>
+        await _dbContext.Set<Comment>()
+            .Include(s => s.Post)
+            .Where(s => s.PostId == postId && s.CommentStatus == CommentStatus.Valid).ToListAsync(cancellationToken);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return comment;
+    public async Task<bool> AddOrUpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_dbContext.Set<Comment>().Any(s => s.Id == comment.Id))
+            {
+                _dbContext.Entry(comment).State = EntityState.Modified;
+            }
+            else
+            {
+                _dbContext.Comments.Add(comment);
+            }
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     public async Task<bool> DeleteCommentAsync(Guid id, CancellationToken cancellationToken = default)
     {
