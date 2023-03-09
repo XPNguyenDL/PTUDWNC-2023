@@ -16,7 +16,7 @@
                     <input type="text"
                            class="form-control"
                            name="email"
-                           required="true"
+                           required
                            placeholder="Enter email"
                            aria-label="Enter email"
                            aria-describedby="btnSearchPost" />
@@ -25,7 +25,7 @@
                     <input type="text"
                            class="form-control"
                            name="reason"
-                           required="true"
+                           required
                            placeholder="Enter reason"
                            aria-label="Enter reason"
                            aria-describedby="btnSearchPost" />
@@ -41,7 +41,17 @@
 }
 else
 {
-    <partial name="_SubscribeResult" model="Model" />
+    <div class="mx-auto mt-5 p-5 rounded shadow" style="max-width: 576px">
+        <h5 class="text-uppercase">Thông báo</h5>
+        @if (ViewBag.SubSuccess)
+        {
+            <partial name="_SubscribeResult" model="Model"/> 
+        }
+        else
+        {
+            <p>Hủy đăng ký thất bại.</p>
+        }
+    </div>
 }
 
 

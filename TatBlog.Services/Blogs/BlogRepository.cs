@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -24,7 +22,9 @@ public class BlogRepository : IBlogRepository
         IQueryable<Post> postsQuery = _dbContext.Set<Post>()
             .Include(x => x.Category)
             .Include(x => x.Author)
-            .Include(p => p.Tags);
+            .Include(p => p.Tags)
+            .Include(p => p.Comments);
+
         if (year > 0)
         {
             postsQuery = postsQuery.Where(x => x.PostedDate.Year == year);
@@ -237,7 +237,12 @@ public class BlogRepository : IBlogRepository
 
     public async Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<Post>().FirstOrDefaultAsync(s => s.Id.Equals(postId), cancellationToken);
+        return await _dbContext.Set<Post>()
+            .Include(s => s.Author)
+            .Include(s => s.Tags)
+            .Include(s => s.Category)
+            .Include(s => s.Comments)
+            .FirstOrDefaultAsync(s => s.Id.Equals(postId), cancellationToken);
     }
 
     public async Task<Post> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default)

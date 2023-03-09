@@ -4,17 +4,14 @@
     <h3 class="text-success mb-2">
         Tag Cloud
     </h3>
-    <ul class="list-group">
-        @foreach (var item in Model)
-        {
-            <li class="list-group-item ">
-                <a asp-controller="Blog"
-                    asp-action="Tag"
-                    asp-route-slug="@item.UrlSlug">
-                    @item.Name
-                    <span>(@item.PostCount)</span>
-                </a>
-            </li>
-        }
-    </ul>
+    @foreach (var item in Model)
+    {
+        <button asp-controller="Blog"
+            asp-action="Tag"
+            asp-route-slug="@item.UrlSlug"
+            class="btn btn-outline-secondary m-1">
+            @item.Name
+            <span>(@item.PostCount)</span>
+        </button>
+    }
 </div>

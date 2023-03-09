@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+﻿
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using TatBlog.Core.Contracts;
@@ -57,7 +57,7 @@ public class SubscriberRepository : ISubscriberRepository
         if (match.Success)
         {
             var subscriber = _dbContext.Set<Subscriber>().FirstOrDefault(s => s.Email.Equals(email));
-            if (subscriber != null)
+            if (subscriber != null && subscriber.SubscribeStatus == SubscribeStatus.Subscribe)
             {
                 subscriber.Reason = reason;
                 subscriber.SubscribeStatus = SubscribeStatus.Unsubscribe;

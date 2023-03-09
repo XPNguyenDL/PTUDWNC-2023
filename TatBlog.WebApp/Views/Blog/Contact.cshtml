@@ -20,32 +20,44 @@
                     <i class="fs-5 fa fa-github"></i>
                     <a href="https://github.com/XPNguyenDL" target="_blank" class="ms-1">Github</a>
                 </div>
+                <div>
+                    <i class="fa fa-credit-card"></i>
+                    <a href="https://github.com/tranbaolam26902" target="_blank" class="ms-1">tranbaolam26902</a>
+                </div>
             </div>
             <div class="col-8">
-                <form>
+                <form asp-controller="Blog"
+                      asp-action="Contact"
+                      method="post">
                     <div class="mb-3 fs-3 text-center text-uppercase">Gửi ý kiến</div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
                             <label for="email" class="form-label">Email</label>
                             <span class="text-danger fst-italic fs-6">(Bắt buộc)</span>
                         </div>
-                        <input type="email" class="form-control" id="email" required>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
                             <label for="subject" class="form-label">Chủ đề</label>
                             <span class="text-danger fst-italic fs-6">(Bắt buộc)</span>
                         </div>
-                        <input type="text" class="form-control" id="subject" required>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
                             <label for="content" class="form-label">Nội dung</label>
                             <span class="text-danger fst-italic fs-6">(Bắt buộc)</span>
                         </div>
-                        <textarea class="form-control" id="content" rows="8" required></textarea>
+                        <textarea class="form-control" name="body" id="content" rows="8" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary px-5 py-2">Gửi</button>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary px-5 py-2">Gửi</button>
+                        @if (ViewBag.Success != null)
+                        {
+                            <span class="text-success fst-italic fs-6">Gửi thành công</span>
+                        }
+                    </div>
                 </form>
             </div>
         </div>
