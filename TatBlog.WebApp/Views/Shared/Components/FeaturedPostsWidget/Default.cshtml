@@ -9,7 +9,8 @@
         {
             <li class="list-group-item d-flex justify-content-between col">
                 <div class="col-9">
-                    <a asp-controller="Blog"
+                    <a asp-area="" 
+                       asp-controller="Blog"
                        asp-action="Post"
                        asp-route-slug="@item.UrlSlug"
                        asp-route-year="@item.PostedDate.Year"

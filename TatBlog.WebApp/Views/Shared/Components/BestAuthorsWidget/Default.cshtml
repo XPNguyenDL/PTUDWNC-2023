@@ -8,7 +8,8 @@
         @foreach (var item in Model)
         {
             <li class="list-group-item ">
-                <a asp-controller="Blog"
+                <a asp-area="" 
+                   asp-controller="Blog"
                     asp-action="Author"
                     asp-route-slug="@item.UrlSlug">
                     @item.FullName
