@@ -1,0 +1,37 @@
+﻿using System.ComponentModel;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace TatBlog.WebApp.Areas.Admin.Models;
+
+public class PostFilterModel
+{
+    [DisplayName("Từ khóa")]
+    public string Keyword { get; set; }
+
+    [DisplayName("Tác giả")]
+    public Guid? AuthorId { get; set; }
+
+    [DisplayName("Chủ đề")]
+    public Guid? CategoryId { get; set; }
+
+    [DisplayName("Năm")]
+    public int? Year { get; set; }
+
+    [DisplayName("Tháng")]
+    public int? Month { get; set; }
+
+    public IEnumerable<SelectListItem> AuthorList { get; set; }
+    public IEnumerable<SelectListItem> CategoryList { get; set; }
+    public IEnumerable<SelectListItem> MonthList { get; set; }
+
+    public PostFilterModel()
+    {
+        MonthList = Enumerable.Range(1, 12)
+            .Select(m => new SelectListItem()
+            {
+                Value = m.ToString(),
+                Text = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m),
+            }).ToList();
+    }
+}
