@@ -25,6 +25,11 @@ public static class RouteExtensions
             defaults: new { controller = "Blog", action = "Post" });
 
         endpoints.MapControllerRoute(
+            name: "areas-admin",
+            pattern: "admin/{controller=Home}/{action=Index}/{id?}"
+        );
+
+        endpoints.MapControllerRoute(
             name: "default",
             pattern: "{controller=Blog}/{action=Index}/{id?}");
 
