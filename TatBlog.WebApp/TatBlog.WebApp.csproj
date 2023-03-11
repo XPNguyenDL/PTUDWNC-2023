@@ -10,6 +10,7 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Mapsters\" />
     <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\uploads\pictures\" />
