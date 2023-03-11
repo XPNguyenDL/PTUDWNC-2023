@@ -43,7 +43,7 @@ public interface IBlogRepository
     Task<IList<MonthlyPostCountItem>> CountPostByMonth(int month, CancellationToken cancellationToken = default);
 
     Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default);
-    Task<Post> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+    Task<Post> AddOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default);
 
     Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
 

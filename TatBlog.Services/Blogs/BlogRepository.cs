@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SlugGenerator;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -264,8 +265,41 @@ public class BlogRepository : IBlogRepository
             .FirstOrDefaultAsync(s => s.Id.Equals(postId), cancellationToken);
     }
 
-    public async Task<Post> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default)
+    public async Task<Post> AddOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default)
     {
+        if (_dbContext.Set<Post>().Any(s => s.Id == post.Id))
+        {
+            await _dbContext.Entry(post).Collection(x => x.Tags).LoadAsync(cancellationToken);
+        }
+        else
+        {
+            post.Tags = new List<Tag>();
+        }
+
+        var validTags = tags.Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => new
+            {
+                Name = x,
+                Slug = x.GenerateSlug()
+            })
+            .GroupBy(x => x.Slug)
+            .ToDictionary(g => g.Key, g => g.First().Name);
+
+        foreach (var kv in validTags)
+        {
+            if (post.Tags.Any(x => string.Compare(x.UrlSlug, kv.Key, StringComparison.InvariantCultureIgnoreCase) == 0)) continue;
+
+            var tag = await GetTagBySlugAsync(kv.Key, cancellationToken) ?? new Tag()
+            {
+                Name = kv.Value,
+                Description = kv.Value,
+                UrlSlug = kv.Key
+            };
+
+            post.Tags.Add(tag);
+        }
+
+
         if (_dbContext.Set<Post>().Any(s => s.Id == post.Id))
         {
             _dbContext.Entry(post).State = EntityState.Modified;

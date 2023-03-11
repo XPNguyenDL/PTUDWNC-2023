@@ -22,7 +22,7 @@ public class PostEditModel
     [MaxLength(2000, ErrorMessage = "Giới thiệu tối đa 2000 ký tự")]
     public string ShortDescription { get; set; }
 
-    [DisplayName("Giới thiệu")]
+    [DisplayName("Nội dung")]
     [Required(ErrorMessage = "Nội dung không được bỏ trống")]
     [MaxLength(5000, ErrorMessage = "Nội dung tối đa 5000 ký tự")]
     public string Description { get; set; }
@@ -40,10 +40,10 @@ public class PostEditModel
     public string UrlSlug { get; set; }
 
     [DisplayName("Chọn hình ảnh")] 
-    public IFormFile ImageFile { get; set; }
+    public IFormFile? ImageFile { get; set; }
 
     [DisplayName("Hình hiện tại")] 
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     [DisplayName("Xuất bản ngay")] 
     public bool Published { get; set; }
@@ -60,8 +60,8 @@ public class PostEditModel
     [Required(ErrorMessage = "Bạn chưa nhập tên thẻ")] 
     public string SelectedTags { get; set; }
 
-    public IEnumerable<SelectListItem> AuthorList { get; set; }
-    public IEnumerable<SelectListItem> CategoryList { get; set; }
+    public IEnumerable<SelectListItem>? AuthorList { get; set; }
+    public IEnumerable<SelectListItem>? CategoryList { get; set; }
 
     public List<string> GetSelectTags()
     {
