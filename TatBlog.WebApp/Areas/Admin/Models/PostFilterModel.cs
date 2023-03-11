@@ -10,10 +10,10 @@ public class PostFilterModel
     public string Keyword { get; set; }
 
     [DisplayName("Tác giả")]
-    public Guid? AuthorId { get; set; }
+    public Guid AuthorId { get; set; } 
 
     [DisplayName("Chủ đề")]
-    public Guid? CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
 
     [DisplayName("Năm")]
     public int? Year { get; set; }
