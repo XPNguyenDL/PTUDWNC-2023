@@ -111,6 +111,25 @@ public class BlogRepository : IBlogRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IList<AuthorItem>> GetAuthorAsync(CancellationToken cancellationToken = default)
+    {
+        IQueryable<Author> author = _dbContext.Set<Author>();
+        return await author
+            .OrderBy(x => x.FullName)
+            .Select(x => new AuthorItem
+            {
+                Id = x.Id,
+                FullName = x.FullName,
+                UrlSlug = x.UrlSlug,
+                ImageUrl = x.ImageUrl,
+                Email = x.Email,
+                JoinedDate = x.JoinedDate,
+                PostCount = x.Posts.Count(p => p.Published),
+            })
+            .OrderByDescending(s => s.PostCount)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IPagedList<TagItem>> GetPagedTagsAsync(
         IPagingParams pagingParams,
         CancellationToken cancellationToken = default)
