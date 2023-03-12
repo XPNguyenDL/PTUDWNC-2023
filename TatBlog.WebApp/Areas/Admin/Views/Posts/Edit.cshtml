@@ -19,7 +19,7 @@
         <label asp-for="Title"
                class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input type="text"
+            <input id="Title" type="text"
                    class="form-control" asp-for="Title"/>
             <span asp-validation-for="Title"
                   class="text-danger"></span>
@@ -30,7 +30,7 @@
         <label asp-for="UrlSlug"
                class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input type="text"
+            <input id="UrlSlug" type="text"
                    class="form-control" asp-for="UrlSlug" />
             <span asp-validation-for="UrlSlug"
                   class="text-danger"></span>
@@ -156,4 +156,15 @@
 @section scripts
 {
     <partial name="_ValidationScriptsPartial"/>
+
+    <script src="~/lib/speakingurl/speakingurl.min.js"></script>
+
+    <script>
+    $(function () {
+        $('#Title').change(function () {
+            var slug = getSlug(this.value);
+            $('#UrlSlug').val(slug).trigger('blur');
+        })
+    })
+    </script>
 }

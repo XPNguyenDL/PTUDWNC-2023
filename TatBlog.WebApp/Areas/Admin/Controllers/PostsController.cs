@@ -5,6 +5,7 @@ using TatBlog.Core.Collections;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApp.Areas.Admin.Models;
+using TatBlog.WebApp.Media;
 
 namespace TatBlog.WebApp.Areas.Admin.Controllers
 {
@@ -12,11 +13,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
     {
         private readonly IBlogRepository _blogRepo;
         private readonly IMapper _mapper;
+        private readonly IMediaManager _media;
 
-        public PostsController(IBlogRepository blogRepo, IMapper mapper)
+        public PostsController(IBlogRepository blogRepo, IMapper mapper, IMediaManager media)
         {
             _blogRepo = blogRepo;
             _mapper = mapper;
+            _media = media;
         }
 
         private async Task PopulatePostFilterModelAsync(PostFilterModel model)
@@ -85,7 +88,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                //return BadRequest(ModelState);
                 await PopulatePostEditModelAsync(model);
                 return View(model);
             }
@@ -106,7 +109,22 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 _mapper.Map(model, post);
 
                 post.Category = null;
+                post.Tags = null;
                 post.ModifiedDate = DateTime.Now;
+            }
+
+            if (model.ImageFile?.Length > 0)
+            {
+                var newImagePath = await _media.SaveFileAsync(
+                    model.ImageFile.OpenReadStream(),
+                    model.ImageFile.FileName,
+                    model.ImageFile.ContentType);
+
+                if (!string.IsNullOrWhiteSpace(newImagePath))
+                {
+                    await _media.DeleteFileAsync(post.ImageUrl);
+                    post.ImageUrl = newImagePath;
+                }
             }
 
             await _blogRepo.AddOrUpdatePostAsync(post, model.GetSelectTags());

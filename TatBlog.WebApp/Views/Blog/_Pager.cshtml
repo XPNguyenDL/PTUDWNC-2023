@@ -50,7 +50,8 @@
 
         @if (Model.HasNextPage)
         {
-            <a asp-controller="Blog"
+            <a asp-area=""
+                asp-controller="Blog"
        asp-acction="@actionName"
        asp-route-slug="@slug"
        asp-route-k="@postQuery.Keyword"

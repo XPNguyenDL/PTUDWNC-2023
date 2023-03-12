@@ -29,21 +29,6 @@
       "library": "jquery@3.6.3",
       "destination": "wwwroot/lib/jquery/",
       "files": [
-        "dist/jquery.js",
-        "dist/jquery.min.js",
-        "dist/jquery.min.map",
-        "dist/jquery.slim.js",
-        "dist/jquery.slim.min.js",
-        "dist/jquery.slim.min.map",
-        "README.md",
-        "LICENSE.txt"
-      ]
-    },
-    {
-      "provider": "unpkg",
-      "library": "jquery@3.6.3",
-      "destination": "wwwroot/lib/jquery/",
-      "files": [
         "LICENSE.txt",
         "README.md",
         "dist/jquery.js",
@@ -68,6 +53,16 @@
         "fonts/fontawesome-webfont.woff",
         "fonts/fontawesome-webfont.woff2",
         "fonts/FontAwesome.otf"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "speakingurl@14.0.1",
+      "destination": "wwwroot/lib/speakingurl/",
+      "files": [
+        "LICENSE",
+        "speakingurl.min.js",
+        "README.md"
       ]
     }
   ]
