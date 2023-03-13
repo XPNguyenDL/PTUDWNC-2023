@@ -153,6 +153,7 @@ public class BlogRepository : IBlogRepository
     public async Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Tag>()
+            .Include(x => x.Posts)
             .FirstOrDefaultAsync(t => t.UrlSlug.Equals(slug), cancellationToken);
     }
 
@@ -270,17 +271,18 @@ public class BlogRepository : IBlogRepository
         // Check if the post already exists in the database
         var postExists = await _dbContext.Set<Post>().AnyAsync(s => s.Id == post.Id, cancellationToken);
 
+        
+        // Create an empty list of tags for a new post
+        if (!postExists || post.Tags == null)
+        {
+            post.Tags = new List<Tag>();
+        }
         // Load the tags for an existing post
-        if (postExists)
+        else if (post.Tags == null || post.Tags.Count == 0)
         {
             await _dbContext.Entry(post)
                 .Collection(x => x.Tags)
                 .LoadAsync(cancellationToken);
-        }
-        // Create an empty list of tags for a new post
-        else
-        {
-            post.Tags = new List<Tag>();
         }
 
         // Process the valid tags provided for the post
@@ -303,8 +305,14 @@ public class BlogRepository : IBlogRepository
             {
                 Name = kv.Value,
                 Description = kv.Value,
-                UrlSlug = kv.Key
+                UrlSlug = kv.Key,
+                Posts = new List<Post>()
             };
+
+            if (tag.Posts.All(p => p.Id != post.Id))
+            {
+                tag.Posts.Add(post);
+            }
 
             post.Tags.Add(tag);
         }
@@ -312,19 +320,18 @@ public class BlogRepository : IBlogRepository
         // Add or update the post in the database
         if (postExists)
         {
-            _dbContext.Update(post);
+            _dbContext.Posts.Update(post);
         }
         else
         {
             _dbContext.Posts.Add(post);
         }
 
+        var enries = _dbContext.ChangeTracker.Entries();
         // Save changes to the database
         await _dbContext.SaveChangesAsync(cancellationToken);
-
         return post;
     }
-
 
     public async Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellationToken = default)
     {
