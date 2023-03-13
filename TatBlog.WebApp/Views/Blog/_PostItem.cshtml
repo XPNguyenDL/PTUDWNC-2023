@@ -15,6 +15,7 @@
             <div class="col-md-8">
                 <div class="card-body">
                     <a class="text-decoration-none card-title text-dark fs-5"
+                       asp-area=""
                        asp-controller="Blog"
                        asp-action="Post"
                        asp-route-year="@Model.PostedDate.Year"
@@ -30,6 +31,7 @@
                         </small>
                         <span class="text-primary">
                             <a class="text-decoration-none"
+                               asp-area=""
                                asp-controller="Blog"
                                asp-action="Author"
                                asp-route-slug="@Model.Author.UrlSlug"
@@ -42,6 +44,7 @@
                         </small>
                         <span class="text-primary">
                             <a class="text-decoration-none"
+                               asp-area=""
                                asp-controller="Blog"
                                asp-action="Category"
                                asp-route-slug="@Model.Category.UrlSlug"
@@ -57,7 +60,7 @@
                         @await Html.PartialAsync("_TagList", @Model.Tags)
                     </div>
                     <div class="text-end">
-                        <a
+                        <a asp-area=""
                             asp-controller="Blog"
                             asp-action="Post"
                             asp-route-year="@Model.PostedDate.Year"
