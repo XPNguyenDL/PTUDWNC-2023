@@ -109,7 +109,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 _mapper.Map(model, post);
 
                 post.Category = null;
-                post.Tags = null;
                 post.ModifiedDate = DateTime.Now;
             }
 
