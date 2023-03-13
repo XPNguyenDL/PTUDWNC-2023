@@ -256,8 +256,13 @@ public class BlogRepository : IBlogRepository
 
     }
 
-    public async Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default)
+    public async Task<Post> GetPostByIdAsync(Guid postId, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
+
+        if (!includeDetails)
+        {
+            return await _dbContext.Set<Post>().FindAsync(postId);
+        }
         return await _dbContext.Set<Post>()
             .Include(s => s.Author)
             .Include(s => s.Tags)
@@ -294,6 +299,18 @@ public class BlogRepository : IBlogRepository
             })
             .GroupBy(x => x.Slug)
             .ToDictionary(g => g.Key, g => g.First().Name);
+
+        // Xóa những tag cũ không được chọn
+        var oldPost = await GetPostByIdAsync(post.Id, true, cancellationToken);
+        var oldTags = oldPost.Tags.ToList();
+        foreach (var tag in oldTags)
+        {
+            if (!validTags.ContainsKey(tag.UrlSlug))
+            {
+                tag.Posts.Remove(post);
+                post.Tags.Remove(tag);
+            }
+        }
 
         foreach (var kv in validTags)
         {

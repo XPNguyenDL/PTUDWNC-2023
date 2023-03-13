@@ -42,7 +42,8 @@ public interface IBlogRepository
     Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
     Task<IList<MonthlyPostCountItem>> CountPostByMonth(int month, CancellationToken cancellationToken = default);
 
-    Task<Post> GetPostByIdAsync(Guid postId, CancellationToken cancellationToken = default);
+    Task<Post> GetPostByIdAsync(Guid postId, bool includeDetails = false,
+        CancellationToken cancellationToken = default);
     Task<Post> AddOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default);
 
     Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
