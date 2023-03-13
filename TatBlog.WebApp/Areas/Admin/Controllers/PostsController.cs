@@ -72,8 +72,9 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var post = id != Guid.Empty
-                ? await _blogRepo.GetPostByIdAsync(id)
+                ? await _blogRepo.GetPostByIdAsync(id, true)
                 : null;
+
 
             var model = post == null
                 ? new PostEditModel()
