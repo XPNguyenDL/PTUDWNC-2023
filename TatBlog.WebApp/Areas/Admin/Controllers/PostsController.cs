@@ -108,9 +108,9 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
-                //await PopulatePostEditModelAsync(model);
-                //return View(model);
+                //return BadRequest(ModelState);
+                await PopulatePostEditModelAsync(model);
+                return View(model);
             }
 
             var post = model.Id != Guid.Empty
