@@ -60,7 +60,7 @@ public class LocalFileSystemMediaManager : IMediaManager
         }
     }
 
-    private string CreateFilePath(string fileExt, string contentType = null)
+    private string CreateFilePath(string fileExt, string contentType = "")
     {
         return string.Format(PictureFolder, Guid.NewGuid().ToString("N"), fileExt);
     }
