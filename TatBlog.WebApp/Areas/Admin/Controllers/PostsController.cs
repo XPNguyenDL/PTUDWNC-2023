@@ -14,13 +14,15 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 {
     public class PostsController : Controller
     {
+        private readonly ILogger<PostsController> _logger;
         private readonly IBlogRepository _blogRepo;
         private readonly IMapper _mapper;
         private readonly IMediaManager _media;
         private readonly IValidator<PostEditModel> _postValidator;
 
-        public PostsController(IBlogRepository blogRepo, IMapper mapper, IMediaManager media, IValidator<PostEditModel> postValidator = null)
+        public PostsController(ILogger<PostsController> logger, IBlogRepository blogRepo, IMapper mapper, IMediaManager media)
         {
+            _logger = logger;
             _blogRepo = blogRepo;
             _mapper = mapper;
             _media = media;
@@ -65,9 +67,15 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(PostFilterModel model)
         {
+            _logger.LogInformation("Tạo điều kiện truy vấn");
+
             var postQuery = _mapper.Map<PostQuery>(model);
 
+            _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
+
             ViewBag.PostList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, 1, 10);
+
+            _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
             await PopulatePostFilterModelAsync(model);
             return View(model);
@@ -130,7 +138,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                     model.ImageFile.OpenReadStream(),
                     model.ImageFile.FileName,
                     model.ImageFile.ContentType);
-
                 if (!string.IsNullOrWhiteSpace(newImagePath))
                 {
                     await _media.DeleteFileAsync(post.ImageUrl);

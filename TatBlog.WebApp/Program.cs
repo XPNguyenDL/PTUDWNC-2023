@@ -5,6 +5,7 @@ using TatBlog.WebApp.Validations;
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.ConfigureMVC()
+        .ConfigureNLog()
         .ConfigureService()
         .ConfigureMapster()
         .ConfigureFluentValidation();
