@@ -301,14 +301,17 @@ public class BlogRepository : IBlogRepository
             .ToDictionary(g => g.Key, g => g.First().Name);
 
         // Xóa những tag cũ không được chọn
-        var oldPost = await GetPostByIdAsync(post.Id, true, cancellationToken);
-        var oldTags = oldPost.Tags.ToList();
-        foreach (var tag in oldTags)
+        if (postExists)
         {
-            if (!validTags.ContainsKey(tag.UrlSlug))
+            var oldPost = await GetPostByIdAsync(post.Id, true, cancellationToken);
+            var oldTags = oldPost.Tags.ToList();
+            foreach (var tag in oldTags)
             {
-                tag.Posts.Remove(post);
-                post.Tags.Remove(tag);
+                if (!validTags.ContainsKey(tag.UrlSlug))
+                {
+                    tag.Posts.Remove(post);
+                    post.Tags.Remove(tag);
+                }
             }
         }
 

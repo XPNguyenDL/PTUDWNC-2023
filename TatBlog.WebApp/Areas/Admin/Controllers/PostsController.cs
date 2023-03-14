@@ -1,4 +1,6 @@
-﻿using MapsterMapper;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TatBlog.Core.Collections;
@@ -6,6 +8,7 @@ using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApp.Areas.Admin.Models;
 using TatBlog.WebApp.Media;
+using TatBlog.WebApp.Validations;
 
 namespace TatBlog.WebApp.Areas.Admin.Controllers
 {
@@ -14,12 +17,14 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         private readonly IBlogRepository _blogRepo;
         private readonly IMapper _mapper;
         private readonly IMediaManager _media;
+        private readonly IValidator<PostEditModel> _postValidator;
 
-        public PostsController(IBlogRepository blogRepo, IMapper mapper, IMediaManager media)
+        public PostsController(IBlogRepository blogRepo, IMapper mapper, IMediaManager media, IValidator<PostEditModel> postValidator = null)
         {
             _blogRepo = blogRepo;
             _mapper = mapper;
             _media = media;
+            _postValidator = new PostValidator(_blogRepo);
         }
 
         private async Task PopulatePostFilterModelAsync(PostFilterModel model)
@@ -75,7 +80,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 ? await _blogRepo.GetPostByIdAsync(id, true)
                 : null;
 
-
             var model = post == null
                 ? new PostEditModel()
                 : _mapper.Map<PostEditModel>(post);
@@ -87,11 +91,18 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(PostEditModel model)
         {
+            var validationResult = await this._postValidator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+            }
+
             if (!ModelState.IsValid)
             {
-                //return BadRequest(ModelState);
-                await PopulatePostEditModelAsync(model);
-                return View(model);
+                return BadRequest(ModelState);
+                //await PopulatePostEditModelAsync(model);
+                //return View(model);
             }
 
             var post = model.Id != Guid.Empty
