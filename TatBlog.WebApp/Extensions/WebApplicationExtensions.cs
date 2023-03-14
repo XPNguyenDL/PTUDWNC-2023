@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeder;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApp.Media;
+using TatBlog.WebApp.Middlewares;
 
 namespace TatBlog.WebApp.Extensions;
 
@@ -52,6 +54,8 @@ public static class WebApplicationExtensions
 
         app.UseRouting();
 
+        app.UseMiddleware<UserActivityMiddleware>();
+
         return app;
     }
 
@@ -71,5 +75,13 @@ public static class WebApplicationExtensions
         }
 
         return app;
+    }
+
+    public static WebApplicationBuilder ConfigureNLog(
+        this WebApplicationBuilder builder)
+    {
+        builder.Logging.ClearProviders();
+        builder.Host.UseNLog();
+        return builder;
     }
 }

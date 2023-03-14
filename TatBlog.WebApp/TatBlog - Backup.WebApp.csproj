@@ -12,7 +12,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Mapsters\" />
     <Folder Include="Media\" />
-    <Folder Include="Middlewares\" />
+    <Folder Include="NewFolder\" />
     <Folder Include="Validations\" />
     <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\fonts\" />
