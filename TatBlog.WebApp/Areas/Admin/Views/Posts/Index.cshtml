@@ -1,5 +1,4 @@
-﻿
-@model TatBlog.WebApp.Areas.Admin.Models.PostFilterModel
+﻿@model TatBlog.WebApp.Areas.Admin.Models.PostFilterModel
 @{
     ViewData["PageTitle"] = "Danh sách bài viết";
 
@@ -9,50 +8,107 @@
 
 <h1>Danh sách bài viết</h1>
 
-<partial name="_PostFilterPane" model="Model"/>
+<partial name="_PostFilterPane" model="Model" />
 
 @if (postList != null && postList.Count > 0)
 {
     <table class="table table-responsive table-striped">
         <thead>
-        <tr>
-            <th>Tiêu đề</th>
-            <th>Tác giả</th>
-            <th>Chủ đề</th>
-            <th>Xuất bản</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var post in postList)
-        {
             <tr>
-                <td>
-                    <a asp-area="Admin"
-                       asp-controller="Posts"
-                       asp-action="Edit"
-                       asp-route-id="@post.Id"
-                       class="text-bold">
-                        @post.Title
-                    </a>
-                    <p class="text-muted">
-                        @post.ShortDescription
-                    </p>
-                </td>
-                <td>
-                    @post.Author.FullName
-                </td>
-                <td>
-                    @post.Category.Name
-                </td>
-                <td>@(post.Published ? "Có" : "Không")</td>
+                <th>Tiêu đề</th>
+                <th>Tác giả</th>
+                <th>Chủ đề</th>
+                <th>Xuất bản</th>
             </tr>
-        }
+        </thead>
+        <tbody id="tblposts">
+            @foreach (var post in postList)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Admin"
+                   asp-controller="Posts"
+                   asp-action="Edit"
+                   asp-route-id="@post.Id"
+                   class="text-bold">
+                            @post.Title
+                        </a>
+                        <p class="text-muted">
+                            @post.ShortDescription
+                        </p>
+                    </td>
+                    <td>
+                        @post.Author.FullName
+                    </td>
+                    <td>
+                        @post.Category.Name
+                    </td>
+                    <td>
+                        <a class="btn"
+                   asp-area="Admin"
+                   asp-controller="Posts"
+                   asp-action="TogglePublicStatus"
+                   asp-route-id="@post.Id"
+                   asp-route-p="@postList.PageNumber"
+                   asp-route-ps="@postList.PageSize">
+                            @if (post.Published)
+                            {
+                                <i class="fa fa-eye fa-lg"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-eye-slash fa-lg"></i>
+                            }
+                        </a>
+                    </td>
+                    <td>
+                        <div class="dz-remove">123</div>
+                        <a class="dz-remove text-danger btn"
+                           asp-area="Admin"
+                           asp-controller="Posts"
+                           asp-action="DeletePost"
+                           asp-route-id="@post.Id"
+                           asp-route-p="@postList.PageNumber"
+                           asp-route-ps="@postList.PageSize">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
+    @await Html.PartialAsync("_PagerFilter", postList)
 }
 else
 {
-    <h1 class="text-danger"> 
+    <h1 class="text-danger">
         Không có bài viêt nào
     </h1>
+}
+
+@section scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#tblposts').on('click', '.dz-remove', function (e) {
+                e.preventDefault();
+                var that = $(this);
+                if (confirm('Bạn có thực sự muốn xóa bài viết này?')) {
+                    // Perform delete action
+                    $.ajax({
+                    url: that.attr('href'),
+                        type: 'GET',
+                        success: function () {
+                            // Reload the page or update the table
+                            location.reload();
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi xóa bài viết.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

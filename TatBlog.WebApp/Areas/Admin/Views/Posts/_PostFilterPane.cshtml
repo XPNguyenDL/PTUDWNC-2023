@@ -50,7 +50,13 @@
     </div>
     
     <div class="col-auto">
-       <button type="submit" class="btn btn-primary">Tìm/lọc</button>
+        <button type="submit" class="btn btn-primary">Tìm/lọc</button>
+        <a asp-area="Admin"
+           asp-controller="Posts"
+           asp-action="Index"
+           class="btn btn-warning">
+            Bỏ lọc
+        </a>
         <a asp-area="Admin"
            asp-controller="Posts"
            asp-action="Edit"

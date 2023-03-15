@@ -167,7 +167,10 @@ public class BlogRepository : IBlogRepository
                 UrlSlug = s.UrlSlug,
                 Description = s.Description,
                 PostCount = s.Posts.Count(p => p.Published)
-            }).ToListAsync(cancellationToken);
+            })
+            .Where(s => s.PostCount > 0)
+            .OrderByDescending(s => s.PostCount)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> DeleteTagByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -180,6 +183,13 @@ public class BlogRepository : IBlogRepository
             return true;
         }
         return false;
+    }
+
+    public async Task<bool> DeletePostByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>()
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken) > 0;
     }
 
     public async Task<Category> GetCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default)

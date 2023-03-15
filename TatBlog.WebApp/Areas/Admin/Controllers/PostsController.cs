@@ -3,7 +3,9 @@ using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApp.Areas.Admin.Models;
@@ -65,7 +67,11 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             });
         }
 
-        public async Task<IActionResult> Index(PostFilterModel model)
+        public async Task<IActionResult> Index(
+            PostFilterModel model,
+            PagingParams pageParams,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
         {
             _logger.LogInformation("Tạo điều kiện truy vấn");
 
@@ -73,7 +79,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
 
-            ViewBag.PostList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, 1, 10);
+            if (pageParams.PageNumber != 0 || pageParams.PageSize != 0)
+            {
+                pageNumber = pageParams.PageNumber;
+                pageSize = pageParams.PageSize;
+            }
+
+            ViewBag.PostList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
 
             _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
@@ -108,7 +120,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                //return BadRequest(ModelState);
+                return BadRequest(ModelState);
                 await PopulatePostEditModelAsync(model);
                 return View(model);
             }
@@ -158,6 +170,35 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             return slugExisted
                 ? Json($"Slug '{urlSlug}' đã được sử dụng")
                 : Json(true);
+        }
+
+        
+        public async Task<IActionResult> TogglePublicStatus(
+            Guid id, 
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+            await _blogRepo.TogglePublicStatusPostAsync(id);
+            IPagingParams pageParams = new PagingParams()
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+            };
+            return RedirectToAction("Index", pageParams);
+        }
+
+        public async Task<IActionResult> DeletePost(
+            Guid id,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+            await _blogRepo.DeletePostByIdAsync(id);
+            IPagingParams pageParams = new PagingParams()
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+            };
+            return RedirectToAction("Index", pageParams);
         }
     }
 }
