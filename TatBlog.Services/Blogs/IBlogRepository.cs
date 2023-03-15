@@ -32,6 +32,7 @@ public interface IBlogRepository
     Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default);
     Task<bool> DeleteTagByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> DeletePostByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Category> GetCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<Category> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Category> AddOrUpdateCategoryAsync(Category category, CancellationToken cancellationToken = default);

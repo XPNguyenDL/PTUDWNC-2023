@@ -25,7 +25,7 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Index(
             [FromQuery(Name = "k")] string keyword = "",
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 3)
+            [FromQuery(Name = "ps")] int pageSize = 10)
         {
 
             var postQuery = new PostQuery()
@@ -43,7 +43,7 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Tag(
             string slug,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 3)
+            [FromQuery(Name = "ps")] int pageSize = 10)
         {
             var postQuery = new PostQuery()
             {
@@ -61,7 +61,7 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Author(
             string slug,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 3)
+            [FromQuery(Name = "ps")] int pageSize = 10)
         {
             var postQuery = new PostQuery()
             {
@@ -78,7 +78,7 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Category(
             string slug,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 3)
+            [FromQuery(Name = "ps")] int pageSize = 10)
         {
             var postQuery = new PostQuery()
             {
