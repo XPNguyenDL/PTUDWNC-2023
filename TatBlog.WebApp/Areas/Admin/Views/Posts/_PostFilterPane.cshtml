@@ -39,7 +39,7 @@
                asp-for="Year"
                placeholder="Nhập năm ..."/>
     </div>
-    
+
     <div class="col-auto">
         <label class="visually-hidden" asp-for="Month"></label>
         <select class="form-select"
@@ -47,6 +47,15 @@
                 asp-items="Model.MonthList">
             <option value="" selected>-- Chọn tháng --</option>
         </select>
+    </div>
+    
+    <div class="col-auto">
+        <label class="visually-hidden"
+               asp-for="NonPublished"></label>
+        <span>Đã ẩn</span>
+        <input class="form-check-input"
+               type="checkbox"
+               asp-for="NonPublished" />
     </div>
     
     <div class="col-auto">
