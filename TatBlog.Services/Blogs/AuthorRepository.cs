@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -21,15 +22,26 @@ public class AuthorRepository : IAuthorRepository
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
+    public async Task<bool> IsExistAuthorSlugAsync(Guid id, string slug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>().AnyAsync(s => s.Id != id && s.UrlSlug.Equals(slug), cancellationToken);
+    }
+
     public async Task<Author> GetAuthorBySlugAsync(string urlSlug, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Author>()
             .FirstOrDefaultAsync(s => s.UrlSlug == urlSlug, cancellationToken);
     }
 
-    public async Task<IPagedList<AuthorItem>> GetPagedAuthorsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+    private IQueryable<AuthorItem> AuthorFilter(IAuthorQuery condition)
     {
-        var authorQuery = _dbContext.Set<Author>()
+        var authors = _dbContext.Set<Author>()
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.Keyword), s => 
+                s.Email.Contains(condition.Keyword) ||
+                s.FullName.Contains(condition.Keyword) ||
+                s.Notes.Contains(condition.Keyword))
+            .WhereIf(condition.Month != 0, s => s.JoinedDate.Month == condition.Month)
+            .WhereIf(condition.Year != 0, s => s.JoinedDate.Year == condition.Year)
             .Select(s => new AuthorItem()
             {
                 Id = s.Id,
@@ -40,7 +52,12 @@ public class AuthorRepository : IAuthorRepository
                 Notes = s.Notes,
                 PostCount = s.Posts.Count(p => p.Published)
             });
-        return await authorQuery.ToPagedListAsync(pagingParams, cancellationToken);
+        return authors;
+    }
+
+    public async Task<IPagedList<AuthorItem>> GetPagedAuthorsAsync(IAuthorQuery condition, IPagingParams pagingParams, CancellationToken cancellationToken = default)
+    {
+        return await AuthorFilter(condition).ToPagedListAsync(pagingParams, cancellationToken);
     }
 
     public async Task<Author> AddOrUpdateAuthor(Author author, CancellationToken cancellationToken = default)
@@ -62,5 +79,12 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _dbContext.Set<Author>()
             .OrderByDescending(s => s.Posts.Count(p => p.Published)).Take(authorNum).ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> DeleteAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>()
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken) > 0;
     }
 }

@@ -132,10 +132,15 @@ public class BlogRepository : IBlogRepository
     }
 
     public async Task<IPagedList<TagItem>> GetPagedTagsAsync(
+        string keyword,
         IPagingParams pagingParams,
         CancellationToken cancellationToken = default)
     {
         var tagQuery = _dbContext.Set<Tag>()
+            .WhereIf(!string.IsNullOrWhiteSpace(keyword), s => 
+                s.Description.Contains(keyword) ||
+                s.Name.Contains(keyword) ||
+                s.UrlSlug.Contains(keyword))
             .Select(x => new TagItem()
             {
                 Id = x.Id,
@@ -155,6 +160,26 @@ public class BlogRepository : IBlogRepository
         return await _dbContext.Set<Tag>()
             .Include(x => x.Posts)
             .FirstOrDefaultAsync(t => t.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<Tag> GetTagByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Tag>().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+    }
+
+    public async Task<Tag> AddOrUpdateTagAsync(Tag tag, CancellationToken cancellationToken = default)
+    {
+        if (_dbContext.Set<Tag>().Any(s => s.Id == tag.Id))
+        {
+            _dbContext.Entry(tag).State = EntityState.Modified;
+        }
+        else
+        {
+            _dbContext.Tags.Add(tag);
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return tag;
     }
 
     public async Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default)
@@ -229,6 +254,11 @@ public class BlogRepository : IBlogRepository
     public async Task<bool> IsCategorySlugExistedAsync(Guid id, string slug, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Category>().AnyAsync(s => s.Id != id && s.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<bool> IsTagSlugExistedAsync(Guid id, string slug, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Tag>().AnyAsync(s => s.Id != id && s.UrlSlug.Equals(slug), cancellationToken);
     }
 
     public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(ICategoryQuery categoryQuery, IPagingParams pagingParams, CancellationToken cancellationToken = default)

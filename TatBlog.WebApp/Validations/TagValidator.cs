@@ -4,11 +4,11 @@ using TatBlog.WebApp.Areas.Admin.Models;
 
 namespace TatBlog.WebApp.Validations;
 
-public class CategoryValidator : AbstractValidator<CategoryEditModel>
+public class TagValidator : AbstractValidator<TagEditModel>
 {
     private readonly IBlogRepository _blogRepo;
 
-    public CategoryValidator(IBlogRepository blogRepo)
+    public TagValidator(IBlogRepository blogRepo)
     {
         _blogRepo = blogRepo;
 
@@ -19,7 +19,7 @@ public class CategoryValidator : AbstractValidator<CategoryEditModel>
         RuleFor(s => s.Description)
             .NotEmpty()
             .WithMessage("Giới thiệu không được bỏ trống");
-        
+
 
         RuleFor(s => s.UrlSlug)
             .NotEmpty()
@@ -28,8 +28,8 @@ public class CategoryValidator : AbstractValidator<CategoryEditModel>
             .WithMessage("Slug không được nhiều hơn 512 ký tự");
 
         RuleFor(s => s.UrlSlug)
-            .MustAsync(async (categoryModel, slug, cancellationToken) =>
-                !await _blogRepo.IsCategorySlugExistedAsync(categoryModel.Id, slug, cancellationToken))
+            .MustAsync(async (tagModel, slug, cancellationToken) =>
+                !await _blogRepo.IsTagSlugExistedAsync(tagModel.Id, slug, cancellationToken))
             .WithMessage("Slug '{PropertyValue}' đã được sử dụng");
     }
 }

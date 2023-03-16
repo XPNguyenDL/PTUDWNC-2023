@@ -1,0 +1,32 @@
+﻿
+
+<form asp-area="Admin"
+      asp-controller="Tags"
+      asp-action="Index"
+      method="get"
+      class="row gy-2 gx-3 align-items-center">
+    <div class="col-auto">
+        <input type="text"
+               class="form-control"
+               name="keyword"
+               placeholder="Nhập từ khóa..."
+               aria-label="Nhập từ khóa..."
+               aria-describedby="btnSearchPost"/>
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Tìm/lọc</button>
+        <a asp-area="Admin"
+           asp-controller="Tags"
+           asp-action="Index"
+           class="btn btn-warning">
+            Bỏ lọc
+        </a>
+        <a asp-area="Admin"
+           asp-controller="Tags"
+           asp-action="Edit"
+           class="btn btn-success">
+            Thêm mới
+        </a>
+        </div>
+</form>

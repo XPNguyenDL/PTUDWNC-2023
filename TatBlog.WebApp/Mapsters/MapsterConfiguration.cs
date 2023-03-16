@@ -27,6 +27,14 @@ public class MapsterConfiguration : IRegister
             .Ignore(dest => dest.CategoryList)
             .Ignore(dest => dest.AuthorList)
             .Ignore(dest => dest.ImageFile);
-        
+
+        config.NewConfig<AuthorEditModel, Author>()
+            .Ignore(dest => dest.Id)
+            .Ignore(dest => dest.ImageUrl)
+            .Ignore(dest => dest.Posts);
+
+        config.NewConfig<Author, AuthorEditModel>()
+            .Ignore(dest => dest.ImageFile);
+
     }
 }

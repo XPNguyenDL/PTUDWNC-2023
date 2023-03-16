@@ -26,10 +26,12 @@ public interface IBlogRepository
     Task<IList<AuthorItem>> GetAuthorAsync(int numAuthor, CancellationToken cancellationToken = default);
     Task<IList<AuthorItem>> GetAuthorAsync(CancellationToken cancellationToken = default);
 
-    Task<IPagedList<TagItem>> GetPagedTagsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
+    Task<IPagedList<TagItem>> GetPagedTagsAsync(string keyword, IPagingParams pagingParams, CancellationToken cancellationToken = default);
 
     // Get Tag by slug
     Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default);
+    Task<Tag> GetTagByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Tag> AddOrUpdateTagAsync(Tag tag, CancellationToken cancellationToken = default);
     Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default);
     Task<bool> DeleteTagByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> DeletePostByIdAsync(Guid id, CancellationToken cancellationToken = default);
@@ -38,6 +40,10 @@ public interface IBlogRepository
     Task<Category> AddOrUpdateCategoryAsync(Category category, CancellationToken cancellationToken = default);
     Task<bool> DeleteCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsCategorySlugExistedAsync(
+        Guid id,
+        string slug,
+        CancellationToken cancellationToken = default);
+    Task<bool> IsTagSlugExistedAsync(
         Guid id,
         string slug,
         CancellationToken cancellationToken = default);
