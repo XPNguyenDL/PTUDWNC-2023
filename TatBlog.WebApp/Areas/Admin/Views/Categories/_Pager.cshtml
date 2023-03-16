@@ -1,5 +1,4 @@
-﻿@model IPagedList<Post>
-
+﻿@model IPagedList<CategoryItem>
 
 @if (Model.PageCount > 1)
 {
@@ -7,7 +6,7 @@
         @if (Model.HasPreviousPage)
         {
             <a asp-area="Admin"
-                asp-controller="Posts"
+                asp-controller="Categories"
                 asp-acction="Index"
                 asp-route-p="@(Model.PageNumber - 1)"
                 asp-route-ps="@Model.PageSize"
@@ -29,7 +28,7 @@
         @if (Model.HasNextPage)
         {
             <a asp-area="Admin"
-                asp-controller="Posts"
+       asp-controller="Categories"
                 asp-acction="Index"
                 asp-route-p="@(Model.PageNumber + 1)"
                 asp-route-ps="@Model.PageSize"

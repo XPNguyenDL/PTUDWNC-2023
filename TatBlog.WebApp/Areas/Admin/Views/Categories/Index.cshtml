@@ -1,5 +1,96 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using TatBlog.WebApp.Areas.Admin.Models
+@model IPagedList<CategoryItem>
 @{
+    ViewData["PageTitle"] = "Danh sách chủ đề";
+    var categoryFilter = ViewBag.CategoryFilter as CategoryFilterModel;
+}
+
+<h1>Danh sách chủ đề</h1>
+
+<partial name="_CategoryFilterPane" model="categoryFilter"/>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th width="80%">Thông tin chi tiết</th>
+                <th >Tổng số bài viết</th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody id="tblcategory">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Admin"
+                        asp-controller="Categories"
+                        asp-action="Edit"
+                        asp-route-id="@item.Id"
+                        class="text-bold">
+                            @item.Name
+                        </a>
+                        <p class="text-muted">
+                            @item.Description
+                        </p>
+                    </td>
+                    <td>
+                        @item.PostCount
+                    </td>
+                    <td>
+                        <a asp-area="Admin"
+                           asp-controller="Categories"
+                           asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="text-bold">
+                            <i class="fa fa-pencil fa-lg"></i>
+                        </a>
+                        <a class="dz-remove text-danger btn"
+                           asp-area="Admin"
+                           asp-controller="Categories"
+                           asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           asp-route-p="@Model.PageNumber"
+                           asp-route-ps="@Model.PageSize">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @await Html.PartialAsync("_Pager", Model)
+}
+else
+{
+    <h1 class="text-danger">
+        Không có chủ đề nào
+    </h1>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#tblcategory').on('click', '.dz-remove', function (e) {
+                e.preventDefault();
+                var that = $(this);
+                if (confirm('Bạn có thực sự muốn xóa chủ đề này?')) {
+                    // Perform delete action
+                    $.ajax({
+                    url: that.attr('href'),
+                        type: 'GET',
+                        success: function () {
+                            // Reload the page or update the table
+                            location.reload();
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi xóa chủ đề.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

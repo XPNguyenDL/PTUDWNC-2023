@@ -38,9 +38,10 @@ public interface IBlogRepository
     Task<Category> AddOrUpdateCategoryAsync(Category category, CancellationToken cancellationToken = default);
     Task<bool> DeleteCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsCategorySlugExistedAsync(
+        Guid id,
         string slug,
         CancellationToken cancellationToken = default);
-    Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
+    Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(ICategoryQuery categoryQuery, IPagingParams pagingParams, CancellationToken cancellationToken = default);
     Task<IList<MonthlyPostCountItem>> CountPostByMonth(int month, CancellationToken cancellationToken = default);
 
     Task<Post> GetPostByIdAsync(Guid postId, bool includeDetails = false,

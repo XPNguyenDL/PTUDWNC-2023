@@ -15,10 +15,11 @@
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
-                <th>Tiêu đề</th>
-                <th>Tác giả</th>
-                <th>Chủ đề</th>
-                <th>Xuất bản</th>
+                <th width="60%">Tiêu đề</th>
+                <th width="10%">Tác giả</th>
+                <th width="10%">Chủ đề</th>
+                <th width="10%">Xuất bản</th>
+                <th width="10%"></th>
             </tr>
         </thead>
         <tbody id="tblposts">
@@ -27,10 +28,10 @@
                 <tr>
                     <td>
                         <a asp-area="Admin"
-                   asp-controller="Posts"
-                   asp-action="Edit"
-                   asp-route-id="@post.Id"
-                   class="text-bold">
+                           asp-controller="Posts"
+                           asp-action="Edit"
+                           asp-route-id="@post.Id"
+                           class="text-bold">
                             @post.Title
                         </a>
                         <p class="text-muted">
@@ -62,6 +63,13 @@
                         </a>
                     </td>
                     <td>
+                        <a asp-area="Admin"
+                           asp-controller="Posts"
+                           asp-action="Edit"
+                           asp-route-id="@post.Id"
+                           class="text-bold">
+                            <i class="fa fa-pencil fa-lg"></i>
+                        </a>
                         <a class="dz-remove text-danger btn"
                            asp-area="Admin"
                            asp-controller="Posts"
