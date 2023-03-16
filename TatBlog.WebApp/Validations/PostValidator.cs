@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Globalization;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApp.Areas.Admin.Models;
 
@@ -20,11 +18,11 @@ public class PostValidator : AbstractValidator<PostEditModel>
 
         RuleFor(s => s.ShortDescription)
             .NotEmpty()
-            .WithMessage("Giới thiệu không được bỏ trống"); ;
+            .WithMessage("Giới thiệu không được bỏ trống"); 
 
         RuleFor(s => s.Description)
             .NotEmpty()
-            .WithMessage("Nội dung không được bỏ trống"); ;
+            .WithMessage("Nội dung không được bỏ trống"); 
 
         RuleFor(s => s.Meta)
             .NotEmpty()

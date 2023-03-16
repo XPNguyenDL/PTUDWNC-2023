@@ -226,14 +226,16 @@ public class BlogRepository : IBlogRepository
             .ExecuteDeleteAsync(cancellationToken) > 0;
     }
 
-    public async Task<bool> IsCategorySlugExistedAsync(string slug, CancellationToken cancellationToken = default)
+    public async Task<bool> IsCategorySlugExistedAsync(Guid id, string slug, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<Category>().AnyAsync(s => s.UrlSlug.Equals(slug), cancellationToken);
+        return await _dbContext.Set<Category>().AnyAsync(s => s.Id != id && s.UrlSlug.Equals(slug), cancellationToken);
     }
 
-    public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+    public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(ICategoryQuery categoryQuery, IPagingParams pagingParams, CancellationToken cancellationToken = default)
     {
         var tagQuery = _dbContext.Set<Category>()
+            .WhereIf(!string.IsNullOrWhiteSpace(categoryQuery.Keyword), s => s.Name.ToLower().Contains(categoryQuery.Keyword.ToLower()) ||
+                                                                             s.Description.ToLower().Contains(categoryQuery.Keyword.ToLower()))
             .Select(x => new CategoryItem()
             {
                 Id = x.Id,

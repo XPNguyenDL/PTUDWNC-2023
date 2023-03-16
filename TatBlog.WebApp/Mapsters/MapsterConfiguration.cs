@@ -27,5 +27,6 @@ public class MapsterConfiguration : IRegister
             .Ignore(dest => dest.CategoryList)
             .Ignore(dest => dest.AuthorList)
             .Ignore(dest => dest.ImageFile);
+        
     }
 }
