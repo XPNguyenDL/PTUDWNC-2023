@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.Entities;
@@ -69,7 +68,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(
             PostFilterModel model,
-            PagingParams pageParams,
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
@@ -78,12 +76,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             var postQuery = _mapper.Map<PostQuery>(model);
 
             _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
-
-            if (pageParams.PageNumber != 0 || pageParams.PageSize != 0)
-            {
-                pageNumber = pageParams.PageNumber;
-                pageSize = pageParams.PageSize;
-            }
 
             ViewBag.PostList = await _blogRepo.GetPagedPostsQueryAsync(postQuery, pageNumber, pageSize);
 
@@ -179,12 +171,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
             await _blogRepo.TogglePublicStatusPostAsync(id);
-            IPagingParams pageParams = new PagingParams()
-            {
-                PageSize = pageSize,
-                PageNumber = pageNumber,
-            };
-            return RedirectToAction("Index", pageParams);
+            return RedirectToAction("Index", "Posts", new { pageSize = pageSize, pageNumber = pageNumber });
         }
 
         public async Task<IActionResult> DeletePost(
@@ -193,12 +180,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
             await _blogRepo.DeletePostByIdAsync(id);
-            IPagingParams pageParams = new PagingParams()
-            {
-                PageSize = pageSize,
-                PageNumber = pageNumber,
-            };
-            return RedirectToAction("Index", pageParams);
+            return RedirectToAction("Index", "Posts", new { pageSize = pageSize, pageNumber = pageNumber });
         }
     }
 }

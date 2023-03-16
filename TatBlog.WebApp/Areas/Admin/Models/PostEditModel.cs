@@ -38,5 +38,4 @@ public class PostEditModel
             .Split(new[] { ',', ';', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
             .ToList();
     }
-
 }

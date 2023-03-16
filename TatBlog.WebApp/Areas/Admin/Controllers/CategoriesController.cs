@@ -26,7 +26,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(
             CategoryFilterModel filterModel,
-            PagingParams newPaging,
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 5)
         {
@@ -37,12 +36,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 SortOrder = "DESC",
                 SortColumn = "PostCount"
             };
-
-            if (newPaging.PageNumber != 0 && newPaging.PageSize != 0)
-            {
-                paging.PageSize = newPaging.PageSize;
-                paging.PageNumber = newPaging.PageNumber;
-            }
+            
             var categoryQuery = _mapper.Map<CategoryQuery>(filterModel);
 
             var categories = await _blogRepo.GetPagedCategoriesAsync(categoryQuery, paging);
@@ -107,12 +101,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
             await _blogRepo.DeleteCategoryByIdAsync(id);
-            IPagingParams pageParams = new PagingParams()
-            {
-                PageSize = pageSize,
-                PageNumber = pageNumber,
-            };
-            return RedirectToAction("Index", pageParams);
+            return RedirectToAction("Index", "Categories", new { pageSize = pageSize , pageNumber = pageNumber});
         }
     }
 }
