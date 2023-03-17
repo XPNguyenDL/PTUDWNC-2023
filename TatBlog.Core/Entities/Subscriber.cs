@@ -4,6 +4,7 @@ namespace TatBlog.Core.Entities;
 
 public enum SubscribeStatus
 {
+    None = -1,
     Subscribe,
     Unsubscribe,
     Block

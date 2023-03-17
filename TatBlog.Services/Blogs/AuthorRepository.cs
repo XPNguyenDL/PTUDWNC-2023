@@ -22,6 +22,11 @@ public class AuthorRepository : IAuthorRepository
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
+    public async Task<int> CountAuthorAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>().CountAsync(cancellationToken);
+    }
+
     public async Task<bool> IsExistAuthorSlugAsync(Guid id, string slug, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Author>().AnyAsync(s => s.Id != id && s.UrlSlug.Equals(slug), cancellationToken);

@@ -5,6 +5,8 @@ namespace TatBlog.Core.Entities;
 
 public enum CommentStatus
 {
+    None = -1,
+    NotVerify,
     Violate, // Vi phạm nội quy
     Valid // hợp lệ
 }

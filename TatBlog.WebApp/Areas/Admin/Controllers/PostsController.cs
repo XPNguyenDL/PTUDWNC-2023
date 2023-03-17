@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.Entities;
@@ -179,6 +180,10 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 3)
         {
+            var oldPost = await _blogRepo.GetPostByIdAsync(id);
+
+            await _media.DeleteFileAsync(oldPost.ImageUrl);
+
             await _blogRepo.DeletePostByIdAsync(id);
             return RedirectToAction("Index", "Posts", new { pageSize = pageSize, pageNumber = pageNumber });
         }

@@ -4,7 +4,7 @@ public interface IPagedList
 {
     int PageCount { get; }
 
-    int TotalItemCount { get; }
+    int TotalItemCount { get;}
 
     int PageIndex { get; }
 
