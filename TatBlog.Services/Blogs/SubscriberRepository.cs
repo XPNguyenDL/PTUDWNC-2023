@@ -92,18 +92,37 @@ public class SubscriberRepository : ISubscriberRepository
         return await _dbContext.Set<Subscriber>().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
+    public async Task<bool> DeleteSubscriberAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Subscriber>()
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken) > 0;
+    }
+
+    public async Task<int> CountSubscriberByDayAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Subscriber>().CountAsync(s => s.DateSubscribe > DateTime.Now.AddDays(-1), cancellationToken);
+    }
+    
+    public async Task<int> CountSubscriberAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Subscriber>().CountAsync(cancellationToken);
+    }
+
     public async Task<Subscriber> GetSubscriberByEmail(string email, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Subscriber>().FirstOrDefaultAsync(s => s.Email == email, cancellationToken);
     }
 
-    public async Task<IPagedList<Subscriber>> SearchSubscribersAsync(IPagingParams pagingParams, string keyword, SubscribeStatus status, CancellationToken cancellation = default)
+    public async Task<IPagedList<Subscriber>> SearchSubscribersAsync(ISubscriberQuery condition, IPagingParams pagingParams, CancellationToken cancellation = default)
     {
         var subQuery = _dbContext.Set<Subscriber>()
-            .Where(s => s.Email.Contains(keyword) ||
-                        s.Note.ToLower().Contains(keyword.ToLower()) ||
-                        s.Reason.ToLower().Contains(keyword.ToLower()) ||
-                        s.SubscribeStatus == status);
+            .WhereIf(!string.IsNullOrWhiteSpace(condition.Keyword), s => s.Email.Contains(condition.Keyword) ||
+                                                                        s.Note.ToLower().Contains(condition.Keyword.ToLower()) ||
+                                                                        s.Reason.ToLower().Contains(condition.Keyword.ToLower()))
+            .WhereIf(condition.Month > 0 || condition.Year > 0, s => s.DateSubscribe.Month == condition.Month ||
+                                                                     s.DateSubscribe.Year == condition.Year)
+            .WhereIf(condition.Status != SubscribeStatus.None, s => s.SubscribeStatus == condition.Status);
         return await subQuery.ToPagedListAsync(pagingParams, cancellation);
     }
 }

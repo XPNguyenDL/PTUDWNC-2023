@@ -7,6 +7,7 @@ namespace TatBlog.Services.Blogs;
 public interface IAuthorRepository
 {
     Task<Author> GetAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<int> CountAuthorAsync(CancellationToken cancellationToken = default);
     Task<bool> IsExistAuthorSlugAsync(Guid id, string slug, CancellationToken cancellationToken = default);
 
     Task<Author> GetAuthorBySlugAsync(string urlSlug, CancellationToken cancellationToken = default);

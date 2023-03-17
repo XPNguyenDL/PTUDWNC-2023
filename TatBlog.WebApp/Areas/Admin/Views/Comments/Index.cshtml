@@ -1,5 +1,95 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using TatBlog.WebApp.Areas.Admin.Models
+@model IPagedList<Comment>
 @{
+    ViewData["PageTitle"] = "Danh sách bình luận";
+    var cmtFilter = ViewBag.CommentFilterModel as CommentFilterModel;
+}
+
+<h1>Danh sách chủ đề</h1>
+
+<partial name="_CommentFilter" model="cmtFilter" />
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Thông tin chi tiết</th>
+                <th>Thông tin bài viết</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tblcategory">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="text-bold">
+                            Tên bình luận: <span class="text-muted">@item.UserComment</span>
+                        </span>
+                        <span class="text-bold">
+                            Nội dung: <span class="text-muted">@item.Content</span>
+                        </span>
+                        <span class="text-bold">
+                            Ngày đăng: <span class="text-muted">@item.PostTime.ToString("yyyy MMMM dd")</span>
+                        </span>
+                    </td>
+                    <td>
+                        <p class="text-bold">
+                            Tiêu đề: <span class="text-muted">@item.Post.Title</span>
+                        </p>
+                    </td>
+                    <td>
+                       <partial name="_VerifyComment" model="item"/>
+                    </td>
+                    <td>
+
+                        <a class="dz-remove text-danger btn"
+                   asp-area="Admin"
+                   asp-controller="Comments"
+                   asp-action="Delete"
+                   asp-route-id="@item.Id"
+                   asp-route-p="@Model.PageNumber"
+                   asp-route-ps="@Model.PageSize">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @await Html.PartialAsync("_Pager", Model)
+}
+else
+{
+    <h1 class="text-danger">
+        Không có bình luận nào
+    </h1>
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        $(function () {
+            $('#tblcategory').on('click', '.dz-remove', function (e) {
+                e.preventDefault();
+                var that = $(this);
+                if (confirm('Bạn có thực sự muốn xóa bình luận này?')) {
+                    // Perform delete action
+                    $.ajax({
+                        url: that.attr('href'),
+                        type: 'GET',
+                        success: function () {
+                            // Reload the page or update the table
+                            location.reload();
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi xóa bình luận.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

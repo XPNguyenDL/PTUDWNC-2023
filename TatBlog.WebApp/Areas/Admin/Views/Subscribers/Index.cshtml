@@ -1,5 +1,102 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using TatBlog.WebApp.Areas.Admin.Models
+@model IPagedList<Subscriber>
 @{
+    ViewData["PageTitle"] = "Danh sách đăng ký";
+    var subFilter = ViewBag.SubscriberFilter as SubscriberFilterModel;
+}
+
+<h1>Danh sách đăng ký</h1>
+
+<partial name="_SubFilter" model="subFilter" />
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Thông tin chi tiết</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tblcategory">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="text-bold">
+                            <span class="text-muted">@item.Email</span>
+                        </span>
+                    </td>
+                    <td>
+                        <p class="text-bold">
+                            Lý do hủy đăng ký: <span class="text-muted">@item.Reason</span>
+                        </p>
+                        <p class="text-bold">
+                            Ghi chú: <span class="text-muted">@item.Note</span>
+                        </p>
+                        <p class="text-bold">
+                            Trạng thái: <span class="text-muted">@item.SubscribeStatus.ToString("G")</span>
+                        </p>
+                        <p class="text-bold">
+                            Ngày đăng ký: <span class="text-muted">@item.DateSubscribe.ToString("MM/dd/yyyy")</span>
+                        </p>
+
+                    </td>
+                    <td>
+                        <a class="btn btn-danger"
+                   asp-area="Admin"
+                   asp-controller="Subscribers"
+                   asp-action="BlockSubscriber"
+                   asp-route-id="@item.Id">
+                            <i class="fa fa-ban fa-lg"></i>
+                        </a>
+
+                        <a class="dz-remove text-danger btn"
+                   asp-area="Admin"
+                   asp-controller="Subscribers"
+                   asp-action="Delete"
+                   asp-route-id="@item.Id"
+                   asp-route-p="@Model.PageNumber"
+                   asp-route-ps="@Model.PageSize">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @await Html.PartialAsync("_Pager", Model)
+}
+else
+{
+    <h1 class="text-danger">
+        Không có đăng ký nào
+    </h1>
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        $(function () {
+            $('#tblcategory').on('click', '.dz-remove', function (e) {
+                e.preventDefault();
+                var that = $(this);
+                if (confirm('Bạn có thực sự muốn xóa đăng ký này?')) {
+                    // Perform delete action
+                    $.ajax({
+                        url: that.attr('href'),
+                        type: 'GET',
+                        success: function () {
+                            // Reload the page or update the table
+                            location.reload();
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi xóa đăng ký này.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

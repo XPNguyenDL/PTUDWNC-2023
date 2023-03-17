@@ -7,6 +7,9 @@ namespace TatBlog.Services.Blogs;
 public interface IBlogRepository
 {
     Task<Post> GetPostAsync(int year, int month, int day, string slug, CancellationToken cancellationToken = default);
+    Task<int> CountPostAsync(CancellationToken cancellationToken = default);
+    Task<int> CountPostUnPublicAsync(CancellationToken cancellationToken = default);
+
 
     // Tìm bài viết nhiều bài nhất
     Task<IList<Post>> GetPopularArticlesAsync(

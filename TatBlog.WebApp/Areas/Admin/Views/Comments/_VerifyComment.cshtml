@@ -1,0 +1,18 @@
+﻿@model Comment
+
+<form asp-area="Admin"
+      asp-controller="Comments"
+      asp-action="VerifyComment"
+      method="get"
+      class="d-flex">
+    <input type="hidden" asp-for="Id" />
+    <select class="form-select"
+            asp-for="CommentStatus">
+        <option value="@CommentStatus.Valid">-- Hợp lệ --</option>
+        <option value="@CommentStatus.Violate">-- Vi phạm --</option>
+        <option value="@CommentStatus.NotVerify">-- Chưa phê duyệt --</option>
+    </select>
+    <button type="submit" class="ms-1">
+        <i class="fa fa-save fa-lg"></i>
+    </button>
+</form>

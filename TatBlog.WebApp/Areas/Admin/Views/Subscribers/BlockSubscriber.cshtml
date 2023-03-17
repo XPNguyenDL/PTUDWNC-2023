@@ -1,0 +1,67 @@
+﻿@model TatBlog.WebApp.Areas.Admin.Models.SubscriberEditModel
+
+@{
+    ViewData["PageTitle"] = "Block tài khoản đăng ký";
+
+}
+
+<h1>Block tài khoản đăng ký</h1>
+
+<form asp-area="Admin"
+      asp-controller="Subscribers"
+      asp-action="BlockSubscriber"
+      method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row mb-3">
+        <label asp-for="Reason"
+               class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input type="text"
+                   class="form-control" asp-for="Reason" />
+            <span asp-validation-for="Reason"
+                  class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <label asp-for="Note"
+               class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input type="text"
+                   class="form-control" asp-for="Note" />
+            <span asp-validation-for="Note"
+                  class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="text-center my-4">
+        <button type="submit" class="btn btn-primary">
+            Lưu các thay đổi
+        </button>
+
+        <a asp-area="Admin"
+           asp-controller="Subscribers"
+           asp-action="Index"
+           class="btn btn-danger">
+            Hủy & Quay lại
+        </a>
+    </div>
+</form>
+
+@section scripts
+    {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/speakingurl/speakingurl.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#Title').change(function () {
+                var slug = getSlug(this.value);
+                $('#UrlSlug').val(slug).trigger('blur');
+            })
+        })
+    </script>
+}

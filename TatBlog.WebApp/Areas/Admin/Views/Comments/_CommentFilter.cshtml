@@ -1,0 +1,62 @@
+﻿@model TatBlog.WebApp.Areas.Admin.Models.CommentFilterModel
+
+<form asp-area="Admin"
+      asp-controller="Comments"
+      asp-action="Index"
+      method="get"
+      class="row gy-2 gx-3 align-items-center">
+    <div class="col-auto">
+        <label class="visually-hidden" asp-for="Keyword"></label>
+        <input type="text"
+               class="form-control"
+               asp-for="Keyword"
+               placeholder="Nhập từ khóa..."/>
+
+    </div>
+    
+    <div class="col-auto">
+        <label class="visually-hidden" asp-for="CommentStatus"></label>
+        <select class="form-select"
+                asp-for="CommentStatus">
+            <option value="" selected>-- Chọn lọc --</option>
+            <option value="@CommentStatus.NotVerify">-- Chưa duyệt--</option>
+            <option value="@CommentStatus.Valid">-- Hợp lệ--</option>
+            <option value="@CommentStatus.Violate">-- Vi phạm --</option>
+        </select>
+    </div>
+    
+    
+    <div class="col-auto">
+        <label class="visually-hidden" asp-for="Year"></label>
+        <input type="text"
+               class="form-control"
+               asp-for="Year"
+               placeholder="Nhập năm ..."/>
+    </div>
+
+    <div class="col-auto">
+        <label class="visually-hidden" asp-for="Month"></label>
+        <select class="form-select"
+                asp-for="Month"
+                asp-items="Model.MonthList">
+            <option value="" selected>-- Chọn tháng --</option>
+        </select>
+    </div>
+    
+    
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Tìm/lọc</button>
+        <a asp-area="Admin"
+           asp-controller="Comments"
+           asp-action="Index"
+           class="btn btn-warning">
+            Bỏ lọc
+        </a>
+        <a asp-area="Admin"
+           asp-controller="Comments"
+           asp-action="Edit"
+           class="btn btn-success">
+            Thêm mới
+        </a>
+        </div>
+</form>

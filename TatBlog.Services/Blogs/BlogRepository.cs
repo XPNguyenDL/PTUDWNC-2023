@@ -47,6 +47,16 @@ public class BlogRepository : IBlogRepository
         return await postsQuery.FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<int> CountPostAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>().CountAsync( cancellationToken);
+    }
+
+    public async Task<int> CountPostUnPublicAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Post>().CountAsync(s => !s.Published, cancellationToken);
+    }
+
     public async Task<IList<Post>> GetPopularArticlesAsync(int numPosts, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Post>()

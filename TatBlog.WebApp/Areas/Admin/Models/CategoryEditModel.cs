@@ -1,10 +1,8 @@
 ﻿namespace TatBlog.WebApp.Areas.Admin.Models;
 
-public class CategoryEditModel
+public class SubscriberEditModel
 {
     public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public string? UrlSlug { get; set; }
-    public string? Description { get; set; }
-    public bool ShowOnMenu { get; set; }
+    public string? Reason { get; set; }
+    public string? Note { get; set; }
 }
