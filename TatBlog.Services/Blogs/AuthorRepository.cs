@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using SlugGenerator;
 using System.Linq;
+using System.Threading;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -11,15 +14,47 @@ namespace TatBlog.Services.Blogs;
 public class AuthorRepository : IAuthorRepository
 {
     private readonly BlogDbContext _dbContext;
+    
+    private readonly IMemoryCache _memoryCache;
 
-    public AuthorRepository(BlogDbContext context)
+    public AuthorRepository(BlogDbContext context, IMemoryCache memoryCache)
     {
         _dbContext = context;
+        _memoryCache = memoryCache;
     }
+
     public async Task<Author> GetAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Author>()
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+    }
+
+    public async Task<Author> GetCachedAuthorByIdAsync(Guid authorId)
+    {
+        return await _memoryCache.GetOrCreateAsync(
+            $"author.by-id.{authorId}",
+            async (entry) =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                return await GetAuthorByIdAsync(authorId);
+            });
+    }
+
+    public async Task<IList<AuthorItem>> GetAuthorsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Author>()
+            .OrderBy(a => a.FullName)
+            .Select(a => new AuthorItem()
+            {
+                Id = a.Id,
+                FullName = a.FullName,
+                Email = a.Email,
+                JoinedDate = a.JoinedDate,
+                ImageUrl = a.ImageUrl,
+                UrlSlug = a.UrlSlug,
+                PostCount = a.Posts.Count(p => p.Published)
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<int> CountAuthorAsync(CancellationToken cancellationToken = default)
@@ -36,6 +71,17 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _dbContext.Set<Author>()
             .FirstOrDefaultAsync(s => s.UrlSlug == urlSlug, cancellationToken);
+    }
+
+    public async Task<Author> GetCachedAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await _memoryCache.GetOrCreateAsync(
+            $"author.by-slug.{slug}",
+            async (entry) =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                return await GetAuthorBySlugAsync(slug, cancellationToken);
+            });
     }
 
     private IQueryable<AuthorItem> AuthorFilter(IAuthorQuery condition)
@@ -65,6 +111,20 @@ public class AuthorRepository : IAuthorRepository
         return await AuthorFilter(condition).ToPagedListAsync(pagingParams, cancellationToken);
     }
 
+    public async Task<IPagedList<T>> GetPagedAuthorsAsync<T>(Func<IQueryable<Author>, IQueryable<T>> mapper, IPagingParams pagingParams, string name = null,
+        CancellationToken cancellationToken = default)
+    {
+        var authorQuery = _dbContext.Set<Author>().AsNoTracking();
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            authorQuery = authorQuery.Where(x => x.FullName.Contains(name));
+        }
+
+        return await mapper(authorQuery)
+            .ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
     public async Task<Author> AddOrUpdateAuthor(Author author, CancellationToken cancellationToken = default)
     {
         if (_dbContext.Set<Author>().Any(s => s.Id == author.Id))
@@ -91,5 +151,14 @@ public class AuthorRepository : IAuthorRepository
         return await _dbContext.Set<Author>()
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync(cancellationToken) > 0;
+    }
+
+    public async Task<bool> SetImageUrlAsync(Guid authorId, string imageUrl, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Authors
+            .Where(x => x.Id == authorId)
+            .ExecuteUpdateAsync(x =>
+                    x.SetProperty(a => a.ImageUrl, a => imageUrl),
+                cancellationToken) > 0;
     }
 }
