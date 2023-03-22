@@ -106,7 +106,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 }
             }
 
-            await _authorRepo.AddOrUpdateAuthor(author);
+            await _authorRepo.AddOrUpdateAuthorAsync(author);
 
             return RedirectToAction(nameof(Index));
         }

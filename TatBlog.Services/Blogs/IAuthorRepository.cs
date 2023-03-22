@@ -34,9 +34,9 @@ public interface IAuthorRepository
         string name = null,
         CancellationToken cancellationToken = default);
 
-    Task<Author> AddOrUpdateAuthor(Author author, CancellationToken cancellationToken = default);
+    Task<Author> AddOrUpdateAuthorAsync(Author author, CancellationToken cancellationToken = default);
 
-    Task<List<Author>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default);
+    Task<List<AuthorItem>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default);
 
     Task<bool> DeleteAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
