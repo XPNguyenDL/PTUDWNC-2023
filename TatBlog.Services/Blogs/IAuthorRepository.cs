@@ -23,6 +23,11 @@ public interface IAuthorRepository
 
     Task<IPagedList<AuthorItem>> GetPagedAuthorsAsync(IAuthorQuery condition, IPagingParams pagingParams, CancellationToken cancellationToken = default);
 
+    Task<IPagedList<AuthorItem>> GetPagedAuthorsAsync(
+        IPagingParams pagingParams,
+        string name = null,
+        CancellationToken cancellationToken = default);
+
     Task<IPagedList<T>> GetPagedAuthorsAsync<T>(
         Func<IQueryable<Author>, IQueryable<T>> mapper,
         IPagingParams pagingParams,
@@ -34,6 +39,7 @@ public interface IAuthorRepository
     Task<List<Author>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default);
 
     Task<bool> DeleteAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default);
+
 
     Task<bool> SetImageUrlAsync(
         Guid authorId, string imageUrl,

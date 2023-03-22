@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SlugGenerator;
+using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -434,7 +435,7 @@ public class BlogRepository : IBlogRepository
                         s.Tags.Any(t => t.Name.Contains(postQuery.TagName))).ToListAsync(cancellationToken);
     }
 
-    private IQueryable<Post> FilterPost(IPostQuery condition)
+    private IQueryable<Post> FilterPosts(IPostQuery condition)
     {
         
         int keyNumber = 0;
@@ -532,7 +533,18 @@ public class BlogRepository : IBlogRepository
 
     public async Task<int> CountPostsQueryAsync(IPostQuery postQuery, CancellationToken cancellationToken = default)
     {
-        return await FilterPost(postQuery).CountAsync(cancellationToken);
+        return await FilterPosts(postQuery).CountAsync(cancellationToken);
+    }
+
+    public async Task<IPagedList<T>> GetPagedPostsAsync<T>(
+        PostQuery condition,
+        IPagingParams pagingParams,
+        Func<IQueryable<Post>, IQueryable<T>> mapper)
+    {
+        var posts = FilterPosts(condition);
+        var projectedPosts = mapper(posts);
+
+        return await projectedPosts.ToPagedListAsync(pagingParams);
     }
 
     public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery, 
@@ -541,7 +553,7 @@ public class BlogRepository : IBlogRepository
         CancellationToken cancellationToken = default)
     {
 
-        return await FilterPost(postQuery).ToPagedListAsync(pageNumber, pageSize, nameof(Post.PostedDate), "DESC", cancellationToken);
+        return await FilterPosts(postQuery).ToPagedListAsync(pageNumber, pageSize, nameof(Post.PostedDate), "DESC", cancellationToken);
     }
 
     // t chưa làm được

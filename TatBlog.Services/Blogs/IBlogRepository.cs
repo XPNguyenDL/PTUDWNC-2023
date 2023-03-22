@@ -1,4 +1,5 @@
-﻿using TatBlog.Core.Contracts;
+﻿using TatBlog.Core.Collections;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 
@@ -67,4 +68,9 @@ public interface IBlogRepository
         int pageNumber = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default);
+
+    Task<IPagedList<T>> GetPagedPostsAsync<T>(
+        PostQuery condition,
+        IPagingParams pagingParams,
+        Func<IQueryable<Post>, IQueryable<T>> mapper);
 }
