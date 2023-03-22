@@ -27,7 +27,7 @@ public class AuthorValidator : AbstractValidator<AuthorEditModel>
             .MaximumLength(1000)
             .WithMessage("Slug không được nhiều hơn 512 ký tự");
 
-        RuleFor(a => a.JoinDate)
+        RuleFor(a => a.JoinedDate)
             .GreaterThan(DateTime.MinValue)
             .WithMessage("Ngày tham gia không hợp lệ");
 

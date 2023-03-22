@@ -145,7 +145,7 @@ public class AuthorRepository : IAuthorRepository
             .ToPagedListAsync(pagingParams, cancellationToken);
     }
 
-    public async Task<Author> AddOrUpdateAuthor(Author author, CancellationToken cancellationToken = default)
+    public async Task<Author> AddOrUpdateAuthorAsync(Author author, CancellationToken cancellationToken = default)
     {
         if (_dbContext.Set<Author>().Any(s => s.Id == author.Id))
         {
@@ -153,6 +153,7 @@ public class AuthorRepository : IAuthorRepository
         }
         else
         {
+            author.Id = Guid.NewGuid();
             _dbContext.Authors.Add(author);
         }
 
@@ -160,10 +161,22 @@ public class AuthorRepository : IAuthorRepository
         return author;
     }
 
-    public async Task<List<Author>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default)
+    public async Task<List<AuthorItem>> GetAuthorMostPost(int authorNum, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Author>()
-            .OrderByDescending(s => s.Posts.Count(p => p.Published)).Take(authorNum).ToListAsync(cancellationToken);
+            .Select(s => new AuthorItem()
+            {
+                Id = s.Id,
+                Email = s.Email,
+                UrlSlug = s.UrlSlug,
+                Notes = s.Notes,
+                FullName = s.FullName,
+                ImageUrl = s.ImageUrl,
+                JoinedDate = s.JoinedDate,
+                PostCount = s.Posts.Count(p => p.Published)
+            })
+            .Take(authorNum)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> DeleteAuthorByIdAsync(Guid id, CancellationToken cancellationToken = default)
