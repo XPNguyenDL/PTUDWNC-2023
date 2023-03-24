@@ -50,7 +50,7 @@ public class BlogRepository : IBlogRepository
 
     public async Task<int> CountPostAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<Post>().CountAsync( cancellationToken);
+        return await _dbContext.Set<Post>().CountAsync(cancellationToken);
     }
 
     public async Task<int> CountPostUnPublicAsync(CancellationToken cancellationToken = default)
@@ -148,7 +148,7 @@ public class BlogRepository : IBlogRepository
         CancellationToken cancellationToken = default)
     {
         var tagQuery = _dbContext.Set<Tag>()
-            .WhereIf(!string.IsNullOrWhiteSpace(keyword), s => 
+            .WhereIf(!string.IsNullOrWhiteSpace(keyword), s =>
                 s.Description.Contains(keyword) ||
                 s.Name.Contains(keyword) ||
                 s.UrlSlug.Contains(keyword))
@@ -171,6 +171,23 @@ public class BlogRepository : IBlogRepository
         return await _dbContext.Set<Tag>()
             .Include(x => x.Posts)
             .FirstOrDefaultAsync(t => t.UrlSlug.Equals(slug), cancellationToken);
+    }
+
+    public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, string name = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Category>()
+            .AsNoTracking()
+            .WhereIf(!string.IsNullOrWhiteSpace(name),
+                x => x.Name.Contains(name))
+            .Select(a => new CategoryItem()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                UrlSlug = a.UrlSlug,
+                PostCount = a.Posts.Count(p => p.Published)
+            })
+            .ToPagedListAsync(pagingParams, cancellationToken);
     }
 
     public async Task<Tag> GetTagByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -294,7 +311,7 @@ public class BlogRepository : IBlogRepository
     public async Task<IList<MonthlyPostCountItem>> CountPostByMonth(int month, CancellationToken cancellationToken = default)
     {
         var result = await _dbContext.Set<Post>()
-            .GroupBy(s => new { s.PostedDate.Month, s.PostedDate.Year})
+            .GroupBy(s => new { s.PostedDate.Month, s.PostedDate.Year })
             .Select(p => new MonthlyPostCountItem()
             {
                 Month = p.Key.Month,
@@ -329,7 +346,7 @@ public class BlogRepository : IBlogRepository
         // Check if the post already exists in the database
         var postExists = await _dbContext.Set<Post>().AnyAsync(s => s.Id == post.Id, cancellationToken);
 
-        
+
         // Create an empty list of tags for a new post
         if (!postExists || post.Tags == null)
         {
@@ -437,7 +454,7 @@ public class BlogRepository : IBlogRepository
 
     private IQueryable<Post> FilterPosts(IPostQuery condition)
     {
-        
+
         int keyNumber = 0;
         var keyword = !string.IsNullOrWhiteSpace(condition.Keyword) ? condition.Keyword.ToLower() : "";
         int.TryParse(condition.Keyword, out keyNumber);
@@ -460,6 +477,8 @@ public class BlogRepository : IBlogRepository
             .WhereIf(condition.Month > 0, p => p.PostedDate.Month == condition.Month)
             .WhereIf(condition.Day > 0, p => p.PostedDate.Day == condition.Day)
             .WhereIf(!string.IsNullOrWhiteSpace(condition.Keyword), s =>
+                s.Title.Contains(keyword) ||
+                s.Description.Contains(keyword) ||
                 s.Category.UrlSlug.ToLower().Contains(keyword) ||
                 s.Author.UrlSlug.ToLower().Contains(keyword) ||
                 s.Author.FullName.ToLower().Contains(keyword) ||
@@ -536,6 +555,13 @@ public class BlogRepository : IBlogRepository
         return await FilterPosts(postQuery).CountAsync(cancellationToken);
     }
 
+    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery, IPagingParams pagingParams,
+        CancellationToken cancellationToken = default)
+    {
+        FilterPosts(postQuery).ToList();
+        return await FilterPosts(postQuery).ToPagedListAsync(pagingParams, cancellationToken);
+    }
+
     public async Task<IPagedList<T>> GetPagedPostsAsync<T>(
         PostQuery condition,
         IPagingParams pagingParams,
@@ -547,12 +573,11 @@ public class BlogRepository : IBlogRepository
         return await projectedPosts.ToPagedListAsync(pagingParams);
     }
 
-    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery, 
+    public async Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery,
         int pageNumber = 1,
-        int pageSize = 10, 
+        int pageSize = 10,
         CancellationToken cancellationToken = default)
     {
-
         return await FilterPosts(postQuery).ToPagedListAsync(pageNumber, pageSize, nameof(Post.PostedDate), "DESC", cancellationToken);
     }
 
