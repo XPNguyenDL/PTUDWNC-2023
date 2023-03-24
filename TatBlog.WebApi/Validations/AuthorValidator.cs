@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Models;
 
 namespace TatBlog.WebApi.Validations;
