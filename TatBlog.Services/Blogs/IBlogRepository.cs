@@ -34,6 +34,11 @@ public interface IBlogRepository
 
     // Get Tag by slug
     Task<Tag> GetTagBySlugAsync(string slug, CancellationToken cancellationToken = default);
+
+    Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
+        IPagingParams pagingParams,
+        string name = null,
+        CancellationToken cancellationToken = default);
     Task<Tag> GetTagByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Tag> AddOrUpdateTagAsync(Tag tag, CancellationToken cancellationToken = default);
     Task<IList<TagItem>> GetTagsAsync(CancellationToken cancellationToken = default);
@@ -68,6 +73,11 @@ public interface IBlogRepository
         int pageNumber = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default);
+
+    Task<IPagedList<Post>> GetPagedPostsQueryAsync(IPostQuery postQuery,
+        IPagingParams pagingParams,
+        CancellationToken cancellationToken = default);
+
 
     Task<IPagedList<T>> GetPagedPostsAsync<T>(
         PostQuery condition,
