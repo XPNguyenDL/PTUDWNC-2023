@@ -30,6 +30,20 @@ public static class PostEndpoints
             .WithName("GetRandomPost")
             .Produces<IList<PostDto>>();
 
+        routeGroupBuilder.MapGet("/archives/{month:int}", GetArchives)
+	        .WithName("GetArchives")
+	        .Produces<IList<MonthlyPostCountItem>>();
+
+        routeGroupBuilder.MapGet("/{id:guid}", GetPostById)
+            .WithName("GetPostById")
+            .Produces<PostDetail>()
+            .Produces(404);
+
+        routeGroupBuilder.MapGet("/byslug/{slug:regex(^[a-z0-9_-]+$)}", GetPostBySlug)
+            .WithName("GetPostBySlug")
+            .Produces<PaginationResult<PostDetail>>()
+			.Produces(404); ;
+
         //routeGroupBuilder.MapGet("/{slug:regex(^[a-z0-9_-]+$)}/posts", GetPostsByCategorySlug)
         //    .WithName("GetPostsByCategorySlug")
         //    .Produces<PaginationResult<PostDto>>();
@@ -96,27 +110,41 @@ public static class PostEndpoints
         return Results.Ok(postDto);
     }
 
-    private static async Task<IResult> GetPostsByCategorySlug(
-        [FromRoute] string slug,
-        [AsParameters] PagingModel pagingModel,
+    private static async Task<IResult> GetArchives(
+        int month,
         IBlogRepository blogRepository)
     {
-        var postsQuery = new PostQuery()
-        {
-            CategorySlug = slug,
-            Published = true
-        };
-
-        var postList = await blogRepository.GetPagedPostsAsync(
-            postsQuery,
-            pagingModel,
-            p => p.ProjectToType<PostDto>());
-
-        var paginationResult = new PaginationResult<PostDto>(postList);
-        return Results.Ok(paginationResult);
+	    var result = await blogRepository.CountPostByMonth(month);
+        return Results.Ok(result);
     }
 
-    private static async Task<IResult> AddCategory(
+    private static async Task<IResult> GetPostById(
+	    Guid id,
+	    IBlogRepository blogRepository,
+	    IMapper mapper)
+    {
+	    var post = await blogRepository.GetPostByIdAsync(id, true);
+
+        var postDetail = mapper.Map<PostDetail>(post);
+		return postDetail != null
+			? Results.Ok(postDetail)
+		    : Results.NotFound($"Không tìm thấy bài viết với id: `{id}`");
+    }
+
+    private static async Task<IResult> GetPostBySlug(
+		[FromRoute] string slug,
+	    IBlogRepository blogRepository,
+	    IMapper mapper)
+    {
+	    var post = await blogRepository.GetPostAsync(0, 0, 0, slug);
+
+	    var postDetail = mapper.Map<PostDetail>(post);
+	    return postDetail != null
+		    ? Results.Ok(postDetail)
+		    : Results.NotFound($"Không tìm thấy bài viết với mã định danh: `{slug}`");
+    }
+
+	private static async Task<IResult> AddCategory(
         CategoryEditModel model,
         IBlogRepository blogRepository,
         IMapper mapper)
