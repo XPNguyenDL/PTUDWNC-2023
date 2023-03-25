@@ -348,7 +348,7 @@ public class BlogRepository : IBlogRepository
 
 
         // Create an empty list of tags for a new post
-        if (!postExists || post.Tags == null)
+        if (!postExists)
         {
             post.Tags = new List<Tag>();
         }
