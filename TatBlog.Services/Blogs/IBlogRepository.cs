@@ -63,7 +63,10 @@ public interface IBlogRepository
         CancellationToken cancellationToken = default);
     Task<Post> AddOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default);
 
-    Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
+    Task<bool> SetImageUrlAsync(Guid postId, string imageUrl, CancellationToken cancellationToken = default);
+
+
+	Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellation = default);
 
     Task<IList<Post>> GetRandomPostAsync(int ranNum, CancellationToken cancellation = default);
 

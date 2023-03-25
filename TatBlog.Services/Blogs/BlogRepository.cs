@@ -13,7 +13,6 @@ public class BlogRepository : IBlogRepository
 {
     private readonly BlogDbContext _dbContext;
 
-
     public BlogRepository(BlogDbContext context)
     {
         _dbContext = context;
@@ -422,6 +421,15 @@ public class BlogRepository : IBlogRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
         return post;
     }
+
+    public async Task<bool> SetImageUrlAsync(Guid postId, string imageUrl, CancellationToken cancellationToken = default)
+    {
+		return await _dbContext.Posts
+			.Where(x => x.Id == postId)
+			.ExecuteUpdateAsync(x =>
+					x.SetProperty(a => a.ImageUrl, a => imageUrl),
+				cancellationToken) > 0;
+	}
 
     public async Task TogglePublicStatusPostAsync(Guid postId, CancellationToken cancellationToken = default)
     {

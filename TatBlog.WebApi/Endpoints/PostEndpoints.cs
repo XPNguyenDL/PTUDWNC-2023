@@ -2,12 +2,15 @@
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Filters;
+using TatBlog.WebApi.Media;
 using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Validations;
 
 namespace TatBlog.WebApi.Endpoints;
 
@@ -48,24 +51,30 @@ public static class PostEndpoints
         //    .WithName("GetPostsByCategorySlug")
         //    .Produces<PaginationResult<PostDto>>();
 
-        //routeGroupBuilder.MapPost("/", AddCategory)
-        //    .WithName("AddCategory")
-        //    .AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
-        //    .Produces(201)
-        //    .Produces(400)
-        //    .Produces(409);
+        routeGroupBuilder.MapPost("/", AddPost)
+            .WithName("AddPost")
+            .AddEndpointFilter<ValidatorFilter<PostEditModel>>()
+			.Produces(201)
+            .Produces(400)
+            .Produces(409);
 
-        //routeGroupBuilder.MapPut("/{id:guid}", UpdateCategory)
-        //    .WithName("UpdateCategory")
-        //    .AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
-        //    .Produces(204)
-        //    .Produces(400)
-        //    .Produces(409);
+        routeGroupBuilder.MapPut("/{id:guid}", UpdatePost)
+            .WithName("UpdatePost")
+            .AddEndpointFilter<ValidatorFilter<PostEditModel>>()
+            .Produces(204)
+            .Produces(400)
+            .Produces(409);
 
-        //routeGroupBuilder.MapDelete("/{id:guid}", DeleteCategory)
-        //    .WithName("DeleteCategory")
-        //    .Produces(204)
-        //    .Produces(404);
+        routeGroupBuilder.MapPost("/{id:guid}/picture", SetPostPicture)
+	        .WithName("SetPostPicture")
+	        .Accepts<IFormFile>("multipart/form-data")
+	        .Produces<string>()
+	        .Produces(400);
+
+        routeGroupBuilder.MapDelete("/{id:guid}", DeletePost)
+            .WithName("DeletePost")
+            .Produces(204)
+            .Produces(404);
 
         return app;
     }
@@ -144,52 +153,108 @@ public static class PostEndpoints
 		    : Results.NotFound($"Không tìm thấy bài viết với mã định danh: `{slug}`");
     }
 
-	private static async Task<IResult> AddCategory(
-        CategoryEditModel model,
+	private static async Task<IResult> AddPost(
+        PostEditModel model,
         IBlogRepository blogRepository,
+        IAuthorRepository authorRepository,
         IMapper mapper)
     {
-        if (await blogRepository.IsCategorySlugExistedAsync(Guid.Empty, model.UrlSlug))
+        if (await blogRepository.IsPostSlugExistedAsync(Guid.Empty, model.UrlSlug))
         {
             return Results.Conflict(
                 $"Slug {model.UrlSlug} đã được sử dụng");
         }
 
-        var category = mapper.Map<Category>(model);
+        var isExitsCategory = await blogRepository.GetCategoryByIdAsync(model.CategoryId);
+        var isExitsAuthor = await authorRepository.GetAuthorByIdAsync(model.AuthorId);
 
-        await blogRepository.AddOrUpdateCategoryAsync(category);
+        if (isExitsAuthor == null || isExitsCategory == null)
+        {
+			return Results.NotFound(
+				$"Mã tác giả hoặc chủ đề không tồn tại!");
+		}
 
-        return Results.CreatedAtRoute("GetCategoryById", new { category.Id },
-            mapper.Map<AuthorItem>(category));
+        var post = mapper.Map<Post>(model);
+
+        post.Id = Guid.NewGuid();
+        post.PostedDate = DateTime.Now;
+        
+		await blogRepository.AddOrUpdatePostAsync(post, model.SelectedTags);
+
+        return Results.CreatedAtRoute("GetPostById", new { post.Id },
+            mapper.Map<PostDetail>(post));
     }
 
-    private static async Task<IResult> UpdateCategory(
+    private static async Task<IResult> UpdatePost(
         Guid id,
-        CategoryEditModel model,
-        IValidator<CategoryEditModel> validator,
+        PostEditModel model,
         IBlogRepository blogRepository,
-        IMapper mapper)
+        IAuthorRepository authorRepository,
+		IMapper mapper)
     {
-        if (await blogRepository.IsCategorySlugExistedAsync(id, model.UrlSlug))
+	    var post = await blogRepository.GetPostByIdAsync(id);
+
+	    if (post == null)
+	    {
+			return Results.NotFound(
+				$"Không tìm thấy bài viết với id: `{id}`");
+		}
+
+		if (await blogRepository.IsPostSlugExistedAsync(id, model.UrlSlug))
         {
             return Results.Conflict(
                 $"Slug {model.UrlSlug} đã được sử dụng");
         }
 
-        var category = mapper.Map<Category>(model);
-        category.Id = id;
+        var isExitsCategory = await blogRepository.GetCategoryByIdAsync(model.CategoryId);
+        var isExitsAuthor = await authorRepository.GetAuthorByIdAsync(model.AuthorId);
 
-        return await blogRepository.AddOrUpdateCategoryAsync(category) != null
+        if (isExitsAuthor == null || isExitsCategory == null)
+        {
+	        return Results.NotFound(
+		        $"Mã tác giả hoặc chủ đề không tồn tại!");
+        }
+
+        mapper.Map(model, post);
+        post.Id = id;
+        post.Category = null;
+        post.Author = null;
+
+        return await blogRepository.AddOrUpdatePostAsync(post, model.SelectedTags) != null
             ? Results.NoContent()
             : Results.NotFound();
     }
 
-    private static async Task<IResult> DeleteCategory(
-        Guid id,
-        IBlogRepository blogRepository)
+    private static async Task<IResult> SetPostPicture(
+	    Guid id, IFormFile imageFile,
+	    IBlogRepository blogRepository,
+	    IMediaManager mediaManager)
     {
-        return await blogRepository.DeleteCategoryByIdAsync(id)
+	    var imageUrl = await mediaManager.SaveFileAsync(
+		    imageFile.OpenReadStream(),
+		    imageFile.FileName, imageFile.ContentType);
+
+	    if (string.IsNullOrWhiteSpace(imageUrl))
+	    {
+		    return Results.BadRequest("Không lưu được tệp");
+	    }
+
+	    await blogRepository.SetImageUrlAsync(id, imageUrl);
+	    return Results.Ok(imageUrl);
+    }
+
+	private static async Task<IResult> DeletePost(
+        Guid id,
+        IBlogRepository blogRepository,
+        IMediaManager _media)
+    {
+	    var oldPost = await blogRepository.GetPostByIdAsync(id);
+
+	    await _media.DeleteFileAsync(oldPost.ImageUrl);
+
+		return await blogRepository.DeletePostByIdAsync(id)
             ? Results.NoContent()
             : Results.NotFound($"Không tìm thấy chủ đề với id: `{id}`");
+
     }
 }
