@@ -1,6 +1,6 @@
 ﻿namespace TatBlog.WebApi.Models.CategoryModel;
 
-public class CategoryDto
+public class SubscriberDto
 {
     public Guid Id { get; set; }
 

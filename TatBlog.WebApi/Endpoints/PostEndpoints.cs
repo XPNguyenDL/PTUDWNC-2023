@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using Mapster;
+﻿using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -10,7 +8,6 @@ using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Filters;
 using TatBlog.WebApi.Media;
 using TatBlog.WebApi.Models.PostModel;
-using TatBlog.WebApi.Validations;
 
 namespace TatBlog.WebApi.Endpoints;
 
