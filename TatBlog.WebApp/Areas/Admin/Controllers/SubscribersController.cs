@@ -23,7 +23,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index(
             SubscriberFilterModel filterModel,
-            string keyword,
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 5)
         {

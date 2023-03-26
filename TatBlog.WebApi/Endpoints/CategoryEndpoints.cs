@@ -8,6 +8,9 @@ using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Filters;
 using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.Author;
+using TatBlog.WebApi.Models.CategoryModel;
+using TatBlog.WebApi.Models.PostModel;
 
 namespace TatBlog.WebApi.Endpoints;
 
@@ -113,13 +116,12 @@ public static class CategoryEndpoints
         await blogRepository.AddOrUpdateCategoryAsync(category);
 
         return Results.CreatedAtRoute("GetCategoryById", new { category.Id },
-            mapper.Map<AuthorItem>(category));
+            mapper.Map<CategoryItem>(category));
     }
 
     private static async Task<IResult> UpdateCategory(
         Guid id,
         CategoryEditModel model,
-        IValidator<CategoryEditModel> validator,
         IBlogRepository blogRepository,
         IMapper mapper)
     {

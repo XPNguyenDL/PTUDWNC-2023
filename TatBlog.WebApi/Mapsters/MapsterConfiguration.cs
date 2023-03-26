@@ -1,7 +1,9 @@
 ﻿using Mapster;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
-using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.Author;
+using TatBlog.WebApi.Models.CategoryModel;
+using TatBlog.WebApi.Models.PostModel;
 
 namespace TatBlog.WebApi.Mapsters;
 

@@ -10,6 +10,9 @@ using TatBlog.WebApi.Extensions;
 using TatBlog.WebApi.Filters;
 using TatBlog.WebApi.Media;
 using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.Author;
+using TatBlog.WebApi.Models.CategoryModel;
+using TatBlog.WebApi.Models.PostModel;
 
 namespace TatBlog.WebApi.Endpoints;
 
