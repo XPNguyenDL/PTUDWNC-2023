@@ -9,7 +9,7 @@ using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Filters;
 using TatBlog.WebApi.Media;
-using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.PostModel;
 using TatBlog.WebApi.Validations;
 
 namespace TatBlog.WebApi.Endpoints;
@@ -61,7 +61,12 @@ public static class PostEndpoints
             .Produces(400)
             .Produces(409);
 
-        routeGroupBuilder.MapPost("/{id:guid}/picture", SetPostPicture)
+        routeGroupBuilder.MapGet("/TogglePost/{id:guid}", TogglePublicStatus)
+	        .WithName("TogglePublicStatus")
+	        .Produces(204)
+	        .Produces(404);
+
+		routeGroupBuilder.MapPost("/{id:guid}/picture", SetPostPicture)
 	        .WithName("SetPostPicture")
 	        .Accepts<IFormFile>("multipart/form-data")
 	        .Produces<string>()
@@ -221,7 +226,22 @@ public static class PostEndpoints
             : Results.NotFound();
     }
 
-    private static async Task<IResult> SetPostPicture(
+    private static async Task<IResult> TogglePublicStatus(
+	    Guid id,
+	    IBlogRepository blogRepository)
+    {
+	    var oldPost = await blogRepository.GetPostByIdAsync(id);
+
+	    if (oldPost == null)
+	    {
+		    return Results.NotFound($"Không tìm thấy bài viết với id: `{id}`");
+	    }
+	    await blogRepository.TogglePublicStatusPostAsync(id);
+	    return Results.Ok();
+    }
+
+
+	private static async Task<IResult> SetPostPicture(
 	    Guid id, IFormFile imageFile,
 	    IBlogRepository blogRepository,
 	    IMediaManager mediaManager)
@@ -259,7 +279,7 @@ public static class PostEndpoints
 
 		return await blogRepository.DeletePostByIdAsync(id)
             ? Results.NoContent()
-            : Results.NotFound($"Không tìm thấy chủ đề với id: `{id}`");
+            : Results.NotFound($"Không tìm thấy bài viết với id: `{id}`");
 
     }
 }
