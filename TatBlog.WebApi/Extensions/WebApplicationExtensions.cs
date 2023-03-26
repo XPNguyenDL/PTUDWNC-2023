@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentEmail.Smtp;
+using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using TatBlog.Data.Contexts;
 using TatBlog.Services.Blogs;
@@ -23,9 +24,8 @@ public static class WebApplicationExtensions
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
         builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
-
-        return builder;
+        
+		return builder;
     }
 
     public static WebApplicationBuilder ConfigureCors(
@@ -58,8 +58,8 @@ public static class WebApplicationExtensions
 
         return builder;
     }
-
-    public static WebApplication SetupRequestPipeline(
+    
+	public static WebApplication SetupRequestPipeline(
         this WebApplication app)
     {
         if (app.Environment.IsDevelopment())

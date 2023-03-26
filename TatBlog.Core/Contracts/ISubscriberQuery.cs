@@ -8,7 +8,10 @@ public interface ISubscriberQuery
     [DisplayName("Từ khóa")]
     public string Keyword { get; set; }
 
-    [DisplayName("Năm")]
+    [DisplayName("Email")]
+    public string Email { get; set; }
+
+	[DisplayName("Năm")]
     public int? Year { get; set; }
 
     [DisplayName("Tháng")]

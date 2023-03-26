@@ -1,7 +1,5 @@
 ﻿namespace TatBlog.WebApp.Areas.Admin.Models;
 
-
-
 public class SubscriberEditModel
 {
     public Guid Id { get; set; }
