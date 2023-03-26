@@ -27,8 +27,8 @@ public interface IAuthorRepository
         IPagingParams pagingParams,
         string name = null,
         CancellationToken cancellationToken = default);
-
-    Task<IPagedList<T>> GetPagedAuthorsAsync<T>(
+    
+	Task<IPagedList<T>> GetPagedAuthorsAsync<T>(
         Func<IQueryable<Author>, IQueryable<T>> mapper,
         IPagingParams pagingParams,
         string name = null,
