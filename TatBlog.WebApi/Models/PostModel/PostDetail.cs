@@ -1,6 +1,10 @@
-﻿namespace TatBlog.WebApi.Models;
+﻿using TatBlog.WebApi.Models.Author;
+using TatBlog.WebApi.Models.CategoryModel;
+using TatBlog.WebApi.Models.TagModel;
 
-public class PostDto
+namespace TatBlog.WebApi.Models.PostModel;
+
+public class PostDetail
 {
     public Guid Id { get; set; }
 
@@ -8,13 +12,15 @@ public class PostDto
 
     public string ShortDescription { get; set; }
 
+    public string Description { get; set; }
+
+    public string MetaData { get; set; }
+
     public string UrlSlug { get; set; }
 
     public string ImageUrl { get; set; }
 
     public int ViewCount { get; set; }
-
-    public DateTime PostDate { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
 
@@ -23,4 +29,5 @@ public class PostDto
     public AuthorDto Author { get; set; }
 
     public IList<TagDto> Tags { get; set; }
+
 }

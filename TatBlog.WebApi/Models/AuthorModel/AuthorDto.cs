@@ -1,4 +1,4 @@
-﻿namespace TatBlog.WebApi.Models;
+﻿namespace TatBlog.WebApi.Models.Author;
 
 public class AuthorDto
 {
@@ -8,5 +8,5 @@ public class AuthorDto
 
     public string UrlSlug { get; set; }
 
-    
+
 }
