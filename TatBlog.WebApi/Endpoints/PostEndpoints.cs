@@ -45,11 +45,7 @@ public static class PostEndpoints
         routeGroupBuilder.MapGet("/byslug/{slug:regex(^[a-z0-9_-]+$)}", GetPostBySlug)
             .WithName("GetPostBySlug")
             .Produces<PaginationResult<PostDetail>>()
-			.Produces(404); ;
-
-        //routeGroupBuilder.MapGet("/{slug:regex(^[a-z0-9_-]+$)}/posts", GetPostsByCategorySlug)
-        //    .WithName("GetPostsByCategorySlug")
-        //    .Produces<PaginationResult<PostDto>>();
+			.Produces(404);
 
         routeGroupBuilder.MapPost("/", AddPost)
             .WithName("AddPost")
@@ -230,7 +226,16 @@ public static class PostEndpoints
 	    IBlogRepository blogRepository,
 	    IMediaManager mediaManager)
     {
-	    var imageUrl = await mediaManager.SaveFileAsync(
+	    var oldPost = await blogRepository.GetPostByIdAsync(id);
+	    if (oldPost == null)
+	    {
+		    return Results.NotFound(
+			    $"Không tìm thấy bài viết với id: `{id}`");
+	    }
+
+		await mediaManager.DeleteFileAsync(oldPost.ImageUrl);
+
+		var imageUrl = await mediaManager.SaveFileAsync(
 		    imageFile.OpenReadStream(),
 		    imageFile.FileName, imageFile.ContentType);
 
