@@ -2,8 +2,6 @@
 using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using System.Net.NetworkInformation;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.Entities;

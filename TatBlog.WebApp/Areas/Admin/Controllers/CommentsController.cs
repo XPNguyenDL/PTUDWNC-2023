@@ -1,5 +1,4 @@
-﻿
-using MapsterMapper;
+﻿using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
