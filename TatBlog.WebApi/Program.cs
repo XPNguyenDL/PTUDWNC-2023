@@ -24,7 +24,10 @@ var app = builder.Build();
         .MapCategoryEndpoints()
         .MaPostEndpoints()
         .MapTagEndpoints()
-        .MapSubscriberEndpoints();
+        .MapSubscriberEndpoints()
+        .MapCommentEndpoints()
+        .MapDashboardEndpoints()
+        .MapContactEndpoints();
     
     app.Run();
 }
