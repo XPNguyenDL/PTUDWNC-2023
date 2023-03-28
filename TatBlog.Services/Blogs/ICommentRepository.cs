@@ -7,7 +7,11 @@ namespace TatBlog.Services.Blogs;
 public interface ICommentRepository
 {
 	Task<List<Comment>> GetCommentsByPost(Guid postId, bool isGetAll = false, CancellationToken cancellationToken = default);
+	Task<Comment> GetCommentsById(Guid id, CancellationToken cancellationToken = default);
+
 	Task<IPagedList<Comment>> GetPagedCommentAsync(ICommentQuery condition, IPagingParams pagingParams,
+		CancellationToken cancellationToken = default);
+	Task<IPagedList<Comment>> GetPagedCommentAsync(string keyword, IPagingParams pagingParams,
 		CancellationToken cancellationToken = default);
 	Task<bool> AddOrUpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default);
 	Task<bool> DeleteCommentAsync(Guid id, CancellationToken cancellationToken = default);
