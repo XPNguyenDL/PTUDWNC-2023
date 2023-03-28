@@ -28,6 +28,11 @@ public class CommentRepository : ICommentRepository
 		return await comment.Where(s => s.PostId == postId && s.CommentStatus == CommentStatus.Valid).ToListAsync(cancellationToken);
 	}
 
+	public async Task<Comment> GetCommentsById(Guid id, CancellationToken cancellationToken = default)
+	{
+		return await _dbContext.Set<Comment>().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+	}
+
 
 	public async Task<IPagedList<Comment>> GetPagedCommentAsync(ICommentQuery condition, IPagingParams pagingParams,
 		CancellationToken cancellationToken = default)
@@ -46,6 +51,15 @@ public class CommentRepository : ICommentRepository
 		return await commentQuery.ToPagedListAsync(pagingParams, cancellationToken);
 	}
 
+	public async Task<IPagedList<Comment>> GetPagedCommentAsync(string keyword, IPagingParams pagingParams, CancellationToken cancellationToken = default)
+	{
+		var commentQuery = _dbContext.Set<Comment>()
+			.WhereIf(!string.IsNullOrWhiteSpace(keyword), s =>
+				s.Content.Contains(keyword) ||
+				s.UserComment.Contains(keyword) ||
+				s.Post.Title.Contains(keyword));
+		return await commentQuery.ToPagedListAsync(pagingParams, cancellationToken);
+	}
 
 
 	public async Task<bool> AddOrUpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default)

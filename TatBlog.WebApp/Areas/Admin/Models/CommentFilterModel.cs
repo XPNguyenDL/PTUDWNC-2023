@@ -31,5 +31,4 @@ public class CommentFilterModel
                 Text = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m),
             }).ToList();
     }
-
 }

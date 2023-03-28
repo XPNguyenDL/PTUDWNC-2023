@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
+using TatBlog.WebApi.Extensions;
 using TatBlog.WebApi.Models.PostModel;
 using TatBlog.WebApi.Models.SubscriberModel;
 
@@ -77,10 +78,18 @@ public static class SubscriberEndpoints
 
 	private static async Task<IResult> Subscribe(
 		string email,
-		ISubscriberRepository subRepository)
+		ISubscriberRepository subRepository,
+		IWebHostEnvironment env)
 	{
 		var subSuccess = await subRepository.SubscribeAsync(email);
-		
+
+		if (subSuccess)
+		{
+			SendMailExtensions.Initialize(env);
+			var body = SendMailExtensions.SetTemplateEmail("templates/emails/EmailSubscribe.html");
+			SendMailExtensions.SendEmail(email, "Thông báo đăng ký", body);
+		}
+
 		return subSuccess
 			? Results.Ok("Đăng ký thành công")
 			: Results.Problem("Đăng ký thất bại");

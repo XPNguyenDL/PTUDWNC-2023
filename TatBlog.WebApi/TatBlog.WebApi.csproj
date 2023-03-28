@@ -29,6 +29,7 @@
     <Folder Include="Filters\" />
     <Folder Include="Extensions\" />
     <Folder Include="Models\CommentModel\" />
+    <Folder Include="Models\DashboardModel\" />
     <Folder Include="Models\SubscriberModel\" />
     <Folder Include="wwwroot\uploads\pictures\" />
   </ItemGroup>
