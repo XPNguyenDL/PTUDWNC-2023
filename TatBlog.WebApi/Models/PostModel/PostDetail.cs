@@ -24,7 +24,7 @@ public class PostDetail
 
     public DateTime? ModifiedDate { get; set; }
 
-    public SubscriberDto Category { get; set; }
+    public CategoryDto Category { get; set; }
 
     public AuthorDto Author { get; set; }
 
