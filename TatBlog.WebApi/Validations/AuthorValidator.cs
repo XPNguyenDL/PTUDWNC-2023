@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TatBlog.WebApi.Models.CategoryModel;
+using TatBlog.WebApi.Models.AuthorModel;
 
 namespace TatBlog.WebApi.Validations;
 

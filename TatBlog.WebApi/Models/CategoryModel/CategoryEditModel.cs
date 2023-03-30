@@ -1,14 +1,10 @@
 ﻿namespace TatBlog.WebApi.Models.CategoryModel;
 
-public class AuthorEditModel
+public class CategoryEditModel
 {
-    public string FullName { get; set; }
+    public string? Name { get; set; }
+    public string? UrlSlug { get; set; }
+    public string? Description { get; set; }
+    public bool ShowOnMenu { get; set; }
 
-    public string UrlSlug { get; set; }
-
-    public DateTime JoinedDate { get; set; }
-
-    public string Email { get; set; }
-
-    public string Notes { get; set; }
 }

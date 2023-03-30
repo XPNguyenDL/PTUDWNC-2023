@@ -1,4 +1,5 @@
 ﻿using TatBlog.Services.Blogs;
+using TatBlog.WebApi.Models;
 using TatBlog.WebApi.Models.DashboardModel;
 
 namespace TatBlog.WebApi.Endpoints;
@@ -12,7 +13,7 @@ public static class DashboardEndpoints
 
 		routeGroupBuilder.MapGet("/", GetDashboardInformation)
 			.WithName("GetDashboardInformation")
-			.Produces<DashboardModel>();
+			.Produces<ApiResponse<DashboardModel>>();
 
 		return app;
 	}
@@ -35,6 +36,6 @@ public static class DashboardEndpoints
 			SubDailyCount = await subRepo.CountSubscriberByDayAsync(),
 		};
 
-		return Results.Ok(result);
+		return Results.Ok(ApiResponse.Success(result));
 	}
 }

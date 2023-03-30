@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using System.Net;
+using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.Collections;
@@ -22,15 +23,15 @@ public static class CommentEndpoints
 
         routeGroupBuilder.MapGet("/", GetComment)
             .WithName("GetComment")
-            .Produces<PaginationResult<Comment>>();
+            .Produces<ApiResponse<PaginationResult<Comment>>>();
 
         routeGroupBuilder.MapGet("/{id:guid}/posts", GetCommentByPostId)
 	        .WithName("GetCommentByPostId")
-	        .Produces<IList<Comment>>();
+	        .Produces<ApiResponse<IList<Comment>>>();
 
 		routeGroupBuilder.MapGet("/{id:guid}", GetCommentById)
             .WithName("GetCommentById")
-            .Produces<Comment>();
+            .Produces<ApiResponse<Comment>>();
 
         routeGroupBuilder.MapPost("/", AddComment)
             .WithName("AddComment")
@@ -60,7 +61,7 @@ public static class CommentEndpoints
         
 		var paginationResult = new PaginationResult<Comment>(cmtList);
 
-        return Results.Ok(paginationResult);
+        return Results.Ok(ApiResponse.Success(paginationResult));
     }
 
     private static async Task<IResult> GetCommentById(
@@ -70,8 +71,8 @@ public static class CommentEndpoints
 		var cmt = await cmtRepository.GetCommentsById(id);
 
 		return cmt == null
-			? Results.NotFound(404)
-			: Results.Ok(cmt);
+			? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound))
+			: Results.Ok(ApiResponse.Success(cmt));
 	}
 
 	private static async Task<IResult> GetCommentByPostId(
@@ -82,8 +83,8 @@ public static class CommentEndpoints
         var cmtList = await cmtRepository.GetCommentsByPost(id);
 
         return cmtList.Count == 0
-            ? Results.Problem("Không có bình luận nào")
-            : Results.Ok(cmtList);
+            ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Không có bình luận nào"))
+            : Results.Ok(ApiResponse.Success(cmtList));
     }
 
     private static async Task<IResult> VerifyComment(
@@ -94,8 +95,8 @@ public static class CommentEndpoints
         var cmt = await cmtRepository.VerifyCommentAsync(id, status);
 
         return cmt == null
-	        ? Results.NotFound(404)
-	        : Results.Ok(cmt);
+	        ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound))
+	        : Results.Ok(ApiResponse.Success(cmt));
     }
 
     private static async Task<IResult> AddComment(
@@ -117,8 +118,8 @@ public static class CommentEndpoints
 
 		await cmtRepository.AddOrUpdateCommentAsync(newCmt);
 
-        return Results.CreatedAtRoute("GetCommentById", new { newCmt.Id },
-            mapper.Map<CommentDto>(newCmt));
+        return Results.Ok(
+	        ApiResponse.Success(mapper.Map<CommentDto>(newCmt), HttpStatusCode.Created));
     }
 
     private static async Task<IResult> DeleteComment(
@@ -126,7 +127,8 @@ public static class CommentEndpoints
         ICommentRepository cmtRepository)
     {
         return await cmtRepository.DeleteCommentAsync(id)
-            ? Results.NoContent()
-            : Results.NotFound($"Không tìm thấy bình luận với id: `{id}`");
+            ? Results.Ok(ApiResponse.Success("Comment is deleted", HttpStatusCode.NoContent))
+            : Results.Ok(ApiResponse.Fail(
+	            HttpStatusCode.NotFound, $"Không tìm thấy bình luận với id: `{id}`"));
     }
 }

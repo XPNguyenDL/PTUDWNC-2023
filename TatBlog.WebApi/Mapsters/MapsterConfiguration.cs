@@ -2,6 +2,7 @@
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.WebApi.Models.Author;
+using TatBlog.WebApi.Models.AuthorModel;
 using TatBlog.WebApi.Models.CategoryModel;
 using TatBlog.WebApi.Models.PostModel;
 
