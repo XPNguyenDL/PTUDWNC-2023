@@ -1,4 +1,5 @@
-﻿using FluentEmail.Core;
+﻿using System.Net;
+using FluentEmail.Core;
 using FluentEmail.Smtp;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using TatBlog.Core.Collections;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Extensions;
+using TatBlog.WebApi.Models;
 using TatBlog.WebApi.Models.PostModel;
 using TatBlog.WebApi.Models.SubscriberModel;
 
@@ -20,7 +22,7 @@ public static class SubscriberEndpoints
 
 		routeGroupBuilder.MapGet("/", GetSubscriber)
 			.WithName("GetSubscriber")
-			.Produces<PaginationResult<Subscriber>>();
+			.Produces<ApiResponse<PaginationResult<Subscriber>>>();
 
 		routeGroupBuilder.MapGet("/{id:guid}", GetSubscriberById)
 			.WithName("GetSubscriberById")
@@ -60,7 +62,7 @@ public static class SubscriberEndpoints
 		var subList = await subscriberRepository.SearchSubscribersAsync(subQuery, model);
 		var paginationResult = new PaginationResult<Subscriber>(subList);
 
-		return Results.Ok(paginationResult);
+		return Results.Ok(ApiResponse.Success(paginationResult));
 	}
 
 	private static async Task<IResult> GetSubscriberById(
@@ -72,8 +74,8 @@ public static class SubscriberEndpoints
 		var subDto = mapper.Map<SubscriberDto>(sub);
 
 		return subDto == null
-			? Results.NotFound(404)
-			: Results.Ok(subDto);
+			? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Sub is not found"))
+			: Results.Ok(ApiResponse.Success(subDto));
 	}
 
 	private static async Task<IResult> Subscribe(
@@ -91,8 +93,8 @@ public static class SubscriberEndpoints
 		}
 
 		return subSuccess
-			? Results.Ok("Đăng ký thành công")
-			: Results.Problem("Đăng ký thất bại");
+			? Results.Ok(ApiResponse.Success("Đăng ký thành công"))
+			: Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, "Đăng ký thất bại"));
 	}
 
 	private static async Task<IResult> UnSubscribe(
@@ -102,8 +104,8 @@ public static class SubscriberEndpoints
 	{
 		var subSuccess = await subRepository.UnSubscribeAsync(email, reason);
 		return subSuccess
-			? Results.Ok("Hủy đăng ký thành công")
-			: Results.Problem("Hủy đăng ký thất bại");
+			? Results.Ok(ApiResponse.Success("Hủy đăng ký thành công"))
+			: Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, "Hủy đăng ký thất bại"));
 	}
 
 	private static async Task<IResult> BlockSubscriber(
@@ -117,7 +119,7 @@ public static class SubscriberEndpoints
 
 		await subRepository.BlockSubscribeAsync(sub.Id, model.Reason, model.Note);
 
-		return Results.CreatedAtRoute("GetSubscriberById", new { sub.Id }, sub);
+		return Results.Ok(ApiResponse.Success(sub, HttpStatusCode.Created));
 	}
 
 	private static async Task<IResult> DeleteSubscriber(
@@ -125,7 +127,7 @@ public static class SubscriberEndpoints
 		ISubscriberRepository subRepository)
 	{
 		return await subRepository.DeleteSubscriberAsync(id)
-			? Results.NoContent()
-			: Results.NotFound($"Không tìm thấy người đăng ký với id: `{id}`");
+			? Results.Ok(ApiResponse.Success("Sub is deleted", HttpStatusCode.NoContent))
+			: Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy người đăng ký với id: `{id}`"));
 	}
 }

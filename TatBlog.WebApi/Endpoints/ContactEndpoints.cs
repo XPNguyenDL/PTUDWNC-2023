@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TatBlog.WebApi.Extensions;
+using TatBlog.WebApi.Models;
 
 namespace TatBlog.WebApi.Endpoints;
 
@@ -26,6 +27,6 @@ public static class ContactEndpoints
 		var body = $"{title}:<br> {content}";
 
 		SendMailExtensions.SendEmail("2014478@dlu.edu.vn", subject, body);
-		return Results.Ok("Gửi thành công");
+		return Results.Ok(ApiResponse.Success("Gửi thành công"));
 	}
 }
