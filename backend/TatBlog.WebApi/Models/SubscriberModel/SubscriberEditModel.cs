@@ -3,5 +3,5 @@
 public class SubscriberEditModel
 {
 	public string Reason { get; set; }
-	public string? Note { get; set; }
+	public string Note { get; set; }
 }

@@ -13,7 +13,7 @@ public class ValidatorFilter<T> : IEndpointFilter where T : class
         _validator = validator;
     }
 
-    public async ValueTask<object?> InvokeAsync(
+    public async ValueTask<object> InvokeAsync(
         EndpointFilterInvocationContext context, 
         EndpointFilterDelegate next)
     {

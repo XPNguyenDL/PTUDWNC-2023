@@ -58,6 +58,7 @@ public static class TagEndpoints
         [AsParameters] TagFilterModel model,
         IBlogRepository blogRepository)
     {
+	    model.SortColumn = "PostCount";
         var tagList = await blogRepository.GetPagedTagsAsync(model.Name, model);
         var paginationResult = new PaginationResult<TagItem>(tagList);
 

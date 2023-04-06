@@ -116,7 +116,7 @@ public static class AuthorEndpoints
 	}
 
 	private static async Task<IResult> GetPostsByAuthorSlug(
-		[FromRoute] string slug,
+		string slug,
 		[AsParameters] PagingModel pagingModel,
 		IBlogRepository blogRepository)
 	{
