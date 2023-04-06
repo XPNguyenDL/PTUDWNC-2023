@@ -45,5 +45,5 @@ export default function Pager({ postQuery, metadata }) {
     );
   }
 
-  return <div>Pager</div>;
+  return null;
 }

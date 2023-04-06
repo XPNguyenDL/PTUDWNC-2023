@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import PostItem from "../Components/PostItem";
 import Pager from "../Components/Pager";
-import { useLocation } from "react-router-dom";
 
 export default function Index() {
   // useState()
@@ -15,7 +15,7 @@ export default function Index() {
   const query = useQuery(),
     keyword = query.get("k") ?? "",
     pageNumber = query.get("p") ?? 1,
-    pageSize = query.get("ps") ?? 1;
+    pageSize = query.get("ps") ?? 10;
 
   // useEffect
   useEffect(() => {
@@ -29,15 +29,11 @@ export default function Index() {
       .then((res) => res.json())
       .then((result) => {
         setPosts(result.result.items);
-        console.log(result.result.metadata);
         setMetadata(result.result.metadata)
       });
   }, [keyword, pageNumber, pageSize]);
 
-  if (posts.length < 0 || !posts) {
-    console.log(posts);
-    return null;
-  }
+ 
 
   return (
     <div className="p-4">

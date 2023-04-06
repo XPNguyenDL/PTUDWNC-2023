@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { API_URL } from "../Utils";
 
 export default function CategoriesWidget() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch(`https://localhost:7058/api/categories?PageNumber=1&PageSize=5&SortColumn=PostCount&SortOrder=DESC`)
+    fetch(`${API_URL}/api/categories?PageNumber=1&PageSize=5&SortColumn=PostCount&SortOrder=DESC`)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setCategories(result.result.items);
       });
   }, []);
@@ -23,7 +23,7 @@ export default function CategoriesWidget() {
             return (
               <ListGroup.Item key={item.id}>
                 <Link
-                  to={`blog/category?slug=${item.urlSlug}`}
+                  to={`blog/category/${item.urlSlug}`}
                   title={item.description}
                   key={item.id}>
                   {item.name}

@@ -2,6 +2,6 @@
 
 public class CommentFilterModel : PagingModel
 {
-	public string? Keyword { get; set; }
+	public string Keyword { get; set; }
 
 }
