@@ -10,6 +10,10 @@ import Layout from "./Pages/Layout";
 import Contact from "./Pages/Contact";
 import About from "./Pages/About";
 import Rss from "./Pages/Rss";
+import PostByAuthor from "./Pages/Blog/PostByAuthor";
+import PostByCategory from "./Pages/Blog/PostByCategory";
+import PostDetail from "./Components/PostDetail";
+import Subscriber from "./Pages/Newsletter/Subscriber";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
                   <Route path="/blog/contact" element={<Contact />} />
                   <Route path="/blog/about" element={<About />} />
                   <Route path="/blog/rss" element={<Rss />} />
+                  <Route path="blog/author/:slug" element={<PostByAuthor />} />
+                  <Route path="blog/category/:slug" element={<PostByCategory />} />
+                  <Route path="blog/post/:slug" element={<PostDetail />} />
+                  <Route path="blog/subscriber" element={<Subscriber />} />
                 </Route>
               </Routes>
             </div>
