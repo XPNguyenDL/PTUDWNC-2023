@@ -5,7 +5,6 @@ import TagList from "./TagList";
 import { Link } from "react-router-dom";
 
 export default function PostItem({ postItem }) {
-
   const imageUrl = isEmptyOrSpaces(postItem.imageUrl)
     ? process.env.PUBLIC_URL + `/images/image_1.jpg`
     : `${API_URL}/${postItem.imageUrl}`;
@@ -19,20 +18,26 @@ export default function PostItem({ postItem }) {
           </div>
           <div className="col-md-8">
             <Card.Body>
-              <Card.Title>{postItem.title}</Card.Title>
+              <Card.Title>
+                <Link
+                  to={`/blog/post/${postItem.urlSlug}`}
+                  className="text-primary text-decoration-none m-1">
+                  {postItem.title}
+                </Link>
+              </Card.Title>
               <Card.Text>
                 <small className="text-muted">Tác giả:</small>
-                  <Link
-                    to={`/blog/author/${postItem.author.urlSlug}`}
-                    className="text-primary text-decoration-none m-1">
-                    {postItem.author.fullName}
-                  </Link>
+                <Link
+                  to={`/blog/author/${postItem.author.urlSlug}`}
+                  className="text-primary text-decoration-none m-1">
+                  {postItem.author.fullName}
+                </Link>
                 <small className="text-muted">Chủ đề:</small>
                 <Link
-                    to={`/blog/category/${postItem.category.urlSlug}`}
-                    className="text-primary text-decoration-none m-1">
-                    {postItem.category.urlSlug}
-                  </Link>
+                  to={`/blog/category/${postItem.category.urlSlug}`}
+                  className="text-primary text-decoration-none m-1">
+                  {postItem.category.urlSlug}
+                </Link>
               </Card.Text>
               <Card.Text>{postItem.shortDescription}</Card.Text>
               <div className="tag-list">
@@ -40,7 +45,7 @@ export default function PostItem({ postItem }) {
               </div>
               <div className="text-end">
                 <Link
-                  to={`/blog/post?id=${postItem.id}`}
+                  to={`/blog/post/${postItem.urlSlug}`}
                   className="btn btn-primary"
                   title={postItem.title}>
                   Xem chi tiết
