@@ -102,23 +102,4 @@ export async function getPostBySlug(
   }
 }
 
-export async function getCommentByPost(
-  id = "",
-) {
-  try {
-    const res = await axios.get(
-      `${API_URL}/api/comments/${id}/posts`
-    );
-
-    const data = res.data;
-    console.log(data);
-    if (data.isSuccess) {
-      return data.result;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    return null;
-  }
-}
 

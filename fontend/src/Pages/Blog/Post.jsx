@@ -2,9 +2,10 @@ import React from 'react'
 import PostDetail from '../../Components/PostDetail'
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { getCommentByPost, getPostBySlug } from '../../Services/BlogRepository';
+import { getPostBySlug } from '../../Services/BlogRepository';
 import { useEffect } from 'react';
 import PostComment from '../../Components/PostComment';
+import { getCommentByPost } from '../../Services/CommentRepository';
 
 export default function Post() {
     const params = useParams();
@@ -27,7 +28,7 @@ export default function Post() {
   return (
     <div>
         <PostDetail post={post}/>
-        <PostComment comments={comments}/>
+        <PostComment comments={comments} postId={post.id}/>
     </div>
   )
 }

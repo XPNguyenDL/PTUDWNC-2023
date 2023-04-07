@@ -35,7 +35,7 @@ public static class CommentEndpoints
 
         routeGroupBuilder.MapPost("/", AddComment)
             .WithName("AddComment")
-            .Produces(201)
+            .Produces<ApiResponse<CommentDto>>()
             .Produces(400)
             .Produces(409);
 
