@@ -22,6 +22,7 @@ public class PostDetail
 
     public int ViewCount { get; set; }
 
+    public DateTime? PostedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
 
     public CategoryDto Category { get; set; }
