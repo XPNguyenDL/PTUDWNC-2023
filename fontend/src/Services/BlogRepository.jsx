@@ -81,3 +81,44 @@ export async function getPostByCategory(
     return null;
   }
 }
+
+export async function getPostBySlug(
+  slug = "",
+) {
+  try {
+    const res = await axios.get(
+      `${API_URL}/api/posts/byslug/${slug}`
+    );
+
+    const data = res.data;
+    console.log(data);
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getCommentByPost(
+  id = "",
+) {
+  try {
+    const res = await axios.get(
+      `${API_URL}/api/comments/${id}/posts`
+    );
+
+    const data = res.data;
+    console.log(data);
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+

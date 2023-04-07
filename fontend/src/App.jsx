@@ -14,6 +14,7 @@ import PostByAuthor from "./Pages/Blog/PostByAuthor";
 import PostByCategory from "./Pages/Blog/PostByCategory";
 import PostDetail from "./Components/PostDetail";
 import Subscriber from "./Pages/Newsletter/Subscriber";
+import Post from "./Pages/Blog/Post";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
                   <Route path="/blog/rss" element={<Rss />} />
                   <Route path="blog/author/:slug" element={<PostByAuthor />} />
                   <Route path="blog/category/:slug" element={<PostByCategory />} />
-                  <Route path="blog/post/:slug" element={<PostDetail />} />
+                  <Route path="blog/post/:slug" element={<Post />} />
                   <Route path="blog/subscriber" element={<Subscriber />} />
                 </Route>
               </Routes>
