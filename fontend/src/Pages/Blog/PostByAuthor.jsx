@@ -1,9 +1,9 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getPostByAuthor } from "../../Services/BlogRepository";
-import PostItem from "../../Components/PostItem";
+
+import {PostItem, Pager} from "../../Components/";
 import { useState, useEffect } from "react";
-import Pager from "../../Components/Pager";
 
 export default function PostByAuthor() {
   const params = useParams();

@@ -1,8 +1,7 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
-import PostItem from "../../Components/PostItem";
 import { useState, useEffect } from "react";
-import Pager from "../../Components/Pager";
+import { Pager, PostItem } from "../../Components";
 import { getPostByCategory } from "../../Services/BlogRepository";
 
 export default function PostByCategory() {

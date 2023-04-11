@@ -26,7 +26,7 @@ export async function postComment(postId = "", userComment = "", content) {
     };
 
     let result = {};
-    const res = await axios
+    await axios
     .post(`${API_URL}/api/comments`, data)
     .then((response) => {
         // handle success

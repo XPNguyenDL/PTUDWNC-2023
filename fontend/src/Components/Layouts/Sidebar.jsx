@@ -1,11 +1,11 @@
 import React from 'react'
-import SearchForm from '../../SearchForm'
-import CategoriesWidget from '../../Widget/CategoriesWidget'
-import FeaturedPosts from '../../Widget/FeaturedPosts'
-import RandomPosts from '../../Widget/RandomPosts'
-import TagCloud from '../../Widget/TagCloud'
-import BestAuthor from '../../Widget/BestAuthor'
-import Archives from '../../Widget/Archives'
+import SearchForm from '../SearchForm'
+import CategoriesWidget from '../Widget/CategoriesWidget'
+import FeaturedPosts from '../Widget/FeaturedPosts'
+import RandomPosts from '../Widget/RandomPosts'
+import TagCloud from '../Widget/TagCloud'
+import BestAuthor from '../Widget/BestAuthor'
+import Archives from '../Widget/Archives'
 import { Link } from 'react-router-dom'
 
 export default function Sidebar() {

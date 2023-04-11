@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import PostItem from "../Components/PostItem";
-import Pager from "../Components/Pager";
+import { Pager, PostItem } from "../../Components";
 
-export default function Index() {
+export default function Home() {
   // useState()
   const [posts, setPosts] = useState([]);
   const [metadata, setMetadata] = useState({});
@@ -29,18 +28,16 @@ export default function Index() {
       .then((res) => res.json())
       .then((result) => {
         setPosts(result.result.items);
-        setMetadata(result.result.metadata)
+        setMetadata(result.result.metadata);
       });
   }, [keyword, pageNumber, pageSize]);
-
- 
 
   return (
     <div className="p-4">
       {posts.map((item) => {
         return <PostItem postItem={item} />;
       })}
-      <Pager postQuery={{ 'keyword': keyword }} metadata={metadata} />
+      <Pager postQuery={{ keyword: keyword }} metadata={metadata} />
     </div>
   );
 }
