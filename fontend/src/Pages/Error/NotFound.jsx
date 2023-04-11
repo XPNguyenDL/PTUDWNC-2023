@@ -5,10 +5,10 @@ export default function NotFound() {
   return (
     <div className="d-flex flex-column container mx-auto align-items-center">
       <div className="my-5">
-        <img
-          src="https://www.pngitem.com/pimgs/m/561-5616833_image-not-found-png-not-found-404-png.png"
-          alt="not-found"
-        />
+        <h1 className="fs-1 text-danger">404</h1>
+      </div>
+      <div className="mb-5">
+        <p className="fs-3">Không tìm thấy trang</p>
       </div>
       <div className="mb-5">
         <Link to="/" className="btn btn-warning">
