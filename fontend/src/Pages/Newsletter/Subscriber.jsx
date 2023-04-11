@@ -1,7 +1,6 @@
 import React from "react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { subApi } from "../../Services/SubscriberRepository";
-import { useState } from "react";
 
 export default function Subscriber() {
   const email = useRef();
