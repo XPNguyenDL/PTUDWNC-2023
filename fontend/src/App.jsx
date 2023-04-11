@@ -1,48 +1,55 @@
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./Components/Layouts/Navbar";
-import Sidebar from "./Components/Layouts/Sidebar";
-import Footer from "./Components/Layouts/Footer";
-import Index from "./Pages/Index";
-import Layout from "./Pages/Layout";
-import Contact from "./Pages/Contact";
-import About from "./Pages/About";
-import Rss from "./Pages/Rss";
-import PostByAuthor from "./Pages/Blog/PostByAuthor";
-import PostByCategory from "./Pages/Blog/PostByCategory";
-import PostDetail from "./Components/PostDetail";
-import Subscriber from "./Pages/Newsletter/Subscriber";
-import Post from "./Pages/Blog/Post";
+import { Footer, Dashboard } from "./Components";
+import { Subscriber } from "./Pages/Newsletter";
+import {
+  Post,
+  About,
+  Contact,
+  Home,
+  Layout,
+  PostByAuthor,
+  PostByCategory,
+  Rss
+} from "./Pages/Blog/Index";
+import {
+  AdminLayout,
+  Author,
+  Category,
+  Comment,
+  Post as PostAdmin,
+  Tags
+} from "./Pages/Admin/Index";
+import { NotFound } from "./Pages/Error";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-9">
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/blog" element={<Index />} />
-                  <Route path="/blog/contact" element={<Contact />} />
-                  <Route path="/blog/about" element={<About />} />
-                  <Route path="/blog/rss" element={<Rss />} />
-                  <Route path="blog/author/:slug" element={<PostByAuthor />} />
-                  <Route path="blog/category/:slug" element={<PostByCategory />} />
-                  <Route path="blog/post/:slug" element={<Post />} />
-                  <Route path="blog/subscriber" element={<Subscriber />} />
-                </Route>
-              </Routes>
-            </div>
-            <div className="col-3 border-start">
-              <Sidebar />
-            </div>
-          </div>
-        </div>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/blog" element={<Home />} />
+            <Route path="/blog/contact" element={<Contact />} />
+            <Route path="/blog/about" element={<About />} />
+            <Route path="/blog/rss" element={<Rss />} />
+            <Route path="blog/author/:slug" element={<PostByAuthor />} />
+            <Route path="blog/category/:slug" element={<PostByCategory />} />
+            <Route path="blog/post/:slug" element={<Post />} />
+            <Route path="blog/subscriber" element={<Subscriber />} />
+          </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/authors" element={<Author />} />
+            <Route path="/admin/categories" element={<Category />} />
+            <Route path="/admin/posts" element={<PostAdmin />} />
+            <Route path="/admin/comments" element={<Comment />} />
+            <Route path="/admin/tags" element={<Tags />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
         <Footer />
       </BrowserRouter>
     </>
