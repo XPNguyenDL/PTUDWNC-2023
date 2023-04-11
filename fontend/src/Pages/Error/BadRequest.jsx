@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-export default function NotFound() {
+export default function BadRequest() {
   return (
     <div className="d-flex flex-column container mx-auto align-items-center">
       <div className="my-5">
