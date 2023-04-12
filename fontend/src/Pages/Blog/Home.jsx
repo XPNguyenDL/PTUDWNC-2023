@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Pager, PostItem } from "../../Components";
+import { getPost } from "../../Services/BlogRepository";
 
 export default function Home() {
   // useState()
@@ -22,14 +23,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch(
-      `https://localhost:7058/api/posts?Keyword=${keyword}&PageNumber=${pageNumber}&PageSize=${pageSize}&SortColumn=&SortOrder=`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        setPosts(result.result.items);
-        setMetadata(result.result.metadata);
-      });
+    fetchPosts();
+    async function fetchPosts() {
+      const postQuery = {
+        keyword: keyword,
+        pageSize: pageSize,
+        pageNumber: pageNumber
+      }
+      const data = await getPost(postQuery);
+      if (data) {
+        setPosts(data.items);
+        setMetadata(data.metadata)
+      } else {
+        setPosts([]);
+      }
+    }
   }, [keyword, pageNumber, pageSize]);
 
   return (
@@ -37,7 +45,7 @@ export default function Home() {
       {posts.map((item) => {
         return <PostItem postItem={item} />;
       })}
-      <Pager postQuery={{ keyword: keyword }} metadata={metadata} />
+      <Pager postQuery={keyword} metadata={metadata} />
     </div>
   );
 }
