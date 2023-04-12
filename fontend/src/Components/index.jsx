@@ -9,3 +9,4 @@ export { default as PostsFilter } from './PostsFilter';
 export { default as SearchForm } from './SearchForm';
 export { default as TagList } from './TagList';
 export { default as Utils } from './Utils';
+export { default as Loading } from './Loading';
