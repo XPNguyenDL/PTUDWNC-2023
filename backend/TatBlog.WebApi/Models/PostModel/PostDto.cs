@@ -26,5 +26,7 @@ public class PostDto
 
     public AuthorDto Author { get; set; }
 
-    public IList<TagDto> Tags { get; set; }
+    public bool Published { get; set; }
+
+	public IList<TagDto> Tags { get; set; }
 }

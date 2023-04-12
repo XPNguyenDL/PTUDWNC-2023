@@ -27,6 +27,10 @@ public static class AuthorEndpoints
 			.WithName("GetAuthors")
 			.Produces<ApiResponse<PaginationResult<AuthorItem>>>();
 
+		routeGroupBuilder.MapGet("/all", GetAllAuthors)
+			.WithName("GetAllAuthors")
+			.Produces<ApiResponse<AuthorItem>>();
+
 		routeGroupBuilder.MapGet("/{id:guid}", GetAuthorDetail)
 			.WithName("GetAuthorById")
 			.Produces<ApiResponse<AuthorItem>>()
@@ -81,6 +85,14 @@ public static class AuthorEndpoints
 		var paginationResult = new PaginationResult<AuthorItem>(authorList);
 
 		return Results.Ok(ApiResponse.Success(paginationResult));
+	}
+	
+	private static async Task<IResult> GetAllAuthors(
+		IAuthorRepository authorRepository)
+	{
+		var authorList = await authorRepository.GetAuthorsAsync();
+		
+		return Results.Ok(ApiResponse.Success(authorList));
 	}
 
 	private static async Task<IResult> GetAuthorDetail(

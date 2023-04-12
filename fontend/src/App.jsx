@@ -2,7 +2,6 @@ import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Footer, Dashboard } from "./Components";
-import { Subscriber } from "./Pages/Newsletter";
 import {
   Post,
   About,
@@ -11,17 +10,17 @@ import {
   Layout,
   PostByAuthor,
   PostByCategory,
-  Rss
-} from "./Pages/Blog/Index";
-import {
+  Rss,
   AdminLayout,
   Author,
   Category,
   Comment,
   Post as PostAdmin,
-  Tags
-} from "./Pages/Admin/Index";
-import { NotFound } from "./Pages/Error";
+  Tags,
+  Subscriber,
+  NotFound,
+  BadRequest
+} from "./Pages";
 
 function App() {
   return (
@@ -49,6 +48,7 @@ function App() {
             <Route path="/admin/tags" element={<Tags />} />
           </Route>
           <Route path="*" element={<NotFound />} />
+          <Route path="/400" element={<BadRequest />} />
         </Routes>
         <Footer />
       </BrowserRouter>

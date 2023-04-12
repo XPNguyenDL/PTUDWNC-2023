@@ -1,8 +1,7 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getPostByAuthor } from "../../Services/BlogRepository";
-
-import {PostItem, Pager} from "../../Components/";
+import { PostItem, Pager } from "../../Components/";
 import { useState, useEffect } from "react";
 
 export default function PostByAuthor() {
@@ -19,7 +18,6 @@ export default function PostByAuthor() {
     pageNumber = query.get("p") ?? 1,
     pageSize = query.get("ps") ?? 10;
 
-
   useEffect(() => {
     fetchPostsByAuthorSlug();
     async function fetchPostsByAuthorSlug() {
@@ -29,7 +27,7 @@ export default function PostByAuthor() {
         setMetadata(data.metadata);
       } else setPosts([]);
     }
-  }, [params]);
+  }, [params, pageSize, pageNumber]);
 
   return (
     <div className="p-4">

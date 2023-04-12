@@ -24,7 +24,11 @@ public static class CategoryEndpoints
             .WithName("GetCategories")
             .Produces<ApiResponse<PaginationResult<CategoryItem>>>();
 
-        routeGroupBuilder.MapGet("/{id:guid}", GetCategoryById)
+        routeGroupBuilder.MapGet("/all", GetAllCategories)
+	        .WithName("GetAllCategories")
+	        .Produces<ApiResponse<CategoryItem>>();
+
+		routeGroupBuilder.MapGet("/{id:guid}", GetCategoryById)
             .WithName("GetCategoryById")
             .Produces<ApiResponse<Category>>();
 
@@ -65,7 +69,15 @@ public static class CategoryEndpoints
         return Results.Ok(ApiResponse.Success(paginationResult));
     }
 
-    private static async Task<IResult> GetCategoryById(
+    private static async Task<IResult> GetAllCategories(
+	    IBlogRepository repository)
+    {
+	    var categories = await repository.GetCategoriesAsync();
+
+	    return Results.Ok(ApiResponse.Success(categories));
+    }
+
+	private static async Task<IResult> GetCategoryById(
         Guid id,
         IBlogRepository blogRepository,
         IMapper mapper)

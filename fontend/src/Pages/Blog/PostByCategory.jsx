@@ -27,7 +27,7 @@ export default function PostByCategory() {
         setMetadata(data.metadata);
       } else setPosts([]);
     }
-  }, [params]);
+  }, [params, pageSize, pageNumber]);
 
   return (
     <div className="p-4">
