@@ -20,8 +20,10 @@ import {
   Subscriber,
   NotFound,
   PostEdit,
-  BadRequest
+  BadRequest,
+  AuthorEdit
 } from "./Pages";
+import { CategoryEdit } from "./Pages/Admin/Catetories";
 
 function App() {
   return (
@@ -43,7 +45,11 @@ function App() {
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/authors" element={<Author />} />
+            <Route path="/admin/authors/edit" element={<AuthorEdit />} />
+            <Route path="/admin/authors/edit/:id" element={<AuthorEdit />} />
             <Route path="/admin/categories" element={<Category />} />
+            <Route path="/admin/categories/edit" element={<CategoryEdit />} />
+            <Route path="/admin/categories/edit/:id" element={<CategoryEdit />} />
             <Route path="/admin/posts" element={<PostAdmin />} />
             <Route path="/admin/posts/edit" element={<PostEdit />} />
             <Route path="/admin/posts/edit/:id" element={<PostEdit />} />
