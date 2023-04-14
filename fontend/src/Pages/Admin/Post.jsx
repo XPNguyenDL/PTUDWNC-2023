@@ -71,7 +71,7 @@ export default function Post() {
                     <tr key={item.id}>
                       <td>
                         <Link
-                          to={`admin/posts/edit/${item.id}`}
+                          to={`/admin/posts/edit/${item.id}`}
                           className="text-bold">
                           {item.title}
                         </Link>

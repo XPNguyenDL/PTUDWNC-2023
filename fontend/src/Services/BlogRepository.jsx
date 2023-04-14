@@ -122,3 +122,54 @@ export async function getPostBySlug(slug = "") {
     return null;
   }
 }
+
+export async function addPost(post) {
+  try {
+    const res = await axios.post(`${API_URL}/api/posts`, post);
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      console.log(data);
+      return null;
+    }
+  } catch (error) {
+    console.log('Error', error);
+    return null;
+  }
+}
+
+export async function updatePost(postId, post) {
+  try {
+    // const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/posts/${postId}`, post);
+    console.log(`${API_URL}/api/posts/${postId}`);
+    const res = await axios.put(`${API_URL}/api/posts/${postId}`, post);
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log('Error', error);
+    return null;
+  }
+}
+
+export async function updatePostPicture(postId, image) {
+  try {
+    const formData = new FormData();
+    formData.append("file", image);
+    const res = await axios.post(`${API_URL}/api/posts/${postId}/picture`, formData);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log('Error', error);
+    return null;
+  }
+}

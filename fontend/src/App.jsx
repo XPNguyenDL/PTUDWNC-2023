@@ -19,6 +19,7 @@ import {
   Tags,
   Subscriber,
   NotFound,
+  PostEdit,
   BadRequest
 } from "./Pages";
 
@@ -44,6 +45,8 @@ function App() {
             <Route path="/admin/authors" element={<Author />} />
             <Route path="/admin/categories" element={<Category />} />
             <Route path="/admin/posts" element={<PostAdmin />} />
+            <Route path="/admin/posts/edit" element={<PostEdit />} />
+            <Route path="/admin/posts/edit/:id" element={<PostEdit />} />
             <Route path="/admin/comments" element={<Comment />} />
             <Route path="/admin/tags" element={<Tags />} />
           </Route>
