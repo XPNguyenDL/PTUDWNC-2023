@@ -2,6 +2,7 @@
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using TatBlog.Core.Collections;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -100,7 +101,7 @@ public static class AuthorEndpoints
 		IAuthorRepository authorRepository,
 		IMapper mapper)
 	{
-		var author = await authorRepository.GetCachedAuthorByIdAsync(id);
+		var author = await authorRepository.GetAuthorByIdAsync(id);
 
 		return author == null
 			? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tác giả có Id: {id}"))
@@ -190,12 +191,13 @@ public static class AuthorEndpoints
 		IAuthorRepository authorRepository,
 		IMapper mapper)
 	{
+		var author = await authorRepository.GetAuthorByIdAsync(id);
 		if (await authorRepository.IsExistAuthorSlugAsync(id, model.UrlSlug))
 		{
 			return Results.Ok(ApiResponse.Fail(HttpStatusCode.Conflict, $"Slug {model.UrlSlug} đã được sử dụng"));
 		}
-
-		var author = mapper.Map<Author>(model);
+		
+		mapper.Map(model, author);
 		author.Id = id;
 
 		return await authorRepository.AddOrUpdateAuthorAsync(author) != null
