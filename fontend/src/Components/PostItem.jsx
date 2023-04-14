@@ -1,5 +1,5 @@
 import React from "react";
-import isEmptyOrSpaces, { API_URL } from "./Utils";
+import { API_URL, isEmptyOrSpaces } from "./Utils";
 import { Card } from "react-bootstrap";
 import TagList from "./TagList";
 import { Link } from "react-router-dom";
