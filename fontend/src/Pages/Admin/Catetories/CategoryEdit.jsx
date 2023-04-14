@@ -143,7 +143,6 @@ export default function CategoryEdit() {
             />
           </div>
         </div>
-
         <div className="row mb-3">
           <div className="col-sm-10 offset-sm-2">
             <div className="form-check">
@@ -161,9 +160,9 @@ export default function CategoryEdit() {
           </div>
         </div>
         <div className="text-center">
-            <Button variant="primary" type="submit">
-              Lưu các thay đổi
-            </Button>
+          <Button variant="primary" type="submit">
+            Lưu các thay đổi
+          </Button>
 
           <Link to="/admin/categories" className="btn btn-danger ms-2">
             Hủy và quay lại
