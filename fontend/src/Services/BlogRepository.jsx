@@ -112,7 +112,6 @@ export async function getPostBySlug(slug = "") {
     const res = await axios.get(`${API_URL}/api/posts/byslug/${slug}`);
 
     const data = res.data;
-    console.log(data);
     if (data.isSuccess) {
       return data.result;
     } else {
@@ -142,7 +141,6 @@ export async function addPost(post) {
 export async function updatePost(postId, post) {
   try {
     // const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/posts/${postId}`, post);
-    console.log(`${API_URL}/api/posts/${postId}`);
     const res = await axios.put(`${API_URL}/api/posts/${postId}`, post);
     const data = res.data;
     if (data.isSuccess) {
@@ -170,6 +168,36 @@ export async function updatePostPicture(postId, image) {
     }
   } catch (error) {
     console.log('Error', error);
+    return null;
+  }
+}
+
+export async function getTogglePost(id) {
+  try {
+    const res = await axios.get(`${API_URL}/api/posts/TogglePost/${id}`);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function deletePost(id) {
+  try {
+    const res = await axios.delete(`${API_URL}/api/posts/${id}`);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
     return null;
   }
 }
