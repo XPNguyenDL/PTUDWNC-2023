@@ -21,7 +21,8 @@ import {
   NotFound,
   PostEdit,
   BadRequest,
-  AuthorEdit
+  AuthorEdit,
+  TagEdit
 } from "./Pages";
 import { CategoryEdit } from "./Pages/Admin/Catetories";
 
@@ -47,14 +48,20 @@ function App() {
             <Route path="/admin/authors" element={<Author />} />
             <Route path="/admin/authors/edit" element={<AuthorEdit />} />
             <Route path="/admin/authors/edit/:id" element={<AuthorEdit />} />
+           
             <Route path="/admin/categories" element={<Category />} />
             <Route path="/admin/categories/edit" element={<CategoryEdit />} />
             <Route path="/admin/categories/edit/:id" element={<CategoryEdit />} />
+            
             <Route path="/admin/posts" element={<PostAdmin />} />
             <Route path="/admin/posts/edit" element={<PostEdit />} />
             <Route path="/admin/posts/edit/:id" element={<PostEdit />} />
+            
             <Route path="/admin/comments" element={<Comment />} />
+            
             <Route path="/admin/tags" element={<Tags />} />
+            <Route path="/admin/tags/edit" element={<TagEdit />} />
+            <Route path="/admin/tags/edit/:id" element={<TagEdit />} />
           </Route>
           <Route path="*" element={<NotFound />} />
           <Route path="/400" element={<BadRequest />} />

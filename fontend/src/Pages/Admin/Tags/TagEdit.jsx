@@ -1,59 +1,54 @@
-import React, { useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import {
-  addCategory,
-  getCategoryById,
-  updateCategory
-} from "../../../Services/CategoryRepository";
-import { Button, Form } from "react-bootstrap";
+  addTag,
+  getTagById,
+  updateTag
+} from "../../../Services/TagsRepository";
+import { useEffect } from "react";
+import { useState } from "react";
 import { isGuid } from "../../../Components/Utils";
+import { Button, Form } from "react-bootstrap";
 
 const initialState = {
-  name: "string",
-  urlSlug: "string",
-  description: "string",
-  showOnMenu: true
+  name: "",
+  urlSlug: "",
+  description: ""
 };
 
-export default function CategoryEdit() {
+export default function TagEdit() {
   const params = useParams();
 
   // useState
-  const [category, setCategory] = useState(initialState);
+  const [tag, setTag] = useState(initialState);
   const [shouldNavigate, setShouldNavigate] = useState(false);
 
-  // useEffects
   useEffect(() => {
-    fetchCategories();
-    async function fetchCategories() {
-      const data = await getCategoryById(params.id);
+    fetchTag();
+    async function fetchTag() {
+      const data = await getTagById(params.id);
       if (data) {
-        setCategory(data);
-      } else setCategory([]);
+        setTag(data);
+      } else setTag({});
     }
   }, []);
 
-  // handle
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
-      name: category.name,
-      urlSlug: category.urlSlug,
-      description: category.description,
-      showOnMenu: category.showOnMenu
+      name: tag.name,
+      urlSlug: tag.urlSlug,
+      description: tag.description
     };
 
     if (params.id) {
-      UpdateCategory(data);
+      UpdateTag(data);
     } else {
-      AddCategory(data);
+      AddTag(data);
     }
 
-    async function UpdateCategory(data) {
-      const res = await updateCategory(params.id, data);
-      console.log(res);
+    async function UpdateTag(data) {
+      const res = await updateTag(params.id, data);
       if (res) {
         alert("Cập nhập thành công");
         setShouldNavigate(true);
@@ -62,9 +57,8 @@ export default function CategoryEdit() {
         alert("Cập nhập thất bại");
       }
     }
-
-    async function AddCategory(data) {
-      const res = await addCategory(data);
+    async function AddTag(data) {
+      const res = await addTag(data);
       if (res) {
         alert("Thêm thành công");
       } else {
@@ -74,33 +68,32 @@ export default function CategoryEdit() {
   };
 
   if (params.id && !isGuid(params.id)) {
-    return <Navigate to={`/400?redirectTo=/admin/categories`} />;
+    return <Navigate to={`/400?redirectTo=/admin/tags`} />;
   }
 
   if (shouldNavigate) {
-    return <Navigate to="/admin/categories" />;
+    return <Navigate to="/admin/tags" />;
   }
 
   return (
     <>
       <Form
         method={isGuid(params.id) ? "put" : "post"}
-        encType="multipart/form-data"
         onSubmit={handleSubmit}>
         <div className="row mb-3">
           <Form.Label className="col-sm-2 col-form-label">
-            Tên chủ đề
+            Tên thẻ
           </Form.Label>
           <div className="col-sm-10">
             <Form.Control
               type="text"
-              name="title"
-              title="Title"
+              name="name"
+              title="name"
               required
-              value={category.name || ""}
+              value={tag.name || ""}
               onChange={(e) =>
-                setCategory({
-                  ...category,
+                setTag({
+                  ...tag,
                   name: e.target.value
                 })
               }
@@ -115,10 +108,10 @@ export default function CategoryEdit() {
               name="slug"
               title="Slug"
               required
-              value={category.urlSlug || ""}
+              value={tag.urlSlug || ""}
               onChange={(e) =>
-                setCategory({
-                  ...category,
+                setTag({
+                  ...tag,
                   urlSlug: e.target.value
                 })
               }
@@ -133,30 +126,14 @@ export default function CategoryEdit() {
               name="description"
               title="Description"
               required
-              value={category.description || ""}
+              value={tag.description || ""}
               onChange={(e) =>
-                setCategory({
-                  ...category,
+                setTag({
+                  ...tag,
                   description: e.target.value
                 })
               }
             />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-sm-10 offset-sm-2">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="showOnMenu"
-                checked={category.showOnMenu}
-                onChange={(e) =>
-                  setCategory({ ...category, showOnMenu: e.target.checked })
-                }
-              />
-              <Form.Label className="form-check-label">Đã xuất bản</Form.Label>
-            </div>
           </div>
         </div>
         <div className="text-center">
@@ -164,7 +141,7 @@ export default function CategoryEdit() {
             Lưu các thay đổi
           </Button>
 
-          <Link to="/admin/categories" className="btn btn-danger ms-2">
+          <Link to="/admin/tags" className="btn btn-danger ms-2">
             Hủy và quay lại
           </Link>
         </div>
