@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
-import { getCategories } from "../../Services/CategoryRepository";
-import { getAuthors } from "../../Services/AuthorRepository";
+import { getCategories } from "../../../Services/CategoryRepository";
+import { getAuthors } from "../../../Services/AuthorRepository";
 import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
