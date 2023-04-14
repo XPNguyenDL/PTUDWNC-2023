@@ -7,11 +7,11 @@ import {
   getPostById,
   updatePost,
   updatePostPicture
-} from "../../Services/BlogRepository";
-import { API_URL, isEmptyOrSpaces, isGuid } from "../../Components/Utils";
+} from "../../../Services/BlogRepository";
+import { API_URL, isEmptyOrSpaces, isGuid } from "../../../Components/Utils";
 import { Button, Form } from "react-bootstrap";
-import { getAuthors } from "../../Services/AuthorRepository";
-import { getCategories } from "../../Services/CategoryRepository";
+import { getAuthors } from "../../../Services/AuthorRepository";
+import { getCategories } from "../../../Services/CategoryRepository";
 
 const initialState = {
   title: "",
