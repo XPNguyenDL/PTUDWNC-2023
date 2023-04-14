@@ -409,6 +409,7 @@ public class BlogRepository : IBlogRepository
         // Add or update the post in the database
         if (postExists)
         {
+            post.ModifiedDate = DateTime.Now;
             _dbContext.Posts.Update(post);
         }
         else

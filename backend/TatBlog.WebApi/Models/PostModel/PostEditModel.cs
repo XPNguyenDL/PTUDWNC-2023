@@ -21,7 +21,9 @@ public class PostEditModel
 
     public Guid AuthorId { get; set; }
 
-    public IList<string> SelectedTags { get; set; }
+    public bool Published { get; set; }
+
+	public IList<string> SelectedTags { get; set; }
 
     public PostEditModel()
     {
