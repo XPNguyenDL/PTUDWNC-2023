@@ -605,8 +605,6 @@ public class DataSeeder : IDataSeeder
 		            tags[0],
 	            }
             },
-
-
             new()
             {
 	            Id = Guid.NewGuid(),
@@ -701,11 +699,14 @@ public class DataSeeder : IDataSeeder
             new()
             {
 	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
+	            Title = "Snap is expanding its AR features",
+	            ShortDescription = "Snap is expanding its AR features to 16 additional music festivals",
+	            Description = "Snap is expanding its AR features to 16 additional music festivals. " +
+	                          "The company first inked a multi-year deal with Live Nation last April to ‘elevate performances " +
+	                          "beyond stages and screens’ Snap is also teaming up with event visualization " +
+	                          "company Disguise to enable interactive on-stage AR visuals.",
+	            Meta = "Snap is expanding its AR features",
+	            UrlSlug = "snap-is-expanding-its-ar-features",
 	            Published = true,
 	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
 	            ModifiedDate = null,
@@ -722,11 +723,13 @@ public class DataSeeder : IDataSeeder
             new()
             {
 	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
+	            Title = "Basics of CI/CD Pipeline",
+	            ShortDescription = "Basics of CI/CD Pipeline",
+	            Description = "CI/CD Pipeline is a modern software development practice in which incremental code changes are made frequently and reliably." +
+	                          " The pipeline is a logical demonstration of how software will move along the various phases or stages " +
+	                          "in this lifecycle before it is delivered to the customer or before it's live on production.",
+	            Meta = "Basics of CI/CD Pipeline",
+	            UrlSlug = "basics-of-ci-cd-pipeline",
 	            Published = true,
 	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
 	            ModifiedDate = null,
@@ -743,16 +746,41 @@ public class DataSeeder : IDataSeeder
             new()
             {
 	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
+	            Title = "UI/UX Design Trends 2023",
+	            ShortDescription = "UI/UX Design Trends 2023",
+	            Description = "UI/UX Design Trends 2023. Yet another year is coming to a close." +
+	                          " We are taking a more careful look at both UI and UX trends that continue to evolve." +
+	                          " We highlight some of the trends we think will persist and perhaps gain even more traction in the next year.",
+	            Meta = "UI/UX Design Trends 2023",
+	            UrlSlug = "ui-ux-design-trends-2023",
 	            Published = true,
 	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
 	            ModifiedDate = null,
 	            ViewCount = 0,
-	            Author = authors[0],
+	            Author = authors[1],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Court reverses $20m sandbox patent judgment against Google",
+	            ShortDescription = "Court reverses $20m sandbox patent judgment against Google",
+	            Description = "Court reverses $20m sandbox patent judgment against Google. Google has convinced an appeals court to reverse " +
+	                          "a $20 million judgment against the web giant after Chrome infringed some patents. " +
+	                          "The court said that three of the reissued patents, used to support the claim against Google",
+	            Meta = "Court reverses $20m sandbox patent judgment against Google",
+	            UrlSlug = "court-reverses-usd20m-sandbox-patent-judgment-against-google",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[4],
 	            Category = categories[3],
 	            Tags = new List<Tag>()
 	            {
@@ -764,16 +792,18 @@ public class DataSeeder : IDataSeeder
             new()
             {
 	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
+	            Title = "Advanced JavaScript",
+	            ShortDescription = "Advanced JavaScript Console Logging for Developers",
+	            Description = "Advanced JavaScript Console Logging for Developers Developers need to debug their applications to find errors and issues." +
+	                          " Knowing to use advanced console logging is a handy tool for developers. " +
+	                          "These tools show us how our app looks out in the wild and enable us to fix it on the fly without relying on source code.",
+	            Meta = "Advanced JavaScript",
+	            UrlSlug = "advanced-javascript",
 	            Published = true,
 	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
 	            ModifiedDate = null,
 	            ViewCount = 0,
-	            Author = authors[0],
+	            Author = authors[2],
 	            Category = categories[3],
 	            Tags = new List<Tag>()
 	            {
@@ -785,48 +815,28 @@ public class DataSeeder : IDataSeeder
             new()
             {
 	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
+	            Title = "Recording Badge Scans in Apache Pinot",
+	            ShortDescription = "Recording Badge Scans in Apache Pinot",
+	            Description = "Use a real-time analytics database to record NFC badge scans in Apache Pinot - " +
+	                          "DZone Recording Badge Scans in Pinot. " +
+	                          "Join the DZone community and get the full member experience. " +
+	                          "Join for free about Pinot ApachePinot.",
+	            Meta = "Recording Badge Scans in Apache Pinot",
+	            UrlSlug = "recording-badge-scans-in-apache-pinot",
 	            Published = true,
 	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
 	            ModifiedDate = null,
 	            ViewCount = 0,
-	            Author = authors[0],
-	            Category = categories[3],
+	            Author = authors[1],
+	            Category = categories[2],
 	            Tags = new List<Tag>()
 	            {
 		            tags[1],
-		            tags[2],
-		            tags[0],
-	            }
-            },
-            new()
-            {
-	            Id = Guid.NewGuid(),
-	            Title = "",
-	            ShortDescription = "",
-	            Description = "",
-	            Meta = "",
-	            UrlSlug = "",
-	            Published = true,
-	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
-	            ModifiedDate = null,
-	            ViewCount = 0,
-	            Author = authors[0],
-	            Category = categories[3],
-	            Tags = new List<Tag>()
-	            {
-		            tags[1],
-		            tags[2],
+		            tags[3],
 		            tags[0],
 	            }
             },
 		};
-
-
         _dbContext.Posts.AddRange(posts);
         _dbContext.SaveChanges();
         return posts;
