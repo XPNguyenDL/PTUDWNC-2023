@@ -244,8 +244,587 @@ public class DataSeeder : IDataSeeder
                     tags[9],
                     tags[3],
                 }
-            }
-        };
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Understanding Database Types",
+	            ShortDescription = "Understanding Database Types",
+	            Description = "A complex application usually uses several different databases, each catering to a specific aspect of the application’s needs." +
+	                          " In this comprehensive three-part series, we’ll explore the art of database selection. " +
+	                          "To make the best decision for our projects, it is essential to understand the various types of databases available in the market",
+	            Meta = "Understanding Database Types",
+	            UrlSlug = "understanding-database-types",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 3, 10, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 10,
+	            Author = authors[2],
+	            Category = categories[4],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[9],
+		            tags[3],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "A Detailed Recreation of Browser",
+	            ShortDescription = "Understanding Database Types",
+	            Description = "A Detailed Recreation of Browser Inspired by Super Mario Bros. Movie was created by Ümral Ismayilov," +
+	                          " a 3D Character Artist and Motion Designer who specializes in " +
+	                          "reimagining cartoon characters in 3D. The character was modeled in ZBrush, retopologized " +
+	                          "in Maya, and textured with Substance 3D Painter",
+	            Meta = "A Detailed Recreation of Bowser",
+	            UrlSlug = "a-detailed-recreation-of-browser",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 3, 11, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 10,
+	            Author = authors[1],
+	            Category = categories[4],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[6],
+		            tags[3],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Selling sanctioned storage",
+	            ShortDescription = "Selling sanctioned storage to Huawei costs Seagate $300m",
+	            Description = "Selling sanctioned storage to Huawei costs Seagate $300 million." +
+	                          " The company was on the right side of the law when shipping 7.4 million hard drives to China," +
+	                          " in 429 transactions worth a combined $1.1 billion." +
+	                          " The U.S. Department of Commerce's s Bureau of Industry and Security sent it a letter alleging violations of the U.",
+	            Meta = "A Detailed Recreation of Bowser",
+	            UrlSlug = "selling-sanctioned-storage",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 1, 23, 11, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 10,
+	            Author = authors[0],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[0],
+		            tags[4],
+		            tags[2],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Primo is the IT tool",
+	            ShortDescription = "Selling sanctioned storage to Huawei costs Seagate $300m",
+	            Description = "Primo is a French startup that recently raised " +
+	                          "a $3.4 million funding round to build a software-as-a-service product that handles the IT needs of small and medium companies. " +
+	                          "Primo keeps track of your fleet of devices and can then help you manage it without a dedicated IT manager.",
+	            Meta = "Primo is the IT tool",
+	            UrlSlug = "primo-is-the-it-tool",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 2, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 10,
+	            Author = authors[3],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[0],
+		            tags[3],
+		            tags[1],
+		            tags[4],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "7 Modern and Powerful JavaScript",
+	            ShortDescription = "7 Modern and Powerful JavaScript Features You Didn’t Know About\r\n",
+	            Description = "Optional Chaining Optional chaining is a new feature in JavaScript that allows " +
+	                          "developers to write code that is more concise and easier to read. " +
+	                          "The Promise.allSettled() and BigInt The BigInt data type are just a few " +
+	                          "of the many cool and modern JavaScript features that are available to developers.",
+	            Meta = "7 Modern and Powerful JavaScript",
+	            UrlSlug = "7-modern-and-powerful-javascript",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[4],
+	            Category = categories[5],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+		            tags[2],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "A cure for React useState hell?",
+	            ShortDescription = "A cure for React useState hell?",
+	            Description = "There's nothing preventing you from choosing an end date that’s before the start date," +
+	                          " which makes no sense. There's no guard for a title or description that is too long. " +
+	                          "Using useReducer, we could transform the above code, " +
+	                          "to just this: i The hook helps you control transformations from state A to state B",
+	            Meta = "A cure for React useState hell?",
+	            UrlSlug = "a-cure-for-react-usestate-hell",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[1],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+		            tags[2],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "10 Best React Libraries",
+	            ShortDescription = "10 Best React Libraries for Building High-Performance Web Applications 2023",
+	            Description = "React.js is one of the most popular front-end frameworks today, known for its reusability, " +
+	                          "scalability, and efficiency in developing complex web applications. With a vast library of React components, " +
+	                          "developers can create intuitive and interactive user interfaces that are fast and reliable.",
+	            Meta = "10 Best React Libraries",
+	            UrlSlug = "10-best-react-libraries",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[1],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Flipboard brings editorial curation",
+	            ShortDescription = "Flipboard brings editorial curation to Mastodon with ‘desks’ for news and discovery",
+	            Description = "Flipboard brings editorial curation to Mastodon with 'desks' for news and discovery." +
+	                          " Initially, the company will launch four desks — News, Tech, Culture, and Science — " +
+	                          "which it says won’t be automated by bots, but by professional curators who have expertise" +
+	                          " in discovering and elevating interesting content",
+	            Meta = "Flipboard brings editorial curation",
+	            UrlSlug = "flipboard-brings-editorial-curation",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[1],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Top 7 ChatGPT Developer Hacks",
+	            ShortDescription = "Top 7 ChatGPT Developer Hacks",
+	            Description = "A good engineer needs to recognize how data structures are used in our daily lives." +
+	                          " Engineers should be aware of these data structures and their use cases to create effective and efficient solutions. " +
+	                          "Message brokers play a crucial role when building distributed systems or " +
+	                          "microservices to improve their performance, scalability and maintainability.",
+	            Meta = "Top 7 ChatGPT Developer Hacks",
+	            UrlSlug = "top-7-chatgpt-developer-hacks",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[1],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "How Large Language Models Changed",
+	            ShortDescription = "How Large Language Models Changed My Entire OSINT Workflow",
+	            Description = "The LLM OSINT Analyst Explorer series delves into the potential " +
+	                          "of Large Language Models (LLMs) for uncovering expert-driven insights on specialized topics such as Defense," +
+	                          " National Security, Counter-Terrorism, and the battle against" +
+	                          " Organized Crime. We will demonstrate the development of custom",
+	            Meta = "How Large Language Models Changed",
+	            UrlSlug = "how-large-language-models-changed",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[3],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "The Complete Modern React Developer 2022",
+	            ShortDescription = "The Complete Modern React Developer 2022",
+	            Description = "The Complete Modern React Developer 2022 - DEV Community Introduction" +
+	                          " will give you the skills and knowledge to become a Software Developer across the full stack. " +
+	                          "The only three topics which are not covered in this course are Redux," +
+	                          " GraphQL and React Native which could be covered in a future course.",
+	            Meta = "The Complete Modern React Developer 2022",
+	            UrlSlug = "the-complete-modern-react-developer-2022",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Clean code practice",
+	            ShortDescription = "Clean code practice: Must for every coder and seniors",
+	            Description = "Must for every coder and seniors to know about Clean Code: " +
+	                          "Good Practices P1 must for juniors and seniors. " +
+	                          "Clean Code is just concerned with writing legible code which ultimately helps in maintaining the code. " +
+	                          "Code should follow the naming conventions and common best practices and patterns of the language used",
+	            Meta = "Clean code practice",
+	            UrlSlug = "clean-code-practice",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[1],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[3],
+		            tags[2],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Twitter advertisers told",
+	            ShortDescription = "Twitter advertisers told: Come back, but don't make demands",
+	            Description = "Twitter advertisers told: Come back, but don't make demands. " +
+	                          "Elon Musk told NBCUniversal:" +
+	                          " \"It is not cool to say what Twitter will do\" " +
+	                          "More than half of Twitter's top 1,000 advertisers " +
+	                          "have yet to return to the social media site",
+	            Meta = "Twitter advertisers told",
+	            UrlSlug = "twitter-advertisers-told",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[3],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "REST vs. gRPC",
+	            ShortDescription = "REST vs. gRPC - What’s the Difference?",
+	            Description = "REST has been around for a long time and is an industry standard for developing and designing APIs. Google Remote Procedure Call" +
+	                          ", or gRPC, was created on top of the RPC protocol. " +
+	                          "The Amplication repository is about to hit 10,000-stars on GitHub.",
+	            Meta = "REST vs. gRPC",
+	            UrlSlug = "rest-vs-grpc",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 3, 20, 21, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[3],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "JavaScript Optimization",
+	            ShortDescription = "JavaScript Optimization Techniques for Faster Website Load Times: An In-Depth Guide",
+	            Description = "JavaScript Optimization Techniques for Faster Load Times: " +
+	                          "An In- Depth Guide Master JavaScript optimization to enhance website performance. " +
+	                          "In this article, I’ll guide you through various methods to optimize your JavaScript code, " +
+	                          "including minimizing file sizes, reducing network requests.",
+	            Meta = "JavaScript Optimization",
+	            UrlSlug = "javascript-optimization",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 20, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[3],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[4],
+		            tags[0],
+	            }
+            },
+
+
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "System Design Master Template",
+	            ShortDescription = "System Design Master Template: How to Answer Any System Design Interview Question.",
+	            Description = "System Design Master Template: How to Answer Any System Design Interview Question. The two biggest challenges of answering a system design interview question are: " +
+	                          "To know where to start. Arslan Ahmad: " +
+	                          "Have a look at the top image to understand " +
+	                          "the major components that could be part of any system design.",
+	            Meta = "System Design Master Template",
+	            UrlSlug = "system-design-master-template",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[1],
+	            Category = categories[2],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "The most failed JavaScript interview questions",
+	            ShortDescription = "The most failed JavaScript interview questions",
+	            Description = "The most failed JavaScript interview questions are broken down by topic and the percentage of correct answers from our telegram channel. " +
+	                          "For example, we have chosen a quiz that seems to cover all aspects of this topic. " +
+	                          "Try yourself and read the explanation.",
+	            Meta = "The most failed JavaScript interview questions",
+	            UrlSlug = "the-most-failed-javascript-interview-questions",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[2],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Real-time notifications",
+	            ShortDescription = "Real-time notifications",
+	            Description = "New notification center will allow you to stay up-to-date with all the latest updates in real-time. " +
+	                          "You can receive notifications when you get an upvote, comment, mention, or any other major activity on our platform. " +
+	                          "Simply click on the notification center icon to view your notifications and stay on top of everything that is happening.",
+	            Meta = "Real-time notifications",
+	            UrlSlug = "real-time-notifications",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "Ready at Dawn and Downpour Interactive",
+	            ShortDescription = "Ready at Dawn and Downpour Interactive impacted by Meta layoffs",
+	            Description = "If you see anyone from M*ta (and Ready at Dawn in particular) looking for positions, please signal boost them",
+	            Meta = "Ready at Dawn and Downpour Interactive",
+	            UrlSlug = "ready-at-dawn-and-downpour-interactive",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+            new()
+            {
+	            Id = Guid.NewGuid(),
+	            Title = "",
+	            ShortDescription = "",
+	            Description = "",
+	            Meta = "",
+	            UrlSlug = "",
+	            Published = true,
+	            PostedDate = new DateTime(2023, 4, 19, 2, 20, 0),
+	            ModifiedDate = null,
+	            ViewCount = 0,
+	            Author = authors[0],
+	            Category = categories[3],
+	            Tags = new List<Tag>()
+	            {
+		            tags[1],
+		            tags[2],
+		            tags[0],
+	            }
+            },
+		};
 
 
         _dbContext.Posts.AddRange(posts);
