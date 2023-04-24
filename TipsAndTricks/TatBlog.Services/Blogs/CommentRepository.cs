@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
@@ -51,6 +52,8 @@ public class CommentRepository : ICommentRepository
 		return await commentQuery.ToPagedListAsync(pagingParams, cancellationToken);
 	}
 
+	
+
 	public async Task<IPagedList<Comment>> GetPagedCommentAsync(string keyword, IPagingParams pagingParams, CancellationToken cancellationToken = default)
 	{
 		var commentQuery = _dbContext.Set<Comment>()
@@ -59,6 +62,23 @@ public class CommentRepository : ICommentRepository
 				s.UserComment.Contains(keyword) ||
 				s.Post.Title.Contains(keyword));
 		return await commentQuery.ToPagedListAsync(pagingParams, cancellationToken);
+	}
+
+	public async Task<IPagedList<T>> GetPagedCommentAsync<T>(CommentQuery condition, IPagingParams pagingParams, Func<IQueryable<Comment>, IQueryable<T>> mapper)
+	{
+		var commentQuery = _dbContext.Set<Comment>()
+			.Include(s => s.Post)
+			.WhereIf(!string.IsNullOrWhiteSpace(condition.Keyword), s =>
+				s.Content.Contains(condition.Keyword) ||
+				s.UserComment.Contains(condition.Keyword) ||
+				s.Post.Title.Contains(condition.Keyword))
+			.WhereIf(condition.CommentStatus != CommentStatus.None, s =>
+				s.CommentStatus == condition.CommentStatus)
+			.WhereIf(condition.Year > 0, s => s.PostTime.Year == condition.Year)
+			.WhereIf(condition.Month > 0, s => s.PostTime.Month == condition.Month);
+		var projectedPosts = mapper(commentQuery);
+
+		return await projectedPosts.ToPagedListAsync(pagingParams);
 	}
 
 

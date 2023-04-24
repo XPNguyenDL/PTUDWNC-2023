@@ -65,7 +65,7 @@ export default function Category() {
 
   return (
     <div>
-      <h1>Danh sách bài viết</h1>
+      <h1>Danh sách chủ đề</h1>
       <CategoriesFilterPane setKeyword={setKeyword} />
       {isLoading ? (
         <Loading />

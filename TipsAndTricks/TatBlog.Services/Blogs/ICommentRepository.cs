@@ -1,4 +1,5 @@
-﻿using TatBlog.Core.Contracts;
+﻿using TatBlog.Core.Collections;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 
@@ -13,6 +14,11 @@ public interface ICommentRepository
 		CancellationToken cancellationToken = default);
 	Task<IPagedList<Comment>> GetPagedCommentAsync(string keyword, IPagingParams pagingParams,
 		CancellationToken cancellationToken = default);
+
+	Task<IPagedList<T>> GetPagedCommentAsync<T>(
+		CommentQuery condition,
+		IPagingParams pagingParams,
+		Func<IQueryable<Comment>, IQueryable<T>> mapper);
 	Task<bool> AddOrUpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default);
 	Task<bool> DeleteCommentAsync(Guid id, CancellationToken cancellationToken = default);
 	Task<int> CountCommentAsync(CancellationToken cancellationToken = default);
