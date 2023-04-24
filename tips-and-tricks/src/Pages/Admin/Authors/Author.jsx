@@ -62,7 +62,7 @@ export default function Author() {
 
   return (
     <div>
-      <h1>Danh sách bài viết</h1>
+      <h1>Danh sách tác giả</h1>
       <AuthorsFilterPane setKeyword={setKeyword} />
       {isLoading ? (
         <Loading />

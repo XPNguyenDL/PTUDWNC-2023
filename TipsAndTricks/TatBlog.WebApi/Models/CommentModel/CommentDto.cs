@@ -1,4 +1,6 @@
-﻿namespace TatBlog.WebApi.Models.CommentModel;
+﻿using TatBlog.Core.Entities;
+
+namespace TatBlog.WebApi.Models.CommentModel;
 
 public class CommentDto
 {
@@ -9,4 +11,6 @@ public class CommentDto
 	public string Content { get; set; }
 
 	public DateTime PostTime { get; set; }
+
+	public CommentStatus CommentStatus { get; set; }
 }

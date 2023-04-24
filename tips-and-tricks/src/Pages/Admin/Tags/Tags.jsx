@@ -59,7 +59,7 @@ export default function Tags() {
 
   return (
     <div>
-      <h1>Danh sách bài viết</h1>
+      <h1>Danh sách từ khóa</h1>
       <TagsFilter setKeyword={setKeyword} />
       {isLoading ? (
         <Loading />

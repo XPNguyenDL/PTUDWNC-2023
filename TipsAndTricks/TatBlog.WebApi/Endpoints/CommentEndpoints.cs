@@ -3,6 +3,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.Collections;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
@@ -55,14 +56,20 @@ public static class CommentEndpoints
 
     private static async Task<IResult> GetComment(
         [AsParameters] CommentFilterModel model,
-        ICommentRepository cmtRepository)
+        [FromServices] ICommentRepository cmtRepository,
+        [FromServices] IMapper mapper)
     {
-		var cmtList = await cmtRepository.GetPagedCommentAsync(model.Keyword, model);
-        
-		var paginationResult = new PaginationResult<Comment>(cmtList);
 
-        return Results.Ok(ApiResponse.Success(paginationResult));
-    }
+	    var cmtQuery = mapper.Map<CommentQuery>(model);
+
+		var commentList = await cmtRepository.GetPagedCommentAsync(
+			cmtQuery,
+		    model,
+		    p => p.ProjectToType<CommentDto>());
+
+	    var paginationResult = new PaginationResult<CommentDto>(commentList);
+	    return Results.Ok(ApiResponse.Success(paginationResult));
+	}
 
     private static async Task<IResult> GetCommentById(
 	    Guid id,

@@ -47,3 +47,48 @@ export async function postComment(postId = "", userComment = "", content) {
     return false;
   }
 }
+
+export async function getCommentByQueries(parameters) {
+  try {
+    const res = await axios.get(`${API_URL}/api/comments?${parameters}`);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function deleteComment(id) {
+  try {
+    const res = await axios.delete(`${API_URL}/api/comments/${id}`);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function toggleComment(id) {
+  try {
+    const res = await axios.get(`${API_URL}/api/comments/verify/${id}?status=2`);
+
+    const data = res.data;
+    if (data.isSuccess) {
+      return data.result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
